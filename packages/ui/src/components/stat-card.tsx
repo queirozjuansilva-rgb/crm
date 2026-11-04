@@ -72,16 +72,19 @@ function StatCard({
 	return (
 		<div
 			data-slot="stat-card"
-			className={cn("flex flex-col gap-2.5 p-4 md:p-6", className)}
+			className={cn(
+				"group/stat flex flex-col gap-2.5 p-4 transition-colors duration-300 hover:bg-foreground/[0.025] md:p-6",
+				className,
+			)}
 			{...props}
 		>
 			{label != null ? (
-				<span className="truncate font-medium font-mono text-[11px] text-muted-foreground uppercase tracking-[0.1em]">
+				<span className="truncate font-medium font-mono text-[11px] text-muted-foreground uppercase tracking-[0.1em] transition-colors duration-300 group-hover/stat:text-ring">
 					{label}
 				</span>
 			) : null}
 			<div className="flex flex-wrap items-baseline gap-x-2.5 gap-y-1">
-				<span className="font-semibold text-3xl tracking-[-0.03em] tabular-nums">
+				<span className="font-semibold text-3xl tabular-nums tracking-[-0.03em] transition-transform duration-300 ease-out group-hover/stat:-translate-y-0.5">
 					{value}
 				</span>
 				{delta ? <StatDeltaText delta={delta} /> : null}

@@ -14,8 +14,14 @@ import { requireSession } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 import { CreateDealSheet } from "./create-deal-sheet";
+import { DealsBoard } from "./deals-board";
 import { dealsSearchParams } from "./deals-search-params";
 import { DealsTable } from "./deals-table";
+import {
+	DealsViewSwitch,
+	DealsViewToggle,
+	DealsViewToggleFallback,
+} from "./deals-view-toggle";
 
 export const metadata: Metadata = {
 	title: "Negócios",
@@ -30,10 +36,13 @@ export default function DealsPage({
 				<PageShellHeading>
 					<PageShellTitle>Negócios</PageShellTitle>
 					<PageShellDescription>
-						O pipeline e tudo o que já foi fechado.
+						Arraste os cards entre as etapas, ou troque para a lista.
 					</PageShellDescription>
 				</PageShellHeading>
 				<PageShellActions>
+					<Suspense fallback={<DealsViewToggleFallback />}>
+						<DealsViewToggle />
+					</Suspense>
 					<CreateDealSheet />
 				</PageShellActions>
 			</PageShellHeader>
@@ -67,7 +76,7 @@ async function Deals({
 
 	return (
 		<HydrateClient>
-			<DealsTable />
+			<DealsViewSwitch board={<DealsBoard />} list={<DealsTable />} />
 		</HydrateClient>
 	);
 }

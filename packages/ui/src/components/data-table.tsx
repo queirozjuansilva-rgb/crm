@@ -391,7 +391,7 @@ export function DataTable<TRow, TSub = unknown>({
 					>
 						<span className="flex items-center gap-2">
 							<Filter />
-							Filters
+							Filtros
 							{activeFilterCount > 0 && (
 								<span className="tabular-nums opacity-60">
 									({activeFilterCount})
@@ -465,7 +465,7 @@ export function DataTable<TRow, TSub = unknown>({
 										className="justify-start sm:justify-center"
 									>
 										<Filter data-icon="inline-start" />
-										Filters
+										Filtros
 										{activeFacetFilterCount > 0 && (
 											<span className="tabular-nums opacity-60">
 												({activeFacetFilterCount})

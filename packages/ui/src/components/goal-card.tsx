@@ -29,7 +29,7 @@ function GoalCard({
 		<section
 			data-slot="goal-card"
 			className={cn(
-				"reveal flex flex-col gap-4 rounded-xl border border-primary/35 bg-linear-to-br from-primary/30 to-primary/10 p-5 backdrop-blur-xl md:p-6",
+				"spotlight lift reveal flex flex-col gap-4 rounded-xl border border-primary/35 bg-linear-to-br from-primary/30 to-primary/10 p-5 backdrop-blur-xl md:p-6",
 				className,
 			)}
 			{...props}

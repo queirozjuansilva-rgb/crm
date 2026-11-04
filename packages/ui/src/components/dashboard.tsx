@@ -131,7 +131,7 @@ function KpiCard({
 		<div
 			data-slot="kpi-card"
 			className={cn(
-				"glass-surface reveal flex flex-col gap-4 p-5 md:p-6",
+				"glass-surface lift reveal flex flex-col gap-4 p-5 md:p-6",
 				className,
 			)}
 			{...props}
