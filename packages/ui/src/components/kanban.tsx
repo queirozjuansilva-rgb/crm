@@ -141,16 +141,18 @@ function KanbanLane({
 			data-slot="kanban-lane"
 			data-over={isOver ? "" : undefined}
 			aria-label={typeof column.title === "string" ? column.title : undefined}
-			className="glass-surface reveal flex min-w-60 flex-1 basis-0 flex-col transition-[border-color,background-color] duration-200 data-over:border-ring/70 data-over:bg-primary/8"
+			className="glass-surface reveal flex min-w-56 flex-1 basis-0 flex-col transition-[border-color,background-color] duration-200 data-over:border-ring/70 data-over:bg-primary/8"
 		>
 			<header className="flex flex-col gap-1 px-4 pt-4 pb-3">
-				<div className="flex items-center gap-2">
+				<div className="flex items-start gap-2">
 					<span
 						aria-hidden
-						className="size-2 shrink-0 rounded-full"
+						className="mt-1.5 size-2 shrink-0 rounded-full"
 						style={{ backgroundColor: column.accent }}
 					/>
-					<h3 className="truncate font-medium text-sm">{column.title}</h3>
+					<h3 className="line-clamp-2 font-medium text-sm leading-tight">
+						{column.title}
+					</h3>
 					<span className="ml-auto rounded-full bg-foreground/8 px-2 py-0.5 font-mono text-[11px] text-muted-foreground tabular-nums">
 						{count}
 					</span>

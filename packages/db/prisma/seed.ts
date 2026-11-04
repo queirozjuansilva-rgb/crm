@@ -250,10 +250,10 @@ const TITLES = [
 ] as const;
 
 const OPEN_STAGES = [
-	DealStage.DEMO_BOOKED,
-	DealStage.QUALIFIED_TO_BUY,
-	DealStage.DECISION_MAKER_BOUGHT_IN,
-	DealStage.CONTRACT_SENT,
+	DealStage.SCREENING_BOOKED,
+	DealStage.SCREENING_DONE,
+	DealStage.PROPOSAL_MEETING,
+	DealStage.NEGOTIATION,
 ] as const;
 
 const CLOSED_STAGES = [
@@ -950,8 +950,8 @@ async function seedActivities(
 			dealId: deal.id,
 			subject: "Stage changed",
 			meta: {
-				from: DealStage.DEMO_BOOKED,
-				to: deal.closed ? DealStage.CLOSED_WON : DealStage.QUALIFIED_TO_BUY,
+				from: DealStage.SCREENING_BOOKED,
+				to: deal.closed ? DealStage.CLOSED_WON : DealStage.SCREENING_DONE,
 			},
 		});
 	}

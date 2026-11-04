@@ -119,3 +119,16 @@ export function initialsFromName(name: string | null | undefined): string {
 	const last = parts[parts.length - 1] ?? first;
 	return (first.slice(0, 1) + last.slice(0, 1)).toUpperCase();
 }
+
+const BYTE_UNITS = ["B", "KB", "MB", "GB"] as const;
+
+export function formatBytes(bytes: number): string {
+	let value = bytes;
+	let unit = 0;
+	while (value >= 1024 && unit < BYTE_UNITS.length - 1) {
+		value /= 1024;
+		unit += 1;
+	}
+	const digits = unit === 0 || value >= 10 ? 0 : 1;
+	return `${value.toLocaleString("pt-BR", { maximumFractionDigits: digits })} ${BYTE_UNITS[unit]}`;
+}

@@ -2,10 +2,14 @@ import { DealStage } from "@crm/db/enums";
 import type { StatusTone } from "@crm/ui/components/status-indicator";
 
 const ORDER = [
-	DealStage.DEMO_BOOKED,
-	DealStage.QUALIFIED_TO_BUY,
-	DealStage.DECISION_MAKER_BOUGHT_IN,
-	DealStage.CONTRACT_SENT,
+	DealStage.BUILDING_SNIPER,
+	DealStage.SNIPER_READY,
+	DealStage.SNIPER_SENT,
+	DealStage.ENGAGED_CONVERSATION,
+	DealStage.SCREENING_BOOKED,
+	DealStage.SCREENING_DONE,
+	DealStage.PROPOSAL_MEETING,
+	DealStage.NEGOTIATION,
 	DealStage.CLOSED_WON,
 	DealStage.CLOSED_LOST,
 	DealStage.UNQUALIFIED_TO_BUY,
@@ -17,16 +21,20 @@ type DealStagePresentation = Record<
 >;
 
 const PRESENTATION: DealStagePresentation = {
-	DEMO_BOOKED: { label: "Reunião marcada", tone: "neutral" },
-	QUALIFIED_TO_BUY: { label: "Qualificado", tone: "info" },
-	DECISION_MAKER_BOUGHT_IN: { label: "Decisor envolvido", tone: "info" },
-	CONTRACT_SENT: { label: "Proposta enviada", tone: "warning" },
-	CLOSED_WON: { label: "Ganho", tone: "success" },
-	CLOSED_LOST: { label: "Perdido", tone: "error" },
+	BUILDING_SNIPER: { label: "Montando Sniper", tone: "neutral" },
+	SNIPER_READY: { label: "Sniper Pronta", tone: "neutral" },
+	SNIPER_SENT: { label: "Contato Sniper Disparada", tone: "info" },
+	ENGAGED_CONVERSATION: { label: "Conversa Efetiva", tone: "info" },
+	SCREENING_BOOKED: { label: "Triagem Marcada", tone: "info" },
+	SCREENING_DONE: { label: "Triagem Feita", tone: "info" },
+	PROPOSAL_MEETING: { label: "Reunião de Proposta", tone: "warning" },
+	NEGOTIATION: { label: "Negociação", tone: "warning" },
+	CLOSED_WON: { label: "Venda", tone: "success" },
+	CLOSED_LOST: { label: "Remarketing/Follow-up", tone: "error" },
 	UNQUALIFIED_TO_BUY: { label: "Desqualificado", tone: "neutral" },
 };
 
-export const OPEN_STAGES = ORDER.slice(0, 4) as readonly DealStage[];
+export const OPEN_STAGES = ORDER.slice(0, 8) as readonly DealStage[];
 
 export const LOSING_STAGES: readonly DealStage[] = [
 	DealStage.CLOSED_LOST,
@@ -40,8 +48,12 @@ export const DEAL_STAGE_OPTIONS = ORDER.map((value) => ({
 
 const OPEN_STAGE_COLORS = [
 	"var(--stage-1)",
+	"color-mix(in oklab, var(--stage-1), var(--stage-2) 55%)",
 	"var(--stage-2)",
+	"color-mix(in oklab, var(--stage-2), var(--stage-3) 50%)",
 	"var(--stage-3)",
+	"color-mix(in oklab, var(--stage-3), var(--stage-4) 45%)",
+	"color-mix(in oklab, var(--stage-3), var(--stage-4) 75%)",
 	"var(--stage-4)",
 ] as const;
 

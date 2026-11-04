@@ -504,7 +504,7 @@ describe("the dashboard only values what it can convert", () => {
 			currency: "USD",
 		});
 
-		const unvalued = await stale("Stale open", DealStage.DEMO_BOOKED);
+		const unvalued = await stale("Stale open", DealStage.SCREENING_BOOKED);
 
 		const summary = await dashboard.summary(analystId, { scope: "me" });
 

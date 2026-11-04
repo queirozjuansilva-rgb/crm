@@ -116,7 +116,7 @@ describe("CRM agent events", () => {
 				type: "deal.created",
 				record: { kind: "deal", id: dealId },
 				occurredAt: createdAt,
-				data: { companyId, stage: "DEMO_BOOKED" },
+				data: { companyId, stage: "SCREENING_BOOKED" },
 			});
 			await emit({
 				type: "deal.closed",
@@ -144,7 +144,7 @@ describe("CRM agent events", () => {
 				type: "deal.created",
 				record: { kind: "deal", id: dealId },
 				occurredAt: createdAt.toISOString(),
-				data: { companyId, stage: "DEMO_BOOKED" },
+				data: { companyId, stage: "SCREENING_BOOKED" },
 			},
 			finishedAt: null,
 		});
@@ -231,7 +231,7 @@ describe("CRM agent events", () => {
 			false,
 			true,
 		]);
-		await deals.setStage({ id: deal.id, stage: "QUALIFIED_TO_BUY" }, ownerId);
+		await deals.setStage({ id: deal.id, stage: "SCREENING_DONE" }, ownerId);
 
 		const reasons = (
 			await db.agentTask.findMany({

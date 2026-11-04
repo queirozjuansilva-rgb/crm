@@ -24,6 +24,7 @@ import { formatMoney } from "@crm/ui/lib/format";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { AgentPanel } from "@/components/crm/agent-panel";
+import { AttachmentsSection } from "@/components/crm/attachments/attachments-section";
 import { InlineCompanyField } from "@/components/crm/company-picker";
 import { contactName } from "@/components/crm/contact-name";
 import { FieldsCog, RecordFields } from "@/components/crm/fields/record-fields";
@@ -205,7 +206,7 @@ export function DealSheet({ dealId }: { dealId: string }) {
 						<RecordActions
 							record={{ kind: "deal", id: deal.id }}
 							name={deal.name}
-							consequence={`Its stage history, notes and agent conversations go too. ${deal.company.name} and the ${deal.contacts.length === 1 ? "person" : "people"} on it stay in the CRM.`}
+							consequence={`O histórico de etapas, as notas, os anexos e as conversas com o agente também saem. A ${deal.company.name} e as pessoas vinculadas continuam no CRM.`}
 							archivedAt={deal.archivedAt}
 						/>
 					</>
@@ -360,11 +361,13 @@ function DealOverview({ deal }: { deal: Deal }) {
 				<InlineTextArea
 					label="Descrição"
 					value={deal.description}
-					placeholder={`What ${deal.company.name} is buying, why now, and what stands in the way.`}
+					placeholder={`O que a ${deal.company.name} está comprando, por que agora e o que pode travar.`}
 					saving={isSaving("description")}
 					onSave={(description) => save({ description })}
 				/>
 			</DetailSheetSection>
+
+			<AttachmentsSection record={{ kind: "deal", id: deal.id }} />
 
 			<WhereItStands deal={deal} />
 		</DetailSheetBody>
@@ -400,7 +403,7 @@ function WhereItStands({ deal }: { deal: Deal }) {
 				<DetailSheetProperty label="Envolvidos" wide>
 					{deal.contacts.length === 0 ? (
 						<span className="text-muted-foreground">
-							Nobody from {deal.company.name} is attached yet.
+							Ninguém da {deal.company.name} foi vinculado ainda.
 						</span>
 					) : (
 						<span className="flex flex-wrap items-center gap-x-3 gap-y-0.5">
@@ -475,7 +478,7 @@ function DealContacts({
 					<DetailSheetEmpty
 						icon={UserMultiple}
 						title="Nenhum contato neste negócio"
-						description={`Nobody from ${deal.company.name} is attached yet. Bring the people you are selling to onto the deal and it says who to chase.`}
+						description={`Ninguém da ${deal.company.name} foi vinculado ainda. Traga as pessoas da negociação para o negócio e ele mostra quem acionar.`}
 						action={
 							<Button variant="outline" size="sm" onClick={onAdd}>
 								<Icon icon={Add} data-icon="inline-start" />

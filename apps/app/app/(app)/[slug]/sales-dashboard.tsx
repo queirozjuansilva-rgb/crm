@@ -26,7 +26,7 @@ import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 type Summary = RouterOutputs["dashboard"]["summary"];
 
 const TREND_CONFIG: ChartConfig = {
-	won: { label: "Ganhos", color: "var(--primary)" },
+	won: { label: "Vendas", color: "var(--primary)" },
 	created: { label: "Novo pipeline", color: "var(--chart-3)" },
 };
 
@@ -83,7 +83,7 @@ export function SalesDashboard({ summary }: { summary: Summary }) {
 		<div className="flex flex-col gap-6">
 			<StatGroup>
 				<StatCard
-					label="Ganho este mês"
+					label="Vendido este mês"
 					value={money(wonThisMonth.valueCents)}
 					delta={changeDelta(
 						wonThisMonth.valueCents,
@@ -98,7 +98,7 @@ export function SalesDashboard({ summary }: { summary: Summary }) {
 					description={`${formatCount(pipeline.totalDeals, "deal")} em andamento · ${money(closingThisMonthTotal.valueCents)} previstos este mês`}
 				/>
 				<StatCard
-					label={`Taxa de ganho (${performance.windowDays}d)`}
+					label={`Taxa de venda (${performance.windowDays}d)`}
 					value={
 						performance.winRate === null
 							? "—"
@@ -107,7 +107,7 @@ export function SalesDashboard({ summary }: { summary: Summary }) {
 					description={
 						performance.wins + performance.losses === 0
 							? "Nada fechado ainda"
-							: `${performance.wins} ganhos · ${performance.losses} perdidos`
+							: `${performance.wins} vendas · ${performance.losses} em follow-up`
 					}
 				/>
 				<StatCard
@@ -119,7 +119,7 @@ export function SalesDashboard({ summary }: { summary: Summary }) {
 					}
 					description={
 						performance.avgCycleDays === null
-							? "Nenhum ganho para medir"
+							? "Nenhuma venda para medir"
 							: `ciclo médio de ${performance.avgCycleDays} dias`
 					}
 				/>
@@ -144,7 +144,7 @@ export function SalesDashboard({ summary }: { summary: Summary }) {
 
 			<DashboardRow split="hero">
 				<ChartPanel
-					title="Ganhos vs. novo pipeline"
+					title="Vendas vs. novo pipeline"
 					description="Últimos seis meses, pelo mês em que o negócio fechou ou foi criado"
 				>
 					{hasTrend ? (
@@ -174,7 +174,7 @@ export function SalesDashboard({ summary }: { summary: Summary }) {
 					}
 					centerLabel="da meta do mês"
 					stats={[
-						{ label: "Ganho", value: money(wonThisMonth.valueCents) },
+						{ label: "Vendido", value: money(wonThisMonth.valueCents) },
 						{ label: "Meta", value: money(monthlyGoalCents ?? 0) },
 						{ label: "Dias restantes", value: daysLeftInMonth(new Date()) },
 					]}
