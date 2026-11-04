@@ -17,13 +17,13 @@ type DealStagePresentation = Record<
 >;
 
 const PRESENTATION: DealStagePresentation = {
-	DEMO_BOOKED: { label: "Demo booked", tone: "neutral" },
-	QUALIFIED_TO_BUY: { label: "Qualified to buy", tone: "info" },
-	DECISION_MAKER_BOUGHT_IN: { label: "Decision maker in", tone: "info" },
-	CONTRACT_SENT: { label: "Contract sent", tone: "warning" },
-	CLOSED_WON: { label: "Closed won", tone: "success" },
-	CLOSED_LOST: { label: "Closed lost", tone: "error" },
-	UNQUALIFIED_TO_BUY: { label: "Unqualified", tone: "neutral" },
+	DEMO_BOOKED: { label: "Reunião marcada", tone: "neutral" },
+	QUALIFIED_TO_BUY: { label: "Qualificado", tone: "info" },
+	DECISION_MAKER_BOUGHT_IN: { label: "Decisor envolvido", tone: "info" },
+	CONTRACT_SENT: { label: "Proposta enviada", tone: "warning" },
+	CLOSED_WON: { label: "Ganho", tone: "success" },
+	CLOSED_LOST: { label: "Perdido", tone: "error" },
+	UNQUALIFIED_TO_BUY: { label: "Desqualificado", tone: "neutral" },
 };
 
 export const OPEN_STAGES = ORDER.slice(0, 4) as readonly DealStage[];
@@ -39,10 +39,10 @@ export const DEAL_STAGE_OPTIONS = ORDER.map((value) => ({
 }));
 
 const OPEN_STAGE_COLORS = [
-	"var(--chart-1)",
-	"var(--chart-2)",
-	"var(--chart-3)",
-	"var(--chart-4)",
+	"var(--stage-1)",
+	"var(--stage-2)",
+	"var(--stage-3)",
+	"var(--stage-4)",
 ] as const;
 
 export function isClosedStage(stage: DealStage): boolean {

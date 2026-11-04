@@ -8,6 +8,7 @@ import {
 } from "@crm/ui/components/card";
 import type { ChartConfig } from "@crm/ui/components/chart";
 import { DashboardRow, StatGroup } from "@crm/ui/components/dashboard";
+import { GoalCard } from "@crm/ui/components/goal-card";
 import { StatCard, type StatDelta } from "@crm/ui/components/stat-card";
 import {
 	formatCount,
@@ -25,8 +26,8 @@ import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 type Summary = RouterOutputs["dashboard"]["summary"];
 
 const TREND_CONFIG: ChartConfig = {
-	won: { label: "Closed won", color: "var(--success)" },
-	created: { label: "New pipeline", color: "var(--chart-1)" },
+	won: { label: "Ganhos", color: "var(--primary)" },
+	created: { label: "Novo pipeline", color: "var(--chart-3)" },
 };
 
 function changeDelta(
@@ -54,6 +55,7 @@ export function SalesDashboard({ summary }: { summary: Summary }) {
 		trend,
 		closingThisMonthTotal,
 		reportingCurrency,
+		monthlyGoalCents,
 		unconverted,
 	} = summary;
 
@@ -81,22 +83,22 @@ export function SalesDashboard({ summary }: { summary: Summary }) {
 		<div className="flex flex-col gap-6">
 			<StatGroup>
 				<StatCard
-					label="Closed won this month"
+					label="Ganho este mês"
 					value={money(wonThisMonth.valueCents)}
 					delta={changeDelta(
 						wonThisMonth.valueCents,
 						wonPrevMonth.valueCents,
-						"vs. last month",
+						"vs. mês passado",
 					)}
-					description={`${formatCount(wonThisMonth.count, "deal")} · ${money(wonPrevMonth.valueCents)} last month`}
+					description={`${formatCount(wonThisMonth.count, "deal")} · ${money(wonPrevMonth.valueCents)} no mês passado`}
 				/>
 				<StatCard
-					label="Open pipeline"
+					label="Pipeline aberto"
 					value={money(pipeline.totalCents)}
-					description={`${formatCount(pipeline.totalDeals, "deal")} in progress · ${money(closingThisMonthTotal.valueCents)} due this month`}
+					description={`${formatCount(pipeline.totalDeals, "deal")} em andamento · ${money(closingThisMonthTotal.valueCents)} previstos este mês`}
 				/>
 				<StatCard
-					label={`Win rate (${performance.windowDays}d)`}
+					label={`Taxa de ganho (${performance.windowDays}d)`}
 					value={
 						performance.winRate === null
 							? "—"
@@ -104,12 +106,12 @@ export function SalesDashboard({ summary }: { summary: Summary }) {
 					}
 					description={
 						performance.wins + performance.losses === 0
-							? "Nothing has closed yet"
-							: `${performance.wins} won · ${performance.losses} lost`
+							? "Nada fechado ainda"
+							: `${performance.wins} ganhos · ${performance.losses} perdidos`
 					}
 				/>
 				<StatCard
-					label={`Average deal (${performance.windowDays}d)`}
+					label={`Ticket médio (${performance.windowDays}d)`}
 					value={
 						performance.avgDealCents === null
 							? "—"
@@ -117,25 +119,24 @@ export function SalesDashboard({ summary }: { summary: Summary }) {
 					}
 					description={
 						performance.avgCycleDays === null
-							? "No wins to measure"
-							: `${performance.avgCycleDays}-day average cycle`
+							? "Nenhum ganho para medir"
+							: `ciclo médio de ${performance.avgCycleDays} dias`
 					}
 				/>
 			</StatGroup>
 
 			{unconverted.count > 0 ? (
 				<p className="text-muted-foreground text-xs">
-					Every figure above is in {reportingCurrency}.{" "}
-					{formatCount(unconverted.count, "deal")} in{" "}
+					Todos os valores acima estão em {reportingCurrency}.{" "}
+					{formatCount(unconverted.count, "deal")} em{" "}
 					{unconverted.currencies.join(", ")}{" "}
-					{unconverted.count === 1 ? "is" : "are"} not included — there is no
-					rate to convert {unconverted.currencies.length === 1 ? "it" : "them"}{" "}
-					with.{" "}
+					{unconverted.count === 1 ? "ficou" : "ficaram"} de fora, porque falta
+					a taxa de conversão.{" "}
 					<Link
 						href={workspaceUrl("/settings/currencies")}
 						className="underline hover:no-underline"
 					>
-						Set one
+						Definir
 					</Link>
 					.
 				</p>
@@ -143,8 +144,8 @@ export function SalesDashboard({ summary }: { summary: Summary }) {
 
 			<DashboardRow split="hero">
 				<ChartPanel
-					title="Closed won vs. new pipeline"
-					description="Last six months, by the month a deal closed or was created"
+					title="Ganhos vs. novo pipeline"
+					description="Últimos seis meses, pelo mês em que o negócio fechou ou foi criado"
 				>
 					{hasTrend ? (
 						<div className="flex flex-1 flex-col justify-center py-4">
@@ -160,13 +161,39 @@ export function SalesDashboard({ summary }: { summary: Summary }) {
 							/>
 						</div>
 					) : (
-						<EmptyChart label="No deals closed or created yet" />
+						<EmptyChart label="Nenhum negócio fechado ou criado ainda" />
 					)}
 				</ChartPanel>
 
+				<GoalCard
+					title="Meta do time"
+					progress={
+						monthlyGoalCents && monthlyGoalCents > 0
+							? wonThisMonth.valueCents / monthlyGoalCents
+							: null
+					}
+					centerLabel="da meta do mês"
+					stats={[
+						{ label: "Ganho", value: money(wonThisMonth.valueCents) },
+						{ label: "Meta", value: money(monthlyGoalCents ?? 0) },
+						{ label: "Dias restantes", value: daysLeftInMonth(new Date()) },
+					]}
+					action={
+						<Link
+							href={workspaceUrl("/settings")}
+							className="text-muted-foreground text-xs underline-offset-4 hover:text-foreground hover:underline"
+						>
+							{monthlyGoalCents ? "Editar" : "Definir meta"}
+						</Link>
+					}
+					empty="Defina a meta mensal em Configurações para acompanhar o time aqui."
+				/>
+			</DashboardRow>
+
+			<div className="grid grid-cols-1 gap-4">
 				<ChartPanel
-					title="Open pipeline by stage"
-					description="Where the value sits right now"
+					title="Pipeline aberto por etapa"
+					description="Onde o valor está agora"
 				>
 					{stageSlices.length > 0 ? (
 						<div className="flex flex-1 flex-col justify-between gap-1 pt-4">
@@ -174,7 +201,7 @@ export function SalesDashboard({ summary }: { summary: Summary }) {
 								data={stageSlices}
 								height={168}
 								centerValue={money(pipeline.totalCents)}
-								centerLabel="open"
+								centerLabel="em aberto"
 								formatValue={exact}
 							/>
 							<ul className="flex flex-col px-5 pb-1 md:px-6">
@@ -204,12 +231,17 @@ export function SalesDashboard({ summary }: { summary: Summary }) {
 							</ul>
 						</div>
 					) : (
-						<EmptyChart label="Nothing open" />
+						<EmptyChart label="Nada em aberto" />
 					)}
 				</ChartPanel>
-			</DashboardRow>
+			</div>
 		</div>
 	);
+}
+
+function daysLeftInMonth(now: Date): number {
+	const end = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+	return Math.max(0, end.getDate() - now.getDate());
 }
 
 function ChartPanel({
@@ -227,7 +259,9 @@ function ChartPanel({
 				<CardTitle>{title}</CardTitle>
 				{description ? <CardDescription>{description}</CardDescription> : null}
 			</CardHeader>
-			<div className="flex flex-1 flex-col border">{children}</div>
+			<div className="glass-surface reveal flex flex-1 flex-col">
+				{children}
+			</div>
 		</Card>
 	);
 }

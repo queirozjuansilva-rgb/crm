@@ -47,9 +47,9 @@ export function AddConnectionDialog({
 		>
 			<DialogContent className="max-w-(--container-narrow) gap-0 p-0 md:left-[calc(50%+calc((56px+213px)/2))]">
 				<DialogHeader className="gap-2 px-(--spacing-block-inline) pt-5 pb-4">
-					<DialogTitle className="text-base">Add a connection</DialogTitle>
+					<DialogTitle className="text-base">Adicionar conexão</DialogTitle>
 					<DialogDescription>
-						Nothing moves until you finish setting one up.
+						Nada acontece até você terminar de configurar uma.
 					</DialogDescription>
 				</DialogHeader>
 				<div className="flex max-h-[min(60vh,32rem)] flex-col overflow-y-auto border-y px-2 py-2">
@@ -57,7 +57,7 @@ export function AddConnectionDialog({
 						<CatalogRow
 							logo={GoogleLogo}
 							name="Google Workspace"
-							description="Bring in Gmail messages and Google Calendar meetings"
+							description="Traz mensagens do Gmail e reuniões do Google Agenda"
 							href={`/${slug}/settings/connections/google`}
 						/>
 					) : null}
@@ -65,7 +65,7 @@ export function AddConnectionDialog({
 						<CatalogRow
 							logo={SlackLogo}
 							name="Slack"
-							description="Let deployed agents notify approved channels and people"
+							description="Permite que agentes publicados avisem canais e pessoas aprovados"
 							href={`/${slug}/settings/connections/slack`}
 						/>
 					) : null}
@@ -73,7 +73,7 @@ export function AddConnectionDialog({
 						<CatalogRow
 							logo={MicrosoftLogo}
 							name="Microsoft 365"
-							description="Bring in Outlook email and the people on it"
+							description="Traz e-mails do Outlook e as pessoas envolvidas"
 							href={`/${slug}/settings/connections/microsoft`}
 						/>
 					) : null}
@@ -99,21 +99,17 @@ export function AddConnectionDialog({
 							/>
 						),
 					)}
-					<CatalogRow
-						logo={StripeLogo}
-						name="Stripe"
-						description="Coming soon"
-					/>
+					<CatalogRow logo={StripeLogo} name="Stripe" description="Em breve" />
 					<CatalogRow
 						logo={DocusignLogo}
 						name="Docusign"
-						description="Coming soon"
+						description="Em breve"
 					/>
 				</div>
 				<p className="px-(--spacing-block-inline) py-4 text-muted-foreground text-xs">
 					{connected.length > 0
 						? `${connected.join(", ")} ${connected.length === 1 ? "is" : "are"} already connected.`
-						: "Nothing is connected yet."}
+						: "Nada conectado ainda."}
 				</p>
 			</DialogContent>
 		</Dialog>

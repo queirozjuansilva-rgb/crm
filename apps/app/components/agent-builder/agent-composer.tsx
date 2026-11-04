@@ -85,7 +85,7 @@ type PendingSubmission = {
 const CREATE_AGENT_COMMAND = {
 	commandType: "CREATE_AGENT" as const,
 	invocation: "/Create agent",
-	label: "Create agent",
+	label: "Criar agente",
 };
 
 type ComposerCommand = typeof CREATE_AGENT_COMMAND;
@@ -446,8 +446,9 @@ export function AgentComposer({
 		action: async () => {
 			await onStop?.();
 		},
-		onSuccess: () => toast.success("Stop requested."),
-		onError: () => toast.error("The agent could not be stopped. Try again."),
+		onSuccess: () => toast.success("Parada solicitada."),
+		onError: () =>
+			toast.error("Não foi possível parar o agente. Tente de novo."),
 	});
 	const locked = disabled || submitAction.pending;
 	const canSend =
@@ -550,15 +551,15 @@ export function AgentComposer({
 						size="icon-sm"
 						disabled={stopAction.pending}
 						aria-busy={stopAction.pending}
-						aria-label="Stop reply"
+						aria-label="Parar resposta"
 						onClick={() => stopAction.run()}
 						className="rounded-full"
 					>
 						<AsyncButtonContent
 							status={stopAction.status}
-							pendingLabel={<span className="sr-only">Stopping</span>}
-							successLabel={<span className="sr-only">Stopping</span>}
-							errorLabel={<span className="sr-only">Stop failed</span>}
+							pendingLabel={<span className="sr-only">Parando</span>}
+							successLabel={<span className="sr-only">Parando</span>}
+							errorLabel={<span className="sr-only">Falha ao parar</span>}
 						>
 							<Icon icon={StopFilled} motion="none" />
 						</AsyncButtonContent>
@@ -588,8 +589,8 @@ export function AgentComposer({
 										: "Sending"}
 								</span>
 							}
-							successLabel={<span className="sr-only">Sent</span>}
-							errorLabel={<span className="sr-only">Send failed</span>}
+							successLabel={<span className="sr-only">Enviado</span>}
+							errorLabel={<span className="sr-only">Falha no envio</span>}
 						>
 							<Icon icon={ArrowUp} />
 						</AsyncButtonContent>
@@ -652,7 +653,7 @@ function ComposerEditor({
 			ref={editorRef}
 			role="textbox"
 			tabIndex={disabled ? -1 : 0}
-			aria-label="Message the agent builder"
+			aria-label="Escreva para o construtor de agentes"
 			aria-multiline="true"
 			aria-disabled={disabled}
 			data-empty={state.draft.length === 0 && state.anchors.length === 0}
@@ -1295,7 +1296,7 @@ function ResourcePicker({
 				<Button
 					variant="ghost"
 					size="icon-sm"
-					aria-label="Tag CRM records and integrations"
+					aria-label="Marcar registros e integrações"
 					disabled={disabled}
 				>
 					<Icon icon={Add} />
@@ -1312,8 +1313,8 @@ function ResourcePicker({
 									value: event.target.value,
 								})
 							}
-							placeholder="Search CRM"
-							aria-label="Search CRM"
+							placeholder="Buscar no CRM"
+							aria-label="Buscar no CRM"
 							disabled={disabled}
 						/>
 						<InputGroupAddon>
@@ -1345,7 +1346,7 @@ function ResourcePicker({
 					})}
 					<SkeletonSwap
 						loading={loading}
-						label="CRM records"
+						label="Registros do CRM"
 						skeleton={<ResourceResultsSkeleton />}
 					>
 						{resources.map((resource) => (
@@ -1360,7 +1361,7 @@ function ResourcePicker({
 						))}
 						{ready && connectedGoogle.length === 0 && resources.length === 0 ? (
 							<p className="px-3 py-5 text-center text-muted-foreground text-xs">
-								No matching records.
+								Nenhum registro encontrado.
 							</p>
 						) : null}
 					</SkeletonSwap>
@@ -1400,7 +1401,7 @@ function AttachmentPicker({
 				onPicked(attachmentContextKey(lastAccepted));
 			}
 		} catch {
-			toast.error("Those files could not be attached. Try again.");
+			toast.error("Não foi possível anexar esses arquivos. Tente de novo.");
 		} finally {
 			dispatch({ type: "attachments.reading.finished" });
 		}
@@ -1422,7 +1423,7 @@ function AttachmentPicker({
 			<Button
 				variant="ghost"
 				size="icon-sm"
-				aria-label="Attach files"
+				aria-label="Anexar arquivos"
 				disabled={disabled}
 				onClick={() => input.current?.click()}
 			>
@@ -1456,7 +1457,7 @@ function CommandPicker({
 				<Button
 					variant="ghost"
 					size="icon-sm"
-					aria-label="Open slash commands"
+					aria-label="Abrir comandos"
 					disabled={disabled}
 					className="font-mono text-sm"
 				>
@@ -1557,7 +1558,7 @@ async function readFiles(
 			continue;
 		}
 		if (file.name.length > 180) {
-			toast.error("That file name is too long.");
+			toast.error("Esse nome de arquivo é longo demais.");
 			continue;
 		}
 		if (file.type.length > 120) {

@@ -47,7 +47,7 @@ const eventSummary = z
 
 const auditChange = z.object({ before: z.json(), after: z.json() });
 
-const DATE_FORMATTER = new Intl.DateTimeFormat("en-US", {
+const DATE_FORMATTER = new Intl.DateTimeFormat("pt-BR", {
 	month: "short",
 	day: "numeric",
 	hour: "numeric",
@@ -56,7 +56,7 @@ const DATE_FORMATTER = new Intl.DateTimeFormat("en-US", {
 	timeZone: "UTC",
 	timeZoneName: "short",
 });
-const TIME_FORMATTER = new Intl.DateTimeFormat("en-US", {
+const TIME_FORMATTER = new Intl.DateTimeFormat("pt-BR", {
 	hour: "2-digit",
 	minute: "2-digit",
 	second: "2-digit",
@@ -93,16 +93,16 @@ export function AgentRuns({
 				<select
 					value={outcome}
 					onChange={(event) => setOutcome(event.target.value)}
-					aria-label="Filter run outcomes"
+					aria-label="Filtrar resultados"
 					className="h-7 rounded-md border bg-muted px-2.5 font-medium text-xs outline-none focus-visible:ring-2 focus-visible:ring-ring/60"
 				>
-					<option value="ALL">All outcomes</option>
-					<option value="SUCCEEDED">Succeeded</option>
-					<option value="FAILED">Failed</option>
-					<option value="RUNNING">Running</option>
-					<option value="QUEUED">Queued</option>
-					<option value="WAITING_FOR_APPROVAL">Waiting for approval</option>
-					<option value="CANCELLED">Cancelled</option>
+					<option value="ALL">Todos os resultados</option>
+					<option value="SUCCEEDED">Concluído</option>
+					<option value="FAILED">Falhou</option>
+					<option value="RUNNING">Executando</option>
+					<option value="QUEUED">Na fila</option>
+					<option value="WAITING_FOR_APPROVAL">Aguardando aprovação</option>
+					<option value="CANCELLED">Cancelado</option>
 				</select>
 			</div>
 
@@ -171,7 +171,7 @@ export function AgentRuns({
 									onClick={() => onRetry(run.id)}
 								>
 									<Icon icon={Renew} data-icon="inline-start" />
-									Retry
+									Tentar de novo
 								</Button>
 							</span>
 						) : null}
@@ -184,7 +184,7 @@ export function AgentRuns({
 									disabled={cancelling}
 									onClick={() => setConfirming(run.id)}
 								>
-									Stop
+									Parar
 								</Button>
 							</span>
 						) : null}
@@ -200,7 +200,7 @@ export function AgentRuns({
 			>
 				<AlertDialogContent>
 					<AlertDialogHeader>
-						<AlertDialogTitle>Stop this run?</AlertDialogTitle>
+						<AlertDialogTitle>Parar esta execução?</AlertDialogTitle>
 						<AlertDialogDescription>
 							The agent stops where it is and the run is recorded as cancelled.
 							Anything it has already done — a note, a task, a Slack message —
@@ -209,7 +209,7 @@ export function AgentRuns({
 					</AlertDialogHeader>
 
 					<AlertDialogFooter>
-						<AlertDialogCancel>Keep running</AlertDialogCancel>
+						<AlertDialogCancel>Continuar executando</AlertDialogCancel>
 						<AlertDialogAction
 							variant="destructive"
 							onClick={() => {
@@ -217,7 +217,7 @@ export function AgentRuns({
 								setConfirming(null);
 							}}
 						>
-							Stop run
+							Parar execução
 						</AlertDialogAction>
 					</AlertDialogFooter>
 				</AlertDialogContent>
@@ -225,7 +225,7 @@ export function AgentRuns({
 
 			{visible.length === 0 ? (
 				<p className="py-12 text-center text-muted-foreground text-sm">
-					No runs match this outcome.
+					Nenhuma execução corresponde a este resultado.
 				</p>
 			) : null}
 		</div>
@@ -250,13 +250,13 @@ function ExpandedRun({ run }: { run: RunRow }) {
 	return (
 		<div className="min-w-0 border-t">
 			<div className="grid grid-cols-2 gap-x-4 gap-y-3 border-b bg-background px-4 py-3 sm:min-h-[58px] sm:grid-cols-4 sm:items-center sm:gap-0 sm:px-5 sm:py-2">
-				<RunMeta label="Trigger" value={humanStatus(run.triggerType)} />
+				<RunMeta label="Gatilho" value={humanStatus(run.triggerType)} />
 				<RunMeta
-					label="Initiated by"
+					label="Iniciado por"
 					value={run.initiatedBy?.name ?? "Eve scheduler"}
 				/>
-				<RunMeta label="Model" value={run.modelId ?? "Gateway default"} />
-				<RunMeta label="Version" value={String(run.version.number)} last />
+				<RunMeta label="Modelo" value={run.modelId ?? "Gateway default"} />
+				<RunMeta label="Versão" value={String(run.version.number)} last />
 			</div>
 
 			<div>
@@ -346,12 +346,12 @@ export function AgentActivity({ activity }: { activity: Activity }) {
 				<select
 					value={kind}
 					onChange={(event) => setKind(event.target.value)}
-					aria-label="Filter activity"
+					aria-label="Filtrar atividade"
 					className="h-7 rounded-md border bg-muted px-2.5 font-medium text-xs outline-none focus-visible:ring-2 focus-visible:ring-ring/60"
 				>
-					<option value="ALL">All changes</option>
-					<option value="agent.">Agent changes</option>
-					<option value="run.">Run requests</option>
+					<option value="ALL">Todas as mudanças</option>
+					<option value="agent.">Mudanças do agente</option>
+					<option value="run.">Pedidos de execução</option>
 				</select>
 				<Button
 					variant="outline"
@@ -359,16 +359,16 @@ export function AgentActivity({ activity }: { activity: Activity }) {
 					onClick={() => exportJson("agent-activity.json", visible)}
 				>
 					<Icon icon={Download} data-icon="inline-start" />
-					Export
+					Exportar
 				</Button>
 			</div>
 
 			<div className="min-w-0 overflow-hidden rounded-lg border bg-card">
 				<div className="hidden h-9 items-center border-b bg-background px-5 text-muted-foreground text-xs sm:flex">
-					<span className="w-[166px] shrink-0">Time</span>
-					<span className="min-w-0 flex-1">Change</span>
-					<span className="w-[140px] shrink-0">Actor</span>
-					<span className="w-[118px] shrink-0 text-right">Request</span>
+					<span className="w-[166px] shrink-0">Hora</span>
+					<span className="min-w-0 flex-1">Alterar</span>
+					<span className="w-[140px] shrink-0">Autor</span>
+					<span className="w-[118px] shrink-0 text-right">Pedido</span>
 				</div>
 				{visible.map((event) => (
 					<div
@@ -400,7 +400,7 @@ export function AgentActivity({ activity }: { activity: Activity }) {
 				))}
 				{visible.length === 0 ? (
 					<p className="px-5 py-12 text-center text-muted-foreground text-sm">
-						No changes match this filter.
+						Nenhuma mudança corresponde a este filtro.
 					</p>
 				) : null}
 			</div>

@@ -14,13 +14,13 @@ type ActivityPresentation = Record<
 >;
 
 const PRESENTATION: ActivityPresentation = {
-	NOTE: { icon: Chat, label: "Note" },
-	CALL: { icon: Phone, label: "Call" },
-	EMAIL: { icon: Email, label: "Email" },
-	MEETING: { icon: Events, label: "Meeting" },
-	TASK: { icon: Task, label: "Task" },
-	STAGE_CHANGE: { icon: ArrowRight, label: "Stage change" },
-	ENRICHMENT: { icon: MagicWand, label: "Enrichment" },
+	NOTE: { icon: Chat, label: "Nota" },
+	CALL: { icon: Phone, label: "Ligação" },
+	EMAIL: { icon: Email, label: "E-mail" },
+	MEETING: { icon: Events, label: "Reunião" },
+	TASK: { icon: Task, label: "Tarefa" },
+	STAGE_CHANGE: { icon: ArrowRight, label: "Mudança de etapa" },
+	ENRICHMENT: { icon: MagicWand, label: "Enriquecimento" },
 };
 
 export function activityLabel(type: ActivityType): string {

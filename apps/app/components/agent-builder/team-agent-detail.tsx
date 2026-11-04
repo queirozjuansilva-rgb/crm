@@ -51,7 +51,7 @@ type AgentDetail = RouterOutputs["agents"]["byId"];
 type ReviewVersion = AgentDetail["reviewVersion"];
 type Runs = RouterOutputs["agents"]["history"];
 type Activity = RouterOutputs["agents"]["activity"];
-const DATE_FORMATTER = new Intl.DateTimeFormat("en-US", {
+const DATE_FORMATTER = new Intl.DateTimeFormat("pt-BR", {
 	month: "short",
 	day: "numeric",
 	hour: "numeric",
@@ -60,7 +60,7 @@ const DATE_FORMATTER = new Intl.DateTimeFormat("en-US", {
 	timeZone: "UTC",
 	timeZoneName: "short",
 });
-const _TIME_FORMATTER = new Intl.DateTimeFormat("en-US", {
+const _TIME_FORMATTER = new Intl.DateTimeFormat("pt-BR", {
 	hour: "2-digit",
 	minute: "2-digit",
 	second: "2-digit",
@@ -117,7 +117,7 @@ export function TeamAgentDetail({
 			onSuccess: async () => {
 				await invalidate();
 				setRunsOpen(true);
-				toast.success("Agent run queued.");
+				toast.success("Execução do agente na fila.");
 			},
 			onError: (error) => toast.error(error.message),
 		}),
@@ -138,7 +138,7 @@ export function TeamAgentDetail({
 		trpc.agents.retryRun.mutationOptions({
 			onSuccess: async () => {
 				await invalidate();
-				toast.success("Run queued again.");
+				toast.success("Execução na fila de novo.");
 			},
 			onError: (error) => toast.error(error.message),
 		}),
@@ -173,7 +173,7 @@ export function TeamAgentDetail({
 			<PageShell>
 				<PageShellHeader>
 					<PageShellHeading>
-						<PageShellTitle>Agent unavailable</PageShellTitle>
+						<PageShellTitle>Agente indisponível</PageShellTitle>
 						<PageShellDescription>{agent.error.message}</PageShellDescription>
 					</PageShellHeading>
 				</PageShellHeader>
@@ -200,7 +200,7 @@ export function TeamAgentDetail({
 	const nextRun =
 		enabledTriggers.length === 1 ? enabledTriggers[0]?.nextRunAt : null;
 	const triggerSummary =
-		enabledTriggers.map((trigger) => trigger.name).join(" · ") || "Manual only";
+		enabledTriggers.map((trigger) => trigger.name).join(" · ") || "Só manual";
 
 	return (
 		<PageShell className="min-h-0" contained>
@@ -232,13 +232,13 @@ export function TeamAgentDetail({
 						</span>
 						<div className="mt-1 flex flex-wrap gap-2">
 							<Button onClick={() => setRunsOpen(true)} variant="outline">
-								Runs
+								Execuções
 								<span className="font-mono text-muted-foreground">
 									{data.runCount}
 								</span>
 							</Button>
 							<Button asChild variant="outline">
-								<Link href={workspaceUrl("/chat")}>Open in chat</Link>
+								<Link href={workspaceUrl("/chat")}>Abrir no chat</Link>
 							</Button>
 							{isDraft && data.canManage ? (
 								<DraftAgentActions
@@ -257,10 +257,10 @@ export function TeamAgentDetail({
 										status={runAction.status}
 										pendingLabel="Queueing"
 										successLabel="Queued"
-										errorLabel="Try again"
+										errorLabel="Tentar de novo"
 									>
 										<Icon icon={Play} data-icon="inline-start" />
-										Run now
+										Executar agora
 									</AsyncButtonContent>
 								</Button>
 							) : null}
@@ -274,11 +274,11 @@ export function TeamAgentDetail({
 									<AsyncButtonContent
 										status={pauseAction.status}
 										pendingLabel="Pausing"
-										successLabel="Paused"
-										errorLabel="Try again"
+										successLabel="Pausado"
+										errorLabel="Tentar de novo"
 									>
 										<Icon icon={Pause} data-icon="inline-start" />
-										Pause
+										Pausar
 									</AsyncButtonContent>
 								</Button>
 							) : null}
@@ -293,10 +293,10 @@ export function TeamAgentDetail({
 										status={resumeAction.status}
 										pendingLabel="Resuming"
 										successLabel="Resumed"
-										errorLabel="Try again"
+										errorLabel="Tentar de novo"
 									>
 										<Icon icon={Play} data-icon="inline-start" />
-										Resume
+										Retomar
 									</AsyncButtonContent>
 								</Button>
 							) : null}
@@ -373,7 +373,7 @@ function DraftAgentActions({
 						queryKey: trpc.conversations.builderList.pathKey(),
 					}),
 				]);
-				toast.success("Agent deployed to the team.");
+				toast.success("Agente publicado para o time.");
 			},
 			onError: (error) => toast.error(error.message),
 		}),
@@ -397,7 +397,7 @@ function DraftAgentActions({
 						href={workspaceUrl(`/chat/${version.sourceConversationId}`)}
 						transitionTypes={["nav-back"]}
 					>
-						Change details
+						Detalhes da mudança
 					</Link>
 				</Button>
 			) : null}
@@ -410,9 +410,9 @@ function DraftAgentActions({
 					status={deployAction.status}
 					pendingLabel="Deploying"
 					successLabel="Deployed"
-					errorLabel="Try again"
+					errorLabel="Tentar de novo"
 				>
-					Deploy agent
+					Publicar agente
 				</AsyncButtonContent>
 			</Button>
 			<DeleteAgentAction agentId={agentId} name={name} />
@@ -465,7 +465,7 @@ function DeleteAgentAction({
 						disabled={removeAction.pending}
 					>
 						<Icon icon={OverflowMenuVertical} />
-						<span className="sr-only">More agent actions</span>
+						<span className="sr-only">Mais ações do agente</span>
 					</Button>
 				</DropdownMenuTrigger>
 				<DropdownMenuContent align="end">
@@ -474,7 +474,7 @@ function DeleteAgentAction({
 						onSelect={() => setConfirming(true)}
 					>
 						<Icon icon={TrashCan} />
-						Delete agent
+						Excluir agente
 					</DropdownMenuItem>
 				</DropdownMenuContent>
 			</DropdownMenu>
@@ -497,7 +497,7 @@ function DeleteAgentAction({
 
 					<AlertDialogFooter>
 						<AlertDialogCancel disabled={removeAction.pending}>
-							Cancel
+							Cancelar
 						</AlertDialogCancel>
 						<Button
 							variant="destructive"
@@ -509,9 +509,9 @@ function DeleteAgentAction({
 								status={removeAction.status}
 								pendingLabel="Deleting"
 								successLabel="Deleted"
-								errorLabel="Try again"
+								errorLabel="Tentar de novo"
 							>
-								Delete agent
+								Excluir agente
 							</AsyncButtonContent>
 						</Button>
 					</AlertDialogFooter>
@@ -529,7 +529,7 @@ function AgentOverview({ agent }: { agent: AgentDetail }) {
 	if (!capabilities) {
 		return (
 			<p className="text-muted-foreground text-sm">
-				This agent has no deployed version yet.
+				Este agente ainda não tem versão publicada.
 			</p>
 		);
 	}

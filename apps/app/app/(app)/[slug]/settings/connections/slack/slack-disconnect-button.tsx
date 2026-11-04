@@ -37,7 +37,7 @@ export function SlackDisconnectButton({
 			onSuccess: async () => {
 				await cache.slack();
 				setConfirming(false);
-				toast.success("Slack disconnected.");
+				toast.success("Slack desconectado.");
 				router.refresh();
 			},
 			onError: (error) => toast.error(error.message),
@@ -55,7 +55,7 @@ export function SlackDisconnectButton({
 				onClick={() => setConfirming(true)}
 				disabled={!canManage || disconnectAction.pending}
 			>
-				Disconnect
+				Desconectar
 			</Button>
 
 			<AlertDialog
@@ -78,7 +78,7 @@ export function SlackDisconnectButton({
 					</AlertDialogHeader>
 					<AlertDialogFooter>
 						<AlertDialogCancel disabled={disconnectAction.pending}>
-							Cancel
+							Cancelar
 						</AlertDialogCancel>
 						<Button
 							variant="destructive"
@@ -89,7 +89,7 @@ export function SlackDisconnectButton({
 								status={disconnectAction.status}
 								pendingLabel="Disconnecting…"
 							>
-								Disconnect
+								Desconectar
 							</AsyncButtonContent>
 						</Button>
 					</AlertDialogFooter>

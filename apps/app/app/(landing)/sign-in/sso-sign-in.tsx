@@ -26,7 +26,9 @@ export function SsoSignIn({ providers }: { providers: SsoProvider[] }) {
 		});
 
 		if (error) {
-			toast.error(error.message ?? "Could not reach the sign-in service.");
+			toast.error(
+				error.message ?? "Não foi possível acessar o serviço de login.",
+			);
 			setPending(null);
 		}
 	}

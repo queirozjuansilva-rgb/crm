@@ -110,7 +110,7 @@ export function AgentClarificationComposer({
 					{showFreeform ? (
 						<QuestionnaireInput
 							aria-label={options.length > 0 ? "Another answer" : "Your answer"}
-							placeholder="Add the detail the agent needs"
+							placeholder="Adicione o detalhe que o agente precisa"
 							disabled={pending}
 						/>
 					) : null}
@@ -128,7 +128,7 @@ export function AgentClarificationComposer({
 						status={pending ? "pending" : "idle"}
 						pendingLabel="Submitting"
 					>
-						Submit answer
+						Enviar resposta
 					</AsyncButtonContent>
 				</QuestionnaireSubmit>
 			</QuestionnaireActions>

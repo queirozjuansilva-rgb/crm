@@ -23,12 +23,12 @@ type ProviderGrant = {
 
 const PROVIDERS = {
 	google: {
-		label: "Grant Google access",
+		label: "Conceder acesso ao Google",
 		scopes: [...SYNC_SCOPES],
 		Logo: GoogleLogo,
 	},
 	microsoft: {
-		label: "Grant Microsoft access",
+		label: "Conceder acesso à Microsoft",
 		scopes: [...MICROSOFT_SYNC_SCOPES],
 		Logo: MicrosoftLogo,
 	},
@@ -96,7 +96,7 @@ export function GrantAccess({
 				type="button"
 				variant="ghost"
 			>
-				Sign out
+				Sair
 			</Button>
 		</div>
 	);

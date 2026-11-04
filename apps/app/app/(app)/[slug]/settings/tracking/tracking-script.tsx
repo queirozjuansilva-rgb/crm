@@ -62,7 +62,7 @@ export function TrackingScript() {
 		trpc.tracking.rotateSiteId.mutationOptions({
 			onSuccess: async () => {
 				await cache.tracking();
-				toast.success("Site ID rotated. Paste the new tag on your website.");
+				toast.success("ID do site trocado. Cole a nova tag no seu site.");
 			},
 			onError: (error) => toast.error(error.message),
 		}),
@@ -84,14 +84,14 @@ export function TrackingScript() {
 		const clipboard = navigator.clipboard;
 
 		if (!value || !clipboard) {
-			toast.error("Could not copy the script. Select it instead.");
+			toast.error("Não foi possível copiar o script. Selecione-o manualmente.");
 			return;
 		}
 
 		clipboard
 			.writeText(value)
-			.then(() => toast.success("Script copied."))
-			.catch(() => toast.error("Could not copy the script."));
+			.then(() => toast.success("Script copiado."))
+			.catch(() => toast.error("Não foi possível copiar o script."));
 	};
 
 	return (
@@ -99,13 +99,13 @@ export function TrackingScript() {
 			<CardHeader>
 				<CardTitle>
 					<div className="flex items-center gap-2">
-						Tracking script
+						Script de rastreamento
 						<StatusIndicator
 							size="sm"
 							tone={paused ? "warning" : receivingSince ? "success" : "neutral"}
 							label={
 								paused
-									? "Paused"
+									? "Pausado"
 									: receivingSince
 										? "Receiving page views"
 										: "No page views yet"
@@ -114,7 +114,7 @@ export function TrackingScript() {
 					</div>
 				</CardTitle>
 				<CardDescription>
-					One tag, 4 KB, in the head of every page you measure.
+					Uma tag de 4 KB no head de cada página que você mede.
 				</CardDescription>
 
 				<CardAction>
@@ -126,7 +126,7 @@ export function TrackingScript() {
 						type="button"
 					>
 						<Icon icon={Copy} data-icon="inline-start" />
-						Copy
+						Copiar
 					</Button>
 				</CardAction>
 			</CardHeader>
@@ -139,7 +139,7 @@ export function TrackingScript() {
 					onValueChange={setSection}
 				>
 					<AccordionItem value="html">
-						<AccordionTrigger>Paste it into your HTML</AccordionTrigger>
+						<AccordionTrigger>Colar no seu HTML</AccordionTrigger>
 						<AccordionContent className="flex flex-col gap-4">
 							<pre className="overflow-x-auto rounded-md border bg-muted p-4 font-mono text-code-foreground text-xs/5">
 								<span className="text-code-accent">{"<script"}</span>
@@ -160,7 +160,7 @@ export function TrackingScript() {
 
 					<AccordionItem value="gtm">
 						<AccordionTrigger>
-							Add it through Google Tag Manager
+							Adicionar pelo Google Tag Manager
 						</AccordionTrigger>
 						<AccordionContent className="flex flex-col gap-4">
 							<pre className="overflow-x-auto rounded-md border bg-muted p-4 font-mono text-code-foreground text-xs/5">
@@ -171,10 +171,10 @@ export function TrackingScript() {
 								<span className="text-code-accent">{"></script>"}</span>
 							</pre>
 							<ol className="flex list-decimal flex-col gap-1 pl-4 text-muted-foreground text-xs/relaxed">
-								<li>In Tag Manager, add a new Custom HTML tag.</li>
 								<li>
-									Paste this snippet — not the one above — as the tag's HTML.
+									No Tag Manager, adicione uma nova tag de HTML personalizado.
 								</li>
+								<li>Cole este trecho, não o de cima, como HTML da tag.</li>
 								<li>
 									Trigger it on All Pages, then publish the container. Keep{" "}
 									<span className="font-mono text-foreground">{scriptUrl}</span>{" "}
@@ -196,7 +196,7 @@ export function TrackingScript() {
 						htmlFor="tracking-paused"
 						className="flex flex-col items-start gap-1"
 					>
-						<span className="text-sm">Pause tracking</span>
+						<span className="text-sm">Pausar rastreamento</span>
 						<span className="font-normal text-muted-foreground text-xs">
 							The script keeps loading and records nothing. Your domains and
 							settings are kept
@@ -222,13 +222,13 @@ export function TrackingScript() {
 									size="xs"
 									disabled={!canManage || rotate.isPending}
 								>
-									Rotate site ID
+									Trocar ID do site
 								</Button>
 							</AlertDialogTrigger>
 
 							<AlertDialogContent>
 								<AlertDialogHeader>
-									<AlertDialogTitle>Rotate the site ID?</AlertDialogTitle>
+									<AlertDialogTitle>Trocar o ID do site?</AlertDialogTitle>
 									<AlertDialogDescription>
 										Every copy of the old script stops recording at once,
 										including any you have forgotten about. You will need to
@@ -238,12 +238,12 @@ export function TrackingScript() {
 								</AlertDialogHeader>
 
 								<AlertDialogFooter>
-									<AlertDialogCancel>Cancel</AlertDialogCancel>
+									<AlertDialogCancel>Cancelar</AlertDialogCancel>
 									<AlertDialogAction
 										variant="destructive"
 										onClick={() => rotate.mutate()}
 									>
-										Rotate
+										Trocar
 									</AlertDialogAction>
 								</AlertDialogFooter>
 							</AlertDialogContent>

@@ -147,7 +147,7 @@ test("turns generic PlanetScale data into concise organization details", () => {
 					{ label: "Databases", value: "6" },
 					{ label: "Plan", value: "Scaler Pro" },
 					{ label: "Access", value: "Read Write" },
-					{ label: "Updated", value: "Jan 2, 2026" },
+					{ label: "Updated", value: "2 de jan. de 2026" },
 				],
 				tags: [],
 			},

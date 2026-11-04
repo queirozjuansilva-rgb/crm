@@ -13,7 +13,7 @@ import { requireSession } from "@/lib/session";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 import { AddConnectionDialog } from "./add-connection-dialog";
 
-export const metadata: Metadata = { title: "Connections" };
+export const metadata: Metadata = { title: "Conexões" };
 
 export default function ConnectionsSettingsPage(
 	props: PageProps<"/[slug]/settings/connections">,
@@ -47,7 +47,7 @@ async function ConnectionsSettingsPageContent({
 		return [
 			{
 				name: vendor.name,
-				status: "Connected",
+				status: "Conectado",
 				bringsIn: vendor.presentation.bringsIn,
 				sends:
 					entry.connection.accessMode === "read_write"
@@ -70,9 +70,9 @@ async function ConnectionsSettingsPageContent({
 			? [
 					{
 						name: "Google Workspace",
-						status: "Connected",
-						bringsIn: "Emails, meetings and the people on them",
-						sends: "Nothing yet",
+						status: "Conectado",
+						bringsIn: "E-mails, reuniões e as pessoas envolvidas",
+						sends: "Nada ainda",
 						href: `/${slug}/settings/connections/google`,
 						mark: <GoogleLogo className="size-5 shrink-0" />,
 					},
@@ -84,7 +84,7 @@ async function ConnectionsSettingsPageContent({
 						name: "Slack",
 						status: slack.workspace
 							? `Connected to ${slack.workspace}`
-							: "Connected",
+							: "Conectado",
 						bringsIn: "Workspace members and channels the app has joined",
 						sends: "Messages to approved channels and people",
 						href: `/${slug}/settings/connections/slack`,
@@ -96,9 +96,9 @@ async function ConnectionsSettingsPageContent({
 			? [
 					{
 						name: "Microsoft 365",
-						status: "Connected",
-						bringsIn: "Outlook email and the people on it",
-						sends: "Nothing yet",
+						status: "Conectado",
+						bringsIn: "E-mails do Outlook e as pessoas envolvidas",
+						sends: "Nada ainda",
 						href: `/${slug}/settings/connections/microsoft`,
 						mark: <MicrosoftLogo className="size-5 shrink-0" />,
 					},
@@ -113,17 +113,14 @@ async function ConnectionsSettingsPageContent({
 				<div className="mx-auto flex w-full max-w-(--container-page) flex-col gap-(--spacing-page-gap)">
 					<header className="flex items-start justify-between gap-4 px-(--spacing-block-inline)">
 						<div className="flex flex-col gap-2">
-							<h1 className="font-medium text-2xl tracking-tight">
-								Connections
-							</h1>
+							<h1 className="font-medium text-2xl tracking-tight">Conexões</h1>
 							<p className="max-w-2xl text-muted-foreground text-sm">
-								Where your CRM gets its information, and what it is allowed to
-								send on your behalf.
+								De onde o CRM tira informações e o que pode enviar em seu nome.
 							</p>
 						</div>
 						<Button asChild variant="outline">
 							<Link href={`/${slug}/settings/connections?add=1`}>
-								Add connection
+								Adicionar conexão
 							</Link>
 						</Button>
 					</header>
@@ -137,31 +134,31 @@ async function ConnectionsSettingsPageContent({
 				<div className="mx-auto flex w-full max-w-(--container-narrow) flex-1 flex-col justify-center gap-(--spacing-page-gap) text-center">
 					<div className="flex flex-col gap-2 px-(--spacing-block-inline)">
 						<h1 className="font-medium text-2xl tracking-tight">
-							Nothing is connected yet
+							Nada conectado ainda
 						</h1>
 						<p className="text-muted-foreground text-sm leading-relaxed">
-							Right now every deal, contact and note has to be typed in by hand.
-							Connect a tool and the CRM starts filling itself in from the work
-							your team already does.
+							Hoje todo negócio, contato e nota precisa ser digitado à mão.
+							Conecte uma ferramenta e o CRM passa a se preencher com o trabalho
+							que o time já faz.
 						</p>
 					</div>
 					<div className="flex flex-col divide-y rounded-lg border bg-card px-(--spacing-block-inline)">
 						<StarterRow
 							logo={GoogleLogo}
 							name="Google Workspace"
-							description="File email and meetings against the right company"
+							description="Vincula e-mails e reuniões à empresa certa"
 							href={`/${slug}/settings/connections/google`}
 						/>
 						<StarterRow
 							logo={SlackLogo}
 							name="Slack"
-							description="Let deployed agents notify approved channels and people"
+							description="Permite que agentes publicados avisem canais e pessoas aprovados"
 							href={`/${slug}/settings/connections/slack`}
 						/>
 						<StarterRow
 							logo={MicrosoftLogo}
 							name="Microsoft 365"
-							description="File Outlook email against the right company"
+							description="Vincula e-mails do Outlook à empresa certa"
 							href={`/${slug}/settings/connections/microsoft`}
 						/>
 					</div>
@@ -171,7 +168,7 @@ async function ConnectionsSettingsPageContent({
 							className="font-medium text-foreground underline underline-offset-4"
 							href={`/${slug}/settings/connections?add=1`}
 						>
-							Browse all connections
+							Ver todas as conexões
 						</Link>
 					</p>
 				</div>
@@ -225,12 +222,12 @@ function ConnectionCard({
 					{status}
 				</p>
 				<Button asChild size="sm" variant="outline">
-					<Link href={href}>Manage</Link>
+					<Link href={href}>Gerenciar</Link>
 				</Button>
 			</div>
 			<div className="flex flex-col gap-2 pl-8 text-sm">
-				<CapabilityRow label="Brings in" value={bringsIn} />
-				<CapabilityRow label="Sends" value={sends} />
+				<CapabilityRow label="Traz" value={bringsIn} />
+				<CapabilityRow label="Envia" value={sends} />
 			</div>
 		</section>
 	);
@@ -264,7 +261,7 @@ function StarterRow({
 				<p className="text-muted-foreground text-xs">{description}</p>
 			</div>
 			<Button asChild variant="outline" size="sm">
-				<Link href={href}>Connect</Link>
+				<Link href={href}>Conectar</Link>
 			</Button>
 		</div>
 	);

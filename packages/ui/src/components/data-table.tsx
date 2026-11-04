@@ -206,7 +206,7 @@ function FacetSubmenu({
 							onKeyDown={(event) => event.stopPropagation()}
 						/>
 						<CommandList>
-							<CommandEmpty>{facet.empty ?? "Nothing matches."}</CommandEmpty>
+							<CommandEmpty>{facet.empty ?? "Nada corresponde."}</CommandEmpty>
 							<CommandGroup>
 								{facet.options.map((option) => {
 									const checked = selected.includes(option.value);
@@ -236,7 +236,7 @@ function FacetSubmenu({
 						{selected.length > 0 && (
 							<>
 								<DropdownMenuItem onSelect={() => onChange([])}>
-									Clear
+									Limpar
 								</DropdownMenuItem>
 								<DropdownMenuSeparator />
 							</>
@@ -314,7 +314,7 @@ export function DataTable<TRow, TSub = unknown>({
 			: tabs?.options.find((option) => option.value === query.tab);
 	const activeTabLabel = activeTabOption
 		? activeTabOption.label
-		: (tabs?.allLabel ?? "All");
+		: (tabs?.allLabel ?? "Todos");
 
 	const deferredRows = useDeferredValue(rows);
 	const anyExpandable =
@@ -367,7 +367,7 @@ export function DataTable<TRow, TSub = unknown>({
 							size="sm"
 							onClick={() => selection.state.clear()}
 						>
-							Clear
+							Limpar
 						</Button>
 					</div>
 				</div>
@@ -435,7 +435,7 @@ export function DataTable<TRow, TSub = unknown>({
 									onValueChange={(value) => query.setTab(value)}
 								>
 									<DropdownMenuRadioItem value="all">
-										<span className="flex-1">{tabs.allLabel ?? "All"}</span>
+										<span className="flex-1">{tabs.allLabel ?? "Todos"}</span>
 									</DropdownMenuRadioItem>
 									{tabs.options.map((option) => {
 										if (tabCounts?.[option.value] === 0) return null;
@@ -494,18 +494,18 @@ export function DataTable<TRow, TSub = unknown>({
 										className="justify-start sm:justify-center"
 									>
 										<ArrowsVertical data-icon="inline-start" />
-										Sort
+										Ordenar
 									</Button>
 								</DropdownMenuTrigger>
 								<DropdownMenuContent align="end" className="min-w-48">
-									<DropdownMenuLabel>Sort by</DropdownMenuLabel>
+									<DropdownMenuLabel>Ordenar por</DropdownMenuLabel>
 									<DropdownMenuRadioGroup
 										value={query.sort}
 										onValueChange={query.setSort}
 									>
 										{anyExpandable && (
 											<DropdownMenuRadioItem value="detail">
-												Detail
+												Detalhe
 											</DropdownMenuRadioItem>
 										)}
 										{sortableColumns.map((column) => (
@@ -522,10 +522,10 @@ export function DataTable<TRow, TSub = unknown>({
 										}
 									>
 										<DropdownMenuRadioItem value="asc">
-											Ascending
+											Crescente
 										</DropdownMenuRadioItem>
 										<DropdownMenuRadioItem value="desc">
-											Descending
+											Decrescente
 										</DropdownMenuRadioItem>
 									</DropdownMenuRadioGroup>
 								</DropdownMenuContent>
@@ -540,14 +540,14 @@ export function DataTable<TRow, TSub = unknown>({
 										className="justify-start sm:justify-center"
 									>
 										<Column data-icon="inline-start" />
-										Columns
+										Colunas
 										<span className="tabular-nums opacity-60">
 											({visibleColumns.length})
 										</span>
 									</Button>
 								</DropdownMenuTrigger>
 								<DropdownMenuContent align="end" className="min-w-48">
-									<DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
+									<DropdownMenuLabel>Mostrar ou ocultar colunas</DropdownMenuLabel>
 									{hideable.map((column) => (
 										<DropdownMenuCheckboxItem
 											key={column.id}
@@ -577,16 +577,16 @@ export function DataTable<TRow, TSub = unknown>({
 					"table-fixed [&_td:first-child]:pl-4 [&_th:first-child]:pl-4 [&_td:last-child]:pr-4 [&_th:last-child]:pr-4",
 					tableClassName,
 				)}
-				containerClassName="min-h-0 flex-1 overflow-auto rounded-lg border bg-card"
+				containerClassName="glass-surface min-h-0 flex-1 overflow-auto"
 				overlay={
 					deferredRows.length === 0 ? (
 						<div className="absolute inset-x-0 top-11 bottom-0 flex items-center justify-center px-4 py-8 text-center text-muted-foreground">
-							{loading ? <Spinner /> : (empty ?? "No results found.")}
+							{loading ? <Spinner /> : (empty ?? "Nenhum resultado.")}
 						</div>
 					) : null
 				}
 			>
-				<TableHeader className="sticky top-0 z-10 bg-muted [&_th]:bg-muted [&_tr]:border-0 [&_tr]:shadow-[inset_0_-1px_0_var(--border)]">
+				<TableHeader className="sticky top-0 z-10 bg-popover [&_th]:bg-popover [&_tr]:border-0 [&_tr]:shadow-[inset_0_-1px_0_var(--border)]">
 					<TableRow>
 						{selection && (
 							<TableHead className={cn("h-11 w-10 px-3", HIDE_BELOW_CLASS.sm)}>
@@ -602,13 +602,13 @@ export function DataTable<TRow, TSub = unknown>({
 										selection.state.toggleAll(checked === true)
 									}
 									disabled={deferredRows.length === 0}
-									aria-label="Select every row on this page"
+									aria-label="Selecionar todas as linhas desta página"
 								/>
 							</TableHead>
 						)}
 						{anyExpandable && (
 							<TableHead className="h-11 w-10 px-3">
-								<span className="sr-only">Detail</span>
+								<span className="sr-only">Detalhe</span>
 							</TableHead>
 						)}
 						{visibleColumns.map((column) => {
@@ -701,7 +701,7 @@ export function DataTable<TRow, TSub = unknown>({
 												aria-label={
 													selection.rowLabel
 														? `Select ${selection.rowLabel(row)}`
-														: "Select row"
+														: "Selecionar linha"
 												}
 											/>
 										</TableCell>

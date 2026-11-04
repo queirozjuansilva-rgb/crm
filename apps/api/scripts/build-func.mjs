@@ -177,8 +177,6 @@ writeFileSync(
 	JSON.stringify({
 		version: 3,
 		routes: [{ src: "/(.*)", dest: "/api/index" }],
-		// Vercel Hobby only allows daily crons: the mailbox sync and the other
-		// /internal/* jobs are triggered by an external scheduler instead.
 	}),
 );
 

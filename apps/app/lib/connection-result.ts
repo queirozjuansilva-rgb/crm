@@ -252,14 +252,14 @@ function detailLabel(key: string) {
 	if (key === "database_count") return "Databases";
 	if (key === "mcp_access_level" || key === "access_level") return "Access";
 	if (key === "updated_at") return "Updated";
-	if (key === "created_at") return "Created";
+	if (key === "created_at") return "Criado em";
 	return humanise(key);
 }
 
 function dateLabel(value: string) {
 	const date = new Date(value);
 	if (Number.isNaN(date.getTime())) return value;
-	return new Intl.DateTimeFormat("en-US", {
+	return new Intl.DateTimeFormat("pt-BR", {
 		month: "short",
 		day: "numeric",
 		year: "numeric",
@@ -294,7 +294,7 @@ function scalarText(value: JsonValue | undefined) {
 
 function limitedScalar(value: JsonValue | undefined, limit: number) {
 	const boolean = booleanValue.safeParse(value);
-	if (boolean.success) return boolean.data ? "Yes" : "No";
+	if (boolean.success) return boolean.data ? "Sim" : "No";
 	const number = numberValue.safeParse(value);
 	if (number.success) return String(number.data);
 	const text = stringValue.safeParse(value);

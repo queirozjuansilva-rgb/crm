@@ -158,9 +158,9 @@ export function AgentCode({
 			<section className="flex flex-col gap-3.5">
 				<div className="flex items-end justify-between gap-4">
 					<div>
-						<h2 className="font-semibold text-lg tracking-tight">Code</h2>
+						<h2 className="font-semibold text-lg tracking-tight">Código</h2>
 						<p className="text-muted-foreground text-sm">
-							What the agent actually runs.
+							O que o agente realmente executa.
 						</p>
 					</div>
 
@@ -183,7 +183,7 @@ export function AgentCode({
 								size="sm"
 								variant="outline"
 							>
-								{editing ? "Done" : "Edit"}
+								{editing ? "Feito" : "Edit"}
 							</Button>
 						) : null}
 					</div>
@@ -230,10 +230,10 @@ export function AgentCode({
 			<SaveBar
 				description={`${changed.length} file${changed.length === 1 ? "" : "s"} changed. Saving writes a new revision.`}
 				open={changed.length > 0}
-				title="Unsaved code"
+				title="Código não salvo"
 			>
 				<Button disabled={saving} onClick={discard} size="sm" variant="outline">
-					Discard
+					Descartar
 				</Button>
 				<Button
 					disabled={saving}
@@ -242,7 +242,7 @@ export function AgentCode({
 					}}
 					size="sm"
 				>
-					{saving ? "Saving…" : "Save"}
+					{saving ? "Saving…" : "Salvar"}
 				</Button>
 			</SaveBar>
 		</EditProvider>

@@ -5,9 +5,11 @@ import {
 	readAgentModel,
 	readArchiveRetentionDays,
 	readContextDevKey,
+	readMonthlyGoalCents,
 	writeAgentModel,
 	writeArchiveRetentionDays,
 	writeContextDevKey,
+	writeMonthlyGoalCents,
 } from "@crm/db/settings";
 import { BadRequestException, Injectable, Logger } from "@nestjs/common";
 import { ResearchKeyService } from "../agent/research-key.service";
@@ -18,6 +20,7 @@ import type {
 	AgentModelSettings,
 	ArchiveRetentionSettings,
 	ModelCatalogResult,
+	MonthlyGoalSettings,
 	ResearchKeySettings,
 } from "./settings.contracts";
 
@@ -143,5 +146,20 @@ export class SettingsService {
 		});
 
 		return { days: saved };
+	}
+
+	async monthlyGoal(): Promise<MonthlyGoalSettings> {
+		return { cents: await readMonthlyGoalCents(this.db) };
+	}
+
+	async setMonthlyGoal(cents: number | null): Promise<MonthlyGoalSettings> {
+		const saved = await writeMonthlyGoalCents(this.db, cents);
+
+		this.logger.log({
+			message: "Monthly goal changed",
+			cents: saved,
+		});
+
+		return { cents: saved };
 	}
 }

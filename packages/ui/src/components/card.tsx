@@ -76,7 +76,7 @@ function CardContent({ className, ...props }: React.ComponentProps<"div">) {
 		<div
 			data-slot="card-content"
 			className={cn(
-				"flex flex-col gap-4 rounded-lg border bg-card p-4 md:p-6",
+				"glass-surface flex flex-col gap-4 p-4 md:p-6",
 				className,
 			)}
 			{...props}
@@ -85,7 +85,7 @@ function CardContent({ className, ...props }: React.ComponentProps<"div">) {
 }
 
 const cardPanelVariants = cva(
-	"flex min-h-0 flex-col overflow-hidden rounded-lg border bg-card",
+	"glass-surface reveal flex min-h-0 flex-col overflow-hidden",
 	{
 		variants: {
 			size: {

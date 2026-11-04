@@ -1,6 +1,6 @@
 {
-	"name": "Comp AI CRM",
-	"short_name": "Comp AI CRM",
+	"name": "Lugh CRM",
+	"short_name": "Lugh CRM",
 	"icons": [
 		{
 			"src": "/web-app-manifest-192x192.png",
@@ -15,7 +15,7 @@
 			"purpose": "maskable"
 		}
 	],
-	"theme_color": "#ffffff",
-	"background_color": "#ffffff",
+	"theme_color": "#100e18",
+	"background_color": "#100e18",
 	"display": "standalone"
 }

@@ -88,16 +88,16 @@ type Draft = {
 };
 
 const TYPE_HINTS = {
-	TEXT: "Text — a short line",
-	LONG_TEXT: "Long text — a paragraph",
-	NUMBER: "Number",
-	DATE: "Date",
-	CHECKBOX: "Checkbox — yes or no",
-	SELECT: "Select — one of a fixed list",
+	TEXT: "Texto: uma linha curta",
+	LONG_TEXT: "Texto longo: um parágrafo",
+	NUMBER: "Número",
+	DATE: "Data",
+	CHECKBOX: "Caixa de seleção: sim ou não",
+	SELECT: "Seleção: uma opção de uma lista",
 	URL: "URL",
-	EMAIL: "Email",
-	PHONE: "Phone",
-	USER: "User — someone in the workspace",
+	EMAIL: "E-mail",
+	PHONE: "Telefone",
+	USER: "Usuário: alguém do espaço",
 } satisfies Record<(typeof FIELD_TYPES)[number], string>;
 
 function optionId(option: { id?: string }, index: number): string {
@@ -133,7 +133,7 @@ function Coverage({ field }: { field: FieldRecord }) {
 	const backfill = useMutation(
 		trpc.fields.backfill.mutationOptions({
 			onSuccess: async () => {
-				toast.success("Your agents will pick this up.");
+				toast.success("Seus agentes vão usar isto.");
 				await cache.fieldCoverage(field.id);
 			},
 			onError: (error) => toast.error(error.message),
@@ -444,7 +444,7 @@ export function FieldEditor({
 						<AlertDialogHeader>
 							<AlertDialogTitle>Archive {field.label}?</AlertDialogTitle>
 							<AlertDialogDescription>
-								Hidden everywhere. Its values are kept.
+								Oculto em todo lugar. Os valores são mantidos.
 							</AlertDialogDescription>
 						</AlertDialogHeader>
 						<AlertDialogFooter>
@@ -453,7 +453,7 @@ export function FieldEditor({
 								variant="destructive"
 								onClick={() => archive.mutate({ id: field.id })}
 							>
-								Archive field
+								Arquivar campo
 							</AlertDialogAction>
 						</AlertDialogFooter>
 					</AlertDialogContent>

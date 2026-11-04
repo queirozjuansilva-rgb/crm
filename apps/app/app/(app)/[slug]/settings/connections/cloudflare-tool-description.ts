@@ -5,7 +5,7 @@ const TYPESCRIPT_MARKER = "Available in your code:";
 export async function presentCloudflareToolDescription(
 	description: string | null,
 ) {
-	const value = description?.trim() || "No description provided.";
+	const value = description?.trim() || "Sem descrição.";
 	const markerIndex = value.indexOf(TYPESCRIPT_MARKER);
 	if (markerIndex < 0) return { prose: value };
 

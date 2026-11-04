@@ -1,13 +1,37 @@
+const PORTUGUESE_NOUNS: Record<string, readonly [string, string]> = {
+	deal: ["negócio", "negócios"],
+	task: ["tarefa", "tarefas"],
+	contact: ["contato", "contatos"],
+	company: ["empresa", "empresas"],
+	record: ["registro", "registros"],
+	tool: ["ferramenta", "ferramentas"],
+	run: ["execução", "execuções"],
+	day: ["dia", "dias"],
+	item: ["item", "itens"],
+	person: ["pessoa", "pessoas"],
+	meeting: ["reunião", "reuniões"],
+	email: ["e-mail", "e-mails"],
+	note: ["nota", "notas"],
+	agent: ["agente", "agentes"],
+	file: ["arquivo", "arquivos"],
+	field: ["campo", "campos"],
+	view: ["visualização", "visualizações"],
+};
+
 export function formatCount(
 	count: number,
 	noun: string,
 	plural = `${noun}s`,
 ): string {
+	const portuguese = PORTUGUESE_NOUNS[noun];
+	if (portuguese) {
+		return `${count} ${count === 1 ? portuguese[0] : portuguese[1]}`;
+	}
 	return `${count} ${count === 1 ? noun : plural}`;
 }
 
 const WELL_FORMED_CURRENCY_CODE = /^[A-Za-z]{3}$/;
-const percentFormat = new Intl.NumberFormat("en-US", {
+const percentFormat = new Intl.NumberFormat("pt-BR", {
 	style: "percent",
 	maximumFractionDigits: 0,
 });
@@ -25,7 +49,7 @@ function fractionDigits(code: string): number {
 	if (cached !== undefined) return cached;
 
 	const digits =
-		new Intl.NumberFormat("en-US", {
+		new Intl.NumberFormat("pt-BR", {
 			style: "currency",
 			currency: code,
 		}).resolvedOptions().maximumFractionDigits ?? 2;
@@ -39,7 +63,7 @@ export function formatMoney(cents: number, currency = "usd"): string {
 	const whole = cents % 100 === 0;
 	const digits = fractionDigits(code);
 
-	return new Intl.NumberFormat(undefined, {
+	return new Intl.NumberFormat("pt-BR", {
 		style: "currency",
 		currency: code,
 		minimumFractionDigits: whole ? 0 : Math.min(2, digits),
@@ -48,7 +72,7 @@ export function formatMoney(cents: number, currency = "usd"): string {
 }
 
 export function formatMoneyCompact(cents: number, currency = "usd"): string {
-	return new Intl.NumberFormat(undefined, {
+	return new Intl.NumberFormat("pt-BR", {
 		style: "currency",
 		currency: displayCurrencyCode(currency),
 		notation: "compact",
@@ -60,7 +84,7 @@ export function formatPercent(rate: number): string {
 	return percentFormat.format(rate);
 }
 
-const dayFormat = new Intl.DateTimeFormat("en-US", {
+const dayFormat = new Intl.DateTimeFormat("pt-BR", {
 	month: "short",
 	day: "numeric",
 	year: "numeric",

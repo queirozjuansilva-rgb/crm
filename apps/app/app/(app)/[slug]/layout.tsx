@@ -1,3 +1,4 @@
+import { AmbientBackground } from "@crm/ui/components/ambient-background";
 import { notFound, unstable_rethrow } from "next/navigation";
 import { connection } from "next/server";
 import { Suspense } from "react";
@@ -17,6 +18,7 @@ export default function AppLayout({
 	return (
 		<MobileNavProvider>
 			<div className="isolate flex h-svh flex-col">
+				<AmbientBackground />
 				<Suspense fallback={<AppHeaderFallback />}>
 					<WorkspaceHeader params={params} />
 				</Suspense>

@@ -57,7 +57,7 @@ export function DeleteChatAction({
 			onSuccess: async () => {
 				await cache.conversationRemoved(conversationId);
 				setConfirming(false);
-				toast.success("Chat deleted.");
+				toast.success("Chat excluído.");
 				onDeleted?.();
 
 				if (returnToChatList) {
@@ -93,7 +93,7 @@ export function DeleteChatAction({
 							disabled={removeAction.pending}
 						>
 							<Icon icon={OverflowMenuVertical} />
-							<span className="sr-only">More chat actions</span>
+							<span className="sr-only">Mais ações do chat</span>
 						</Button>
 					</DropdownMenuTrigger>
 					<DropdownMenuContent align="end">
@@ -102,7 +102,7 @@ export function DeleteChatAction({
 							onSelect={() => setConfirming(true)}
 						>
 							<Icon icon={TrashCan} />
-							Delete chat
+							Excluir chat
 						</DropdownMenuItem>
 					</DropdownMenuContent>
 				</DropdownMenu>
@@ -124,7 +124,7 @@ export function DeleteChatAction({
 					</AlertDialogHeader>
 					<AlertDialogFooter>
 						<AlertDialogCancel disabled={removeAction.pending}>
-							Cancel
+							Cancelar
 						</AlertDialogCancel>
 						<Button
 							variant="destructive"
@@ -136,9 +136,9 @@ export function DeleteChatAction({
 								status={removeAction.status}
 								pendingLabel="Deleting"
 								successLabel="Deleted"
-								errorLabel="Try again"
+								errorLabel="Tentar de novo"
 							>
-								Delete chat
+								Excluir chat
 							</AsyncButtonContent>
 						</Button>
 					</AlertDialogFooter>

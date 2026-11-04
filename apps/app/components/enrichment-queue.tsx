@@ -100,7 +100,7 @@ export function EnrichmentQueue() {
 					<StatusIndicator
 						tone={total > 0 ? "primary" : "neutral"}
 						busy={total > 0}
-						label={total > 0 ? `Enriching ${total}` : "Enrichment"}
+						label={total > 0 ? `Enriching ${total}` : "Enriquecimento"}
 					/>
 				</Button>
 			</PopoverTrigger>
@@ -108,7 +108,7 @@ export function EnrichmentQueue() {
 			<PopoverContent align="end" size="panel">
 				<div className="flex items-center justify-between border-b px-4 py-3">
 					<span className="font-semibold text-popover-foreground text-sm">
-						Enriching now
+						Enriquecendo agora
 					</span>
 					<span className="font-mono text-muted-foreground text-xs">
 						{total}
@@ -118,11 +118,11 @@ export function EnrichmentQueue() {
 				{visible.length === 0 ? (
 					<div className="flex flex-col gap-1 px-6 py-8 text-center">
 						<span className="font-medium text-popover-foreground text-sm">
-							Nothing right now
+							Nada no momento
 						</span>
 						<span className="text-muted-foreground text-xs">
-							New companies and contacts show up here while your agents look
-							them up.
+							Empresas e contatos novos aparecem aqui enquanto os agentes
+							pesquisam.
 						</span>
 					</div>
 				) : (
@@ -144,7 +144,7 @@ export function EnrichmentQueue() {
 								className="cursor-pointer text-primary"
 								onClick={() => setExpanded(true)}
 							>
-								Show all
+								Ver tudo
 							</button>
 						) : null}
 						{footer.action === "load-more" ? (
@@ -157,7 +157,7 @@ export function EnrichmentQueue() {
 									)
 								}
 							>
-								Load more
+								Carregar mais
 							</button>
 						) : null}
 					</div>
@@ -288,7 +288,7 @@ function ScheduledSection({
 						? "1 record is booked for a later look"
 						: `${total} records are booked for a later look`}
 				</span>
-				<span className="text-primary">{shown ? "Hide" : "Show"}</span>
+				<span className="text-primary">{shown ? "Ocultar" : "Mostrar"}</span>
 			</CollapsibleTrigger>
 
 			<CollapsibleContent className="max-h-60 overflow-y-auto border-t">

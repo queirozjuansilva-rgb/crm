@@ -110,7 +110,7 @@ export function ChannelPicker({
 									size="xs"
 									variant="outline"
 								>
-									Add
+									Adicionar
 								</Button>
 							) : null}
 						</span>

@@ -1,45 +1,47 @@
+import { AmbientBackground } from "@crm/ui/components/ambient-background";
 import Logo from "@crm/ui/components/logo";
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { AuthShader } from "@/components/auth-shader";
 
 export function AuthShell({ children }: { children: ReactNode }) {
 	return (
-		<main className="dark grid min-h-svh bg-background text-foreground lg:grid-cols-[minmax(0,1fr)_minmax(420px,520px)]">
-			<section className="relative hidden min-h-svh overflow-hidden bg-muted p-8 lg:flex lg:flex-col lg:justify-between xl:p-12">
-				<AuthShader />
-
+		<main className="dark isolate grid min-h-svh bg-background text-foreground lg:grid-cols-[minmax(0,1fr)_minmax(420px,520px)]">
+			<AmbientBackground />
+			<section className="brand-panel relative m-4 hidden overflow-hidden p-8 lg:flex lg:flex-col lg:justify-between xl:p-12">
 				<div className="relative flex gap-2 text-sm/5">
-					<Link href="/" aria-label="Homepage" className="flex">
-						<Logo className="size-5 shrink-0" />
+					<Link href="/" aria-label="Início" className="flex">
+						<Logo className="size-10 shrink-0" />
 					</Link>
+					<span className="self-center font-semibold text-[22px] tracking-[-0.03em]">
+						lugh
+					</span>
 				</div>
 
 				<div className="relative flex max-w-lg flex-col gap-8">
 					<div className="flex flex-col gap-4">
-						<p className="font-mono text-xs/4 text-muted-foreground uppercase">
-							CRM
+						<p className="font-mono text-xs/4 text-primary uppercase tracking-[0.16em]">
+							CRM · Empresa de crescimento estratégico
 						</p>
-						<h1 className="max-w-[14ch] text-5xl/14 font-semibold text-balance">
-							Every customer, one place.
+						<h1 className="rise-in max-w-[16ch] text-6xl/16 font-semibold tracking-[-0.035em] text-balance">
+							Crescimento é sistema, não sorte.
 						</h1>
 					</div>
 				</div>
 
-				<p className="relative font-mono text-xs/4 text-muted-foreground">
-					Made with love by{" "}
+				<p className="relative font-mono text-xs/4 text-muted-foreground uppercase tracking-[0.14em]">
 					<a
-						href="https://trycomp.ai"
+						href="https://lugh.solutions"
 						target="_blank"
 						rel="noreferrer"
-						className="underline underline-offset-4 hover:text-foreground"
+						className="hover:text-foreground"
 					>
-						Comp AI
-					</a>
+						lugh.solutions
+					</a>{" "}
+					· @lughbr
 				</p>
 			</section>
 
-			<section className="flex min-h-svh flex-col bg-background px-6 py-8 sm:px-10 lg:px-14">
+			<section className="flex min-h-svh flex-col px-6 py-8 sm:px-10 lg:px-14">
 				<div className="flex gap-2 text-sm/5 max-lg:hidden lg:invisible">
 					<Logo className="size-5 shrink-0" />
 				</div>
@@ -61,7 +63,7 @@ export function AuthHeading({
 }) {
 	return (
 		<div className="flex flex-col gap-3 text-left">
-			<Link href="/" aria-label="Homepage" className="flex">
+			<Link href="/" aria-label="Início" className="flex">
 				<Logo className="size-6 shrink-0" />
 			</Link>
 			<div className="flex flex-col gap-1">

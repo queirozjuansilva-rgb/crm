@@ -82,7 +82,7 @@ async function SlackConnectionPageContent({
 					<SlackLogo className="size-6" />
 					<h1 className="font-medium text-xl">Slack</h1>
 					<span className="ml-auto text-muted-foreground text-sm">
-						Not connected
+						Não conectado
 					</span>
 				</div>
 				<p className="text-muted-foreground text-sm leading-relaxed">
@@ -93,11 +93,11 @@ async function SlackConnectionPageContent({
 			</header>
 			<SlackScopeGroups
 				groups={groupScopes([...SLACK_REQUESTED_SCOPES])}
-				title="What you are handing over"
+				title="O que você está liberando"
 				withheld={[]}
 			/>
 			<PlainList
-				title="What it will never do"
+				title="O que ele nunca vai fazer"
 				items={never}
 				icon={Close}
 				tone="text-muted-foreground"
@@ -116,7 +116,7 @@ async function SlackConnectionPageContent({
 			<section className="flex flex-col gap-3 px-(--spacing-block-inline)">
 				<div>
 					<h2 className="font-medium text-sm">
-						Afterwards, most teams start with one of these
+						Depois, a maioria das equipes começa por um destes
 					</h2>
 					<p className="text-muted-foreground text-xs">
 						Suggestions, not settings. None of them exist until you pick one and
@@ -188,7 +188,7 @@ function ConnectedSlack({
 					<SlackLogo className="size-6" />
 					<h1 className="font-medium text-xl">Slack</h1>
 					<span className="ml-auto text-muted-foreground text-sm">
-						{status.workspace ?? "Connected"}
+						{status.workspace ?? "Conectado"}
 					</span>
 					<SlackDisconnectButton
 						canManage={status.canManage}
@@ -204,26 +204,26 @@ function ConnectedSlack({
 			<MissingGrant missing={missing} slug={slug} />
 			<SlackScopeGroups
 				groups={groupScopes(status.scopes)}
-				title="What this workspace granted"
+				title="O que este espaço concedeu"
 				withheld={missing.map(toLine)}
 			/>
 			<SlackChannels />
 			<section className="flex flex-col gap-3 border-y px-(--spacing-block-inline) py-5">
 				<div className="flex items-end justify-between gap-4">
 					<div>
-						<h2 className="font-medium text-sm">Agents that use Slack</h2>
+						<h2 className="font-medium text-sm">Agentes que usam o Slack</h2>
 						<p className="text-muted-foreground text-xs">
-							Built in chat, not here. Open one to change it.
+							Criado no chat, não aqui. Abra um para alterar.
 						</p>
 					</div>
 					<NewAgentDialog>
-						<Button size="sm">New agent</Button>
+						<Button size="sm">Novo agente</Button>
 					</NewAgentDialog>
 				</div>
 				<div className="flex flex-col divide-y rounded-lg border">
 					{agents.length === 0 ? (
 						<p className="px-(--spacing-block-inline) py-4 text-muted-foreground text-sm">
-							No deployed agents use Slack yet.
+							Nenhum agente publicado usa o Slack ainda.
 						</p>
 					) : null}
 					{agents.map(
@@ -248,7 +248,7 @@ function ConnectedSlack({
 									<span
 										className={`size-2 rounded-full ${agent.status === "LIVE" ? "bg-success" : "bg-muted-foreground"}`}
 									/>
-									{agent.status === "LIVE" ? "Running" : "Paused"}
+									{agent.status === "LIVE" ? "Ativo" : "Pausado"}
 								</span>
 							</Link>
 						),
@@ -257,7 +257,7 @@ function ConnectedSlack({
 						className="px-(--spacing-block-inline) py-4 font-medium text-sm hover:bg-muted/50"
 						href={`/${slug}/chat`}
 					>
-						Describe another agent in chat
+						Descreva outro agente no chat
 					</Link>
 				</div>
 			</section>
@@ -269,7 +269,7 @@ function ConnectedSlack({
 				</p>
 				<Button asChild variant="outline" size="sm">
 					<Link href={`/${slug}/settings/connections/slack/people`}>
-						Review
+						Revisar
 					</Link>
 				</Button>
 			</div>
@@ -300,7 +300,7 @@ function MissingGrant({
 						: `Slack held back ${missing.length} permission${missing.length === 1 ? "" : "s"}`}
 				</AlertTitle>
 				<AlertDescription>
-					<span>Reconnect to ask again. You lose nothing.</span>
+					<span>Reconecte para pedir de novo. Nada se perde.</span>
 					<ul className="mt-2 flex flex-col gap-1.5">
 						{missing.map((entry) => (
 							<li className="flex items-start gap-2" key={entry.scope}>

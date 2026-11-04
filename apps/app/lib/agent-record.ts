@@ -25,10 +25,10 @@ const COPY: RecordCopyByKind = {
 	contact: {
 		header: "x-crm-contact",
 		field: "contactId",
-		title: "Ask about this person",
+		title: "Pergunte sobre esta pessoa",
 		blurb:
 			"Every step is shown as it happens — including the leads it throws away.",
-		placeholder: "Are they still there?",
+		placeholder: "Ainda trabalham lá?",
 		suggestions: [
 			"Who is this person?",
 			"Are they still there?",
@@ -38,10 +38,10 @@ const COPY: RecordCopyByKind = {
 	company: {
 		header: "x-crm-company",
 		field: "companyId",
-		title: "Ask about this company",
+		title: "Pergunte sobre esta empresa",
 		blurb:
 			"It reads their site and our own history with them, and shows its working.",
-		placeholder: "What do they sell?",
+		placeholder: "O que eles vendem?",
 		suggestions: [
 			"What do they do?",
 			"Who do we know here?",
@@ -51,10 +51,10 @@ const COPY: RecordCopyByKind = {
 	deal: {
 		header: "x-crm-deal",
 		field: "dealId",
-		title: "Ask about this deal",
+		title: "Pergunte sobre este negócio",
 		blurb:
 			"It can read the thread, the meetings and the people on both sides of it.",
-		placeholder: "Where has this stalled?",
+		placeholder: "Onde isso travou?",
 		suggestions: [
 			"Where does this stand?",
 			"Who else should be involved?",
