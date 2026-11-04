@@ -6,7 +6,7 @@ import { requireSession, signInAccounts } from "@/lib/session";
 import { GrantAccess } from "./grant-access";
 
 export const metadata: Metadata = {
-	title: "Grant access",
+	title: "Conceder acesso",
 };
 
 export const instant = false;
@@ -35,7 +35,7 @@ export default async function GrantAccessPage() {
 	return (
 		<AuthShell>
 			<AuthHeading
-				title="One more step"
+				title="Mais um passo"
 				description={(only ? DESCRIPTION[only] : undefined) ?? BOTH}
 			/>
 

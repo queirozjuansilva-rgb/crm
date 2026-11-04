@@ -106,7 +106,7 @@ export function NewAgentDialog({ children }: { children: React.ReactNode }) {
 
 			<DialogContent className="sm:max-w-(--container-sheet)">
 				<DialogHeader>
-					<DialogTitle>New agent</DialogTitle>
+					<DialogTitle>Novo agente</DialogTitle>
 					<DialogDescription>
 						Say what it is and where it lives. The builder writes the rest. You
 						can change all of this later.
@@ -115,31 +115,31 @@ export function NewAgentDialog({ children }: { children: React.ReactNode }) {
 
 				<div className="flex flex-col gap-4">
 					<div className="flex flex-col gap-1.5">
-						<Label htmlFor="agent-name">Name</Label>
+						<Label htmlFor="agent-name">Nome</Label>
 						<Input
 							id="agent-name"
 							onChange={(event) => setName(event.target.value)}
-							placeholder="Renewal prep brief"
+							placeholder="Resumo de preparação para renovação"
 							value={name}
 						/>
 					</div>
 
 					<div className="flex flex-col gap-1.5">
-						<Label htmlFor="agent-job">What it should do</Label>
+						<Label htmlFor="agent-job">O que ele deve fazer</Label>
 						<Textarea
 							id="agent-job"
 							onChange={(event) => setJob(event.target.value)}
-							placeholder="A week before a renewal, gather the account history and post a short brief for whoever owns the deal."
+							placeholder="Uma semana antes de uma renovação, reúna o histórico da conta e envie um resumo curto para o responsável pelo negócio."
 							rows={3}
 							value={job}
 						/>
 					</div>
 
 					<div className="flex flex-col gap-1.5">
-						<Label htmlFor="agent-channel">Lives in</Label>
+						<Label htmlFor="agent-channel">Fica em</Label>
 						<Select onValueChange={setChannelId} value={channelId}>
 							<SelectTrigger id="agent-channel">
-								<SelectValue placeholder="Pick a Slack channel" />
+								<SelectValue placeholder="Escolha um canal do Slack" />
 							</SelectTrigger>
 							<SelectContent>
 								{rows.map((row) => (
@@ -159,7 +159,7 @@ export function NewAgentDialog({ children }: { children: React.ReactNode }) {
 					</div>
 
 					<div className="flex flex-col gap-1.5">
-						<Label>Allowed to</Label>
+						<Label>Pode</Label>
 						<div className="flex flex-wrap gap-2">
 							{schemas.agents.permissions.map((entry) => {
 								const on = allowed.includes(entry.id);
@@ -195,14 +195,14 @@ export function NewAgentDialog({ children }: { children: React.ReactNode }) {
 
 				<DialogFooter className="items-center">
 					<p className="mr-auto text-muted-foreground text-xs">
-						Nothing sends until you turn it on.
+						Nada é enviado até você ligar.
 					</p>
 					<Button
 						disabled={create.isPending}
 						onClick={() => setOpen(false)}
 						variant="outline"
 					>
-						Cancel
+						Cancelar
 					</Button>
 					<Button disabled={!ready || create.isPending} onClick={hand}>
 						{create.isPending ? "Handing over…" : "Hand to the builder"}

@@ -78,11 +78,11 @@ export function AgentBuilderSidebar({
 	return (
 		<aside className={cn("min-h-0 min-w-0 flex-col p-4 font-sans", className)}>
 			<div className="flex h-7 shrink-0 items-center justify-between pl-2">
-				<span className="font-medium text-xs">Chats</span>
+				<span className="font-medium text-xs">Conversas</span>
 				<Button asChild variant="ghost" size="icon-xs">
 					<Link
 						href={workspaceUrl("/chat")}
-						aria-label="New agent chat"
+						aria-label="Novo chat com agente"
 						onClick={onNavigate}
 					>
 						<Icon icon={Add} />
@@ -90,7 +90,10 @@ export function AgentBuilderSidebar({
 				</Button>
 			</div>
 
-			<nav aria-label="Agent chats" className="min-h-0 flex-1 overflow-y-auto">
+			<nav
+				aria-label="Chats com agentes"
+				className="min-h-0 flex-1 overflow-y-auto"
+			>
 				{groups.map((group) => (
 					<div key={group.label}>
 						<div className="flex h-8 items-end pb-1 pl-2 font-medium text-[11px] text-muted-foreground uppercase tracking-[0.08em]">
@@ -141,7 +144,7 @@ export function AgentBuilderSidebar({
 
 				{groups.length === 0 ? (
 					<p className="px-2 py-3 text-muted-foreground text-xs">
-						No chats in the last 7 days.
+						Nenhum chat nos últimos 7 dias.
 					</p>
 				) : null}
 
@@ -174,7 +177,7 @@ function TeamAgents({
 				onClick={onNavigate}
 				className="flex h-8 items-end gap-2 rounded-sm px-2 pb-1 font-medium text-[11px] text-muted-foreground uppercase tracking-[0.08em] outline-none hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/60"
 			>
-				<span className="min-w-0 flex-1">Team agents</span>
+				<span className="min-w-0 flex-1">Agentes do time</span>
 				<span className="shrink-0 font-mono">{agents.length}</span>
 			</Link>
 			{agents.map((agent) => {
@@ -233,7 +236,7 @@ function ConversationState({ state }: { state: Conversation["state"] }) {
 function groupConversations(conversations: Conversation[], now: number) {
 	if (!now) return [];
 
-	const labels: ChatDateGroup[] = ["Today", "Yesterday", "Last 7 days"];
+	const labels: ChatDateGroup[] = ["Hoje", "Ontem", "Últimos 7 dias"];
 	const items = new Map<ChatDateGroup, Conversation[]>(
 		labels.map((label) => [label, []]),
 	);

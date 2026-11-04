@@ -275,10 +275,10 @@ function Thread({
 			{ended ? (
 				<div className="flex flex-col items-start gap-3 border-t px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-5 sm:py-2">
 					<p className="text-pretty text-muted-foreground text-xs">
-						This conversation has ended.
+						Esta conversa terminou.
 					</p>
 					<Button variant="outline" size="sm" onClick={onNewThread}>
-						Start a new conversation
+						Começar nova conversa
 					</Button>
 				</div>
 			) : null}
@@ -312,7 +312,7 @@ function Thread({
 							disabled={locked}
 						>
 							{busy ? <Spinner /> : <Icon icon={Send} />}
-							<span className="sr-only">Ask</span>
+							<span className="sr-only">Perguntar</span>
 						</Button>
 					</form>
 				)}

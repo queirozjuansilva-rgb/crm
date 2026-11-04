@@ -71,7 +71,7 @@ export function SlackPeopleMatches({
 			<div className="flex flex-col divide-y border-y">
 				{rows.length === 0 ? (
 					<p className="py-5 text-center text-muted-foreground text-sm">
-						No CRM teammates are available to match.
+						Nenhum colega do CRM disponível para vincular.
 					</p>
 				) : null}
 				{rows.map((row) => (
@@ -92,7 +92,7 @@ export function SlackPeopleMatches({
 								</div>
 							) : (
 								<p className="px-2.5 py-2 text-muted-foreground text-xs">
-									No exact email match
+									Nenhum e-mail exatamente igual
 								</p>
 							)}
 						</div>
@@ -106,7 +106,7 @@ export function SlackPeopleMatches({
 			</p>
 			<div className="flex justify-end">
 				<Button asChild>
-					<Link href={`/${slug}/settings/connections/slack`}>Continue</Link>
+					<Link href={`/${slug}/settings/connections/slack`}>Continuar</Link>
 				</Button>
 			</div>
 		</div>

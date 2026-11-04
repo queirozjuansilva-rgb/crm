@@ -63,7 +63,9 @@ export function TeamAgentsIndex({ initialAgents }: { initialAgents: Agents }) {
 			) : (
 				<div className="flex min-h-64 flex-col items-center justify-center rounded-lg border border-dashed px-6 text-center">
 					<Icon icon={Bot} className="size-6 text-muted-foreground" />
-					<h2 className="mt-4 font-medium text-sm">No team agents yet</h2>
+					<h2 className="mt-4 font-medium text-sm">
+						Nenhum agente do time ainda
+					</h2>
 					<p className="mt-1 text-muted-foreground text-xs">
 						Create one from a private chat, then review its access before
 						deploying it.
@@ -72,7 +74,7 @@ export function TeamAgentsIndex({ initialAgents }: { initialAgents: Agents }) {
 						href={workspaceUrl("/chat")}
 						className="mt-4 text-primary text-xs hover:underline"
 					>
-						Open chat
+						Abrir chat
 					</Link>
 				</div>
 			)}

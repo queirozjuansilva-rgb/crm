@@ -127,7 +127,7 @@ export function DealsBulkActions({
 					<DropdownMenuGroup>
 						<DropdownMenuItem onSelect={() => restore.mutate({ ids })}>
 							<Undo />
-							Restore
+							Restaurar
 						</DropdownMenuItem>
 					</DropdownMenuGroup>
 					<DropdownMenuSeparator />
@@ -136,7 +136,7 @@ export function DealsBulkActions({
 							variant="destructive"
 							onSelect={() => setConfirming(true)}
 						>
-							Delete forever
+							Excluir para sempre
 						</DropdownMenuItem>
 					</DropdownMenuGroup>
 				</BulkActionsMenu>
@@ -145,7 +145,7 @@ export function DealsBulkActions({
 					open={confirming}
 					onOpenChange={setConfirming}
 					title={`Delete ${deals(ids.length)} forever?`}
-					description="Everything filed against them — activity, notes, the amounts in your pipeline — goes too. This cannot be undone."
+					description="Tudo o que está ligado a eles também sai: atividades, notas e valores do pipeline. Isso não pode ser desfeito."
 					onConfirm={() => purge.mutate({ ids })}
 				/>
 			</>
@@ -165,7 +165,7 @@ export function DealsBulkActions({
 					}
 				/>
 				<DropdownMenuSub>
-					<DropdownMenuSubTrigger>Change stage</DropdownMenuSubTrigger>
+					<DropdownMenuSubTrigger>Mudar etapa</DropdownMenuSubTrigger>
 					<DropdownMenuSubContent className="max-h-72 overflow-y-auto">
 						<DropdownMenuGroup>
 							{DEAL_STAGE_OPTIONS.map((option) => (
@@ -189,7 +189,7 @@ export function DealsBulkActions({
 				<DropdownMenuGroup>
 					<DropdownMenuItem onSelect={() => archive.mutate({ ids })}>
 						<Archive />
-						Archive
+						Arquivar
 					</DropdownMenuItem>
 				</DropdownMenuGroup>
 			</BulkActionsMenu>
@@ -210,8 +210,8 @@ export function DealsBulkActions({
 								: `Mark ${deals(ids.length)} as unqualified`}
 						</DialogTitle>
 						<DialogDescription>
-							The same reason goes on every one of them, so keep it to what they
-							have in common.
+							O mesmo motivo vale para todos, então escreva o que eles têm em
+							comum.
 						</DialogDescription>
 					</DialogHeader>
 
@@ -225,12 +225,12 @@ export function DealsBulkActions({
 						}}
 					>
 						<Field>
-							<FieldLabel htmlFor={reasonId}>Reason</FieldLabel>
+							<FieldLabel htmlFor={reasonId}>Motivo</FieldLabel>
 							<Textarea
 								id={reasonId}
 								value={reason}
 								onChange={(event) => setReason(event.target.value)}
-								placeholder="Budget pulled for the quarter"
+								placeholder="Orçamento cortado no trimestre"
 								rows={3}
 							/>
 						</Field>
@@ -243,7 +243,7 @@ export function DealsBulkActions({
 							disabled={setStage.isPending || reason.trim() === ""}
 						>
 							{setStage.isPending ? <Spinner /> : null}
-							Save
+							Salvar
 						</Button>
 						<Button
 							variant="outline"
@@ -252,7 +252,7 @@ export function DealsBulkActions({
 								setReason("");
 							}}
 						>
-							Cancel
+							Cancelar
 						</Button>
 					</DialogFooter>
 				</DialogContent>

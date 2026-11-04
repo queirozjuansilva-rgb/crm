@@ -40,9 +40,7 @@ async function SlackPeoplePageContent({ params }: SlackPeoplePageProps) {
 		<ConnectionPage centered>
 			<header className="flex flex-col gap-3 px-(--spacing-block-inline) text-center">
 				<SlackLogo className="mx-auto size-7" />
-				<h1 className="font-medium text-2xl tracking-tight">
-					Slack is connected
-				</h1>
+				<h1 className="font-medium text-2xl tracking-tight">Slack conectado</h1>
 				<p className="text-muted-foreground text-sm">
 					Match your CRM people to Slack once. Agents use these exact accounts
 					later instead of guessing from a similar name.

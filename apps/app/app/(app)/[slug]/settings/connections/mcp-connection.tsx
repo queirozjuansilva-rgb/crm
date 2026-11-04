@@ -205,7 +205,7 @@ export function McpConnection({
 				<div className="flex min-w-0 flex-col gap-2">
 					<Button asChild variant="link" size="inline">
 						<Link href={`/${slug}/settings/connections`}>
-							Back to connections
+							Voltar para conexões
 						</Link>
 					</Button>
 					<h1 className="flex items-center gap-3 font-medium text-2xl tracking-tight">
@@ -218,7 +218,7 @@ export function McpConnection({
 						{entry.name}
 					</h1>
 					<p className="text-muted-foreground text-sm">
-						Deployed agents receive only reviewed tools.
+						Agentes publicados recebem só ferramentas revisadas.
 					</p>
 				</div>
 				{connected && canManage ? (
@@ -264,9 +264,9 @@ export function McpConnection({
 			{!connected && !connecting ? (
 				<Card>
 					<CardHeader>
-						<CardTitle>Access</CardTitle>
+						<CardTitle>Acesso</CardTitle>
 						<CardDescription>
-							Choose what deployed agents can do.
+							Escolha o que os agentes publicados podem fazer.
 						</CardDescription>
 					</CardHeader>
 
@@ -274,7 +274,7 @@ export function McpConnection({
 						<CardContent>
 							<Alert>
 								<Icon icon={Warning} />
-								<AlertTitle>MCP connections are not configured</AlertTitle>
+								<AlertTitle>Conexões MCP não estão configuradas</AlertTitle>
 								<AlertDescription>
 									Set MCP_ENCRYPTION_KEY in the root .env file. Then restart the
 									API.
@@ -310,9 +310,11 @@ export function McpConnection({
 										setMode(value);
 								}}
 							>
-								<ToggleGroupItem value="read_only">Read only</ToggleGroupItem>
+								<ToggleGroupItem value="read_only">
+									Somente leitura
+								</ToggleGroupItem>
 								<ToggleGroupItem value="read_write">
-									Read and write
+									Leitura e escrita
 								</ToggleGroupItem>
 							</ToggleGroup>
 							<p className="text-muted-foreground text-sm">
@@ -337,7 +339,7 @@ export function McpConnection({
 			{connected ? (
 				<Card>
 					<CardHeader>
-						<CardTitle>Tool access</CardTitle>
+						<CardTitle>Acesso a ferramentas</CardTitle>
 						<CardDescription>
 							{presentation.pendingReviewCount > 0
 								? `${presentation.pendingReviewCount} tools need review. Open a tool to inspect it.`
@@ -430,7 +432,7 @@ export function McpConnection({
 																		{tool.presentation.prose}
 																	</InlineReferenceText>
 																) : (
-																	tool.description || "No description provided."
+																	tool.description || "Sem descrição."
 																)}
 															</p>
 															{tool.presentation?.code ? (
@@ -461,7 +463,7 @@ export function McpConnection({
 																	})
 																}
 															>
-																Review tool
+																Revisar ferramenta
 															</Button>
 														) : null}
 													</AccordionContent>
@@ -491,7 +493,7 @@ export function McpConnection({
 					</AlertDialogHeader>
 					<AlertDialogFooter>
 						<AlertDialogCancel disabled={disconnect.isPending}>
-							Keep connected
+							Manter conectado
 						</AlertDialogCancel>
 						<AlertDialogAction
 							variant="destructive"
@@ -545,7 +547,7 @@ function ConnectionDetails({
 			{overview.scopeGroups.length > 0 ? (
 				<Card>
 					<CardHeader>
-						<CardTitle>Permissions</CardTitle>
+						<CardTitle>Permissões</CardTitle>
 						<CardAction>
 							<span className="text-muted-foreground text-xs tabular-nums">
 								{overview.scopeCount} scopes
@@ -554,7 +556,7 @@ function ConnectionDetails({
 					</CardHeader>
 					<CardPanel
 						role="region"
-						aria-label="Granted permissions"
+						aria-label="Permissões concedidas"
 						size={overview.permissionPanelSize}
 					>
 						<CardPanelScroll>
@@ -595,7 +597,7 @@ function ConnectionDetails({
 			{overview.agents.length > 0 ? (
 				<Card>
 					<CardHeader>
-						<CardTitle>Used by</CardTitle>
+						<CardTitle>Usado por</CardTitle>
 					</CardHeader>
 					<CardContent>
 						<div className="flex flex-col divide-y rounded-md border">

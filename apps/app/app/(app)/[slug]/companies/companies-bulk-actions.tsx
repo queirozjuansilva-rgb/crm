@@ -58,7 +58,7 @@ export function CompaniesBulkActions({
 				await cache.company();
 				reportBulk(
 					result,
-					(count) => `Looking up ${companies(count)} — the table will update.`,
+					(count) => `Pesquisando ${companies(count)}. A tabela vai atualizar.`,
 				);
 				onDone();
 			},
@@ -109,7 +109,7 @@ export function CompaniesBulkActions({
 					<DropdownMenuGroup>
 						<DropdownMenuItem onSelect={() => restore.mutate({ ids })}>
 							<Undo />
-							Restore
+							Restaurar
 						</DropdownMenuItem>
 					</DropdownMenuGroup>
 					<DropdownMenuSeparator />
@@ -118,7 +118,7 @@ export function CompaniesBulkActions({
 							variant="destructive"
 							onSelect={() => setConfirming(true)}
 						>
-							Delete forever
+							Excluir para sempre
 						</DropdownMenuItem>
 					</DropdownMenuGroup>
 				</BulkActionsMenu>
@@ -127,7 +127,7 @@ export function CompaniesBulkActions({
 					open={confirming}
 					onOpenChange={setConfirming}
 					title={`Delete ${companies(ids.length)} forever?`}
-					description="This cannot be undone."
+					description="Isso não pode ser desfeito."
 					onConfirm={() => purge.mutate({ ids })}
 				/>
 			</>
@@ -141,20 +141,20 @@ export function CompaniesBulkActions({
 		<BulkActionsMenu pending={pending}>
 			<BulkOwnerMenu
 				users={users.data ?? []}
-				unassignedLabel="Nobody"
+				unassignedLabel="Ninguém"
 				onSelect={(ownerId) => assignOwner.mutate({ ids, ownerId })}
 			/>
 			<DropdownMenuGroup>
 				<DropdownMenuItem onSelect={() => enrich.mutate({ ids })}>
 					<Renew />
-					Re-enrich
+					Enriquecer de novo
 				</DropdownMenuItem>
 			</DropdownMenuGroup>
 			<DropdownMenuSeparator />
 			<DropdownMenuGroup>
 				<DropdownMenuItem onSelect={() => archive.mutate({ ids })}>
 					<Archive />
-					Archive
+					Arquivar
 				</DropdownMenuItem>
 			</DropdownMenuGroup>
 		</BulkActionsMenu>

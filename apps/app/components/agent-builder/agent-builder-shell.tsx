@@ -22,7 +22,7 @@ export function AgentBuilderSidebarFallback() {
 			aria-busy="true"
 		>
 			<div className="flex h-7 items-center pl-2 font-medium text-xs">
-				Chats
+				Conversas
 			</div>
 			<div className="mt-3 space-y-2 px-2" aria-hidden="true">
 				<Skeleton className="h-2.5 w-16" />
@@ -30,7 +30,7 @@ export function AgentBuilderSidebarFallback() {
 				<Skeleton className="h-7 w-full" />
 			</div>
 			<span role="status" className="sr-only">
-				Loading agent navigation…
+				Carregando navegação dos agentes…
 			</span>
 		</aside>
 	);

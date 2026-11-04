@@ -89,6 +89,7 @@ const recentActivityOutput = z.object({
 export const dashboardSummaryOutput = z.object({
 	scope: z.enum(DASHBOARD_SCOPES),
 	reportingCurrency: z.string(),
+	monthlyGoalCents: z.number().nullable(),
 	unconverted: unconvertedOutput,
 	pipeline: z.object({
 		stages: z.array(stageBucketOutput),

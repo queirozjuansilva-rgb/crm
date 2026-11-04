@@ -39,7 +39,7 @@ function columns(
 	return [
 		{
 			id: "name",
-			header: "Name",
+			header: "Nome",
 			sortable: true,
 			hideable: false,
 			width: "w-[28%]",
@@ -51,7 +51,7 @@ function columns(
 		},
 		{
 			id: "start",
-			header: "Key",
+			header: "Chave",
 			width: "w-[20%]",
 			hideBelow: "sm",
 			cell: (row) => (
@@ -60,7 +60,7 @@ function columns(
 		},
 		{
 			id: "createdAt",
-			header: "Created",
+			header: "Criado em",
 			sortable: true,
 			width: "w-[16%]",
 			hideBelow: "md",
@@ -73,7 +73,7 @@ function columns(
 		{
 			id: "lastRequest",
 			header: "Last used",
-			label: "Last used date",
+			label: "Último uso",
 			sortable: true,
 			width: "w-[16%]",
 			hideBelow: "lg",
@@ -105,13 +105,13 @@ function columns(
 						<LocalRelativeTime date={row.expiresAt} />
 					</span>
 				) : (
-					<span className="text-muted-foreground">Never</span>
+					<span className="text-muted-foreground">Nunca</span>
 				),
 		},
 		{
 			id: "actions",
-			header: <span className="sr-only">Actions</span>,
-			label: "Actions",
+			header: <span className="sr-only">Ações</span>,
+			label: "Ações",
 			hideable: false,
 			align: "right",
 			width: "w-[6%]",
@@ -138,12 +138,12 @@ function columns(
 						</AlertDialogHeader>
 
 						<AlertDialogFooter>
-							<AlertDialogCancel>Cancel</AlertDialogCancel>
+							<AlertDialogCancel>Cancelar</AlertDialogCancel>
 							<AlertDialogAction
 								variant="destructive"
 								onClick={() => onRevoke(row)}
 							>
-								Revoke
+								Revogar
 							</AlertDialogAction>
 						</AlertDialogFooter>
 					</AlertDialogContent>
@@ -170,7 +170,7 @@ export function ApiKeysTable() {
 					await query.setPage(query.page - 1);
 				}
 				await cache.apiKeys();
-				toast.success("API key revoked.");
+				toast.success("Chave de API revogada.");
 			},
 			onError: (error) => toast.error(error.message),
 		}),
@@ -179,7 +179,7 @@ export function ApiKeysTable() {
 	return (
 		<DataTable
 			query={query}
-			search={<ListSearch placeholder="Search by name…" />}
+			search={<ListSearch placeholder="Buscar por nome…" />}
 			columns={columns(
 				(apiKey) => revoke.mutate({ id: apiKey.id }),
 				revoke.isPending,
@@ -188,7 +188,7 @@ export function ApiKeysTable() {
 			total={apiKeys.data?.total ?? 0}
 			getRowId={(row) => row.id}
 			loading={apiKeys.isFetching}
-			empty="No API keys yet."
+			empty="Nenhuma chave de API ainda."
 		/>
 	);
 }

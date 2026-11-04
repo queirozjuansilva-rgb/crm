@@ -3,6 +3,7 @@ import {
 	MIN_ARCHIVE_RETENTION_DAYS,
 } from "@crm/db/settings";
 import { z } from "zod";
+import { MAX_AMOUNT_CENTS } from "../deals/deals.contracts";
 
 export const catalogModelOutput = z.object({
 	id: z.string(),
@@ -43,6 +44,21 @@ export const archiveRetentionOutput = z.object({
 });
 
 export type ArchiveRetentionSettings = z.infer<typeof archiveRetentionOutput>;
+
+export const monthlyGoalOutput = z.object({
+	cents: z.number().nullable(),
+});
+
+export type MonthlyGoalSettings = z.infer<typeof monthlyGoalOutput>;
+
+export const setMonthlyGoalInput = z.object({
+	cents: z
+		.number()
+		.int()
+		.min(0, "A meta não pode ser negativa.")
+		.max(MAX_AMOUNT_CENTS, "Essa meta é grande demais para registrar.")
+		.nullable(),
+});
 
 export const setAgentModelInput = z.object({
 	modelId: z.string().trim().min(1).max(200).nullable(),

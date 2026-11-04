@@ -56,7 +56,7 @@ function MicrosoftUnavailable() {
 				<CardTitle>
 					<div className="flex items-center gap-2">
 						Microsoft
-						<StatusIndicator size="sm" tone="neutral" label="Not configured" />
+						<StatusIndicator size="sm" tone="neutral" label="Não configurado" />
 					</div>
 				</CardTitle>
 				<CardDescription>
@@ -103,7 +103,7 @@ function ConnectMicrosoft({
 				<CardTitle>
 					<div className="flex items-center gap-2">
 						Microsoft
-						<StatusIndicator size="sm" tone="neutral" label="Not connected" />
+						<StatusIndicator size="sm" tone="neutral" label="Não conectado" />
 					</div>
 				</CardTitle>
 				<CardDescription>
@@ -125,7 +125,7 @@ function ConnectMicrosoft({
 						) : (
 							<MicrosoftLogo data-icon="inline-start" className="size-4" />
 						)}
-						Connect
+						Conectar
 					</Button>
 				</CardAction>
 			</CardHeader>
@@ -134,7 +134,7 @@ function ConnectMicrosoft({
 				<CardContent>
 					<Alert variant="destructive">
 						<Icon icon={Warning} />
-						<AlertTitle>Microsoft did not finish connecting</AlertTitle>
+						<AlertTitle>A Microsoft não terminou a conexão</AlertTitle>
 						<AlertDescription>
 							{CONNECT_ERRORS.get(connectError) ??
 								"Microsoft returned an error before the connection was made. Try again."}
@@ -228,12 +228,12 @@ export function MicrosoftConnection({
 						<StatusIndicator
 							size="sm"
 							tone={healthy ? "success" : "warning"}
-							label={healthy ? "Connected" : "Needs attention"}
+							label={healthy ? "Conectado" : "Precisa de atenção"}
 						/>
 					</div>
 				</CardTitle>
 				<CardDescription>
-					Email threads land on the matching company as they happen.
+					As conversas de e-mail entram na empresa certa assim que acontecem.
 				</CardDescription>
 
 				<CardAction>
@@ -243,7 +243,7 @@ export function MicrosoftConnection({
 						disabled={syncNow.isPending}
 						onClick={() => syncNow.mutate()}
 					>
-						{syncNow.isPending ? "Checking…" : "Check now"}
+						{syncNow.isPending ? "Checking…" : "Verificar agora"}
 					</Button>
 				</CardAction>
 			</CardHeader>
@@ -252,14 +252,16 @@ export function MicrosoftConnection({
 				{!hasRefreshToken ? (
 					<Alert variant="destructive">
 						<Icon icon={Warning} />
-						<AlertTitle>Microsoft did not return a refresh token</AlertTitle>
-						<AlertDescription>Sign out and back in.</AlertDescription>
+						<AlertTitle>
+							A Microsoft não devolveu um token de atualização
+						</AlertTitle>
+						<AlertDescription>Saia e entre de novo.</AlertDescription>
 					</Alert>
 				) : failing.length > 0 ? (
 					failing.map((source) => (
 						<Alert key={source.source} variant="destructive">
 							<Icon icon={Warning} />
-							<AlertTitle>Email sync failed</AlertTitle>
+							<AlertTitle>A sincronização de e-mail falhou</AlertTitle>
 							<AlertDescription>
 								{source.lastError ?? "Microsoft needs reconnecting."}
 							</AlertDescription>
@@ -269,10 +271,10 @@ export function MicrosoftConnection({
 					<p className="text-muted-foreground text-xs">
 						{lastSyncedAt ? (
 							<>
-								Last checked <LocalRelativeTime date={lastSyncedAt} />
+								Última verificação <LocalRelativeTime date={lastSyncedAt} />
 							</>
 						) : (
-							"Waiting for the first check"
+							"Aguardando a primeira verificação"
 						)}
 					</p>
 				)}
@@ -286,7 +288,7 @@ export function MicrosoftConnection({
 							htmlFor={`auto-create-${source.source}`}
 							className="flex flex-col items-start gap-1"
 						>
-							<span className="text-sm">Email</span>
+							<span className="text-sm">E-mail</span>
 							<span className="font-normal text-muted-foreground text-xs">
 								{AUTO_CREATE}
 							</span>
@@ -308,13 +310,15 @@ export function MicrosoftConnection({
 						<AlertDialog>
 							<AlertDialogTrigger asChild>
 								<Button variant="ghost" size="xs" disabled={purge.isPending}>
-									Delete synced data
+									Excluir dados sincronizados
 								</Button>
 							</AlertDialogTrigger>
 
 							<AlertDialogContent>
 								<AlertDialogHeader>
-									<AlertDialogTitle>Delete synced data?</AlertDialogTitle>
+									<AlertDialogTitle>
+										Excluir dados sincronizados?
+									</AlertDialogTitle>
 									<AlertDialogDescription>
 										Every email brought in from Outlook is removed from the CRM.
 										The next check starts from now, so nothing deleted here
@@ -323,12 +327,12 @@ export function MicrosoftConnection({
 								</AlertDialogHeader>
 
 								<AlertDialogFooter>
-									<AlertDialogCancel>Cancel</AlertDialogCancel>
+									<AlertDialogCancel>Cancelar</AlertDialogCancel>
 									<AlertDialogAction
 										variant="destructive"
 										onClick={() => purge.mutate()}
 									>
-										Delete
+										Excluir
 									</AlertDialogAction>
 								</AlertDialogFooter>
 							</AlertDialogContent>
@@ -337,13 +341,13 @@ export function MicrosoftConnection({
 						<AlertDialog>
 							<AlertDialogTrigger asChild>
 								<Button variant="ghost" size="xs" disabled={revoke.isPending}>
-									Disconnect Microsoft
+									Desconectar Microsoft
 								</Button>
 							</AlertDialogTrigger>
 
 							<AlertDialogContent>
 								<AlertDialogHeader>
-									<AlertDialogTitle>Disconnect Microsoft?</AlertDialogTitle>
+									<AlertDialogTitle>Desconectar Microsoft?</AlertDialogTitle>
 									<AlertDialogDescription>
 										{required
 											? "You will be signed out, and you cannot use the CRM again until you grant access."
@@ -354,12 +358,12 @@ export function MicrosoftConnection({
 								</AlertDialogHeader>
 
 								<AlertDialogFooter>
-									<AlertDialogCancel>Cancel</AlertDialogCancel>
+									<AlertDialogCancel>Cancelar</AlertDialogCancel>
 									<AlertDialogAction
 										variant="destructive"
 										onClick={() => revoke.mutate()}
 									>
-										Disconnect
+										Desconectar
 									</AlertDialogAction>
 								</AlertDialogFooter>
 							</AlertDialogContent>
@@ -371,7 +375,7 @@ export function MicrosoftConnection({
 								target="_blank"
 								rel="noreferrer"
 							>
-								Manage in your Microsoft account
+								Gerenciar na sua conta Microsoft
 							</Link>
 						</Button>
 					</div>

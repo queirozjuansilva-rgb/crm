@@ -72,7 +72,7 @@ export function VerifyInstallation() {
 						disabled={!canManage || verify.isPending || url.trim() === ""}
 					>
 						{verify.isPending ? <Spinner data-icon="inline-start" /> : null}
-						Check now
+						Verificar agora
 					</Button>
 				</CardAction>
 			</CardHeader>
@@ -87,7 +87,7 @@ export function VerifyInstallation() {
 					}}
 				>
 					<Field>
-						<FieldLabel htmlFor={urlId}>Page to check</FieldLabel>
+						<FieldLabel htmlFor={urlId}>Página a verificar</FieldLabel>
 						<InputGroup>
 							<InputGroupAddon>
 								<InputGroupText>https://</InputGroupText>
@@ -124,7 +124,7 @@ export function VerifyInstallation() {
 function Indicator({ result }: { result: Result }) {
 	if (result.status === "found" && result.pageView) {
 		return (
-			<StatusIndicator size="sm" tone="success" label="Verified just now" />
+			<StatusIndicator size="sm" tone="success" label="Verificado agora" />
 		);
 	}
 
@@ -133,7 +133,7 @@ function Indicator({ result }: { result: Result }) {
 			<StatusIndicator
 				size="sm"
 				tone="warning"
-				label="Tag Manager needs a fix"
+				label="O Tag Manager precisa de ajuste"
 			/>
 		);
 	}
@@ -182,7 +182,7 @@ function Outcome({ result, siteId }: { result: Result; siteId: string }) {
 		return (
 			<Alert variant="destructive">
 				<Icon icon={Warning} />
-				<AlertTitle>Tag Manager will drop the site ID</AlertTitle>
+				<AlertTitle>O Tag Manager vai descartar o ID do site</AlertTitle>
 				<AlertDescription>
 					Container {result.container.id} carries the tag, but the site ID is
 					not in the script URL. Tag Manager keeps only the URL when it injects

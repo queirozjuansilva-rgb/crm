@@ -79,7 +79,7 @@ export function AgentModel() {
 		trpc.settings.setAgentModel.mutationOptions({
 			onSuccess: async () => {
 				await cache.settings();
-				toast.success("The agent will use this model from its next session.");
+				toast.success("O agente usa este modelo a partir da próxima sessão.");
 			},
 			onError: (error) => toast.error(error.message),
 		}),
@@ -109,9 +109,9 @@ export function AgentModel() {
 	return (
 		<Card>
 			<CardHeader>
-				<CardTitle>Research agent</CardTitle>
+				<CardTitle>Agente de pesquisa</CardTitle>
 				<CardDescription>
-					The model the agent thinks with, routed through the Vercel AI Gateway.
+					O modelo que o agente usa, pelo Vercel AI Gateway.
 				</CardDescription>
 			</CardHeader>
 
@@ -122,7 +122,7 @@ export function AgentModel() {
 							variant="outline"
 							role="combobox"
 							aria-expanded={open}
-							aria-label="Model"
+							aria-label="Modelo"
 							disabled={save.isPending || catalog.isPending || unavailable}
 						>
 							{currentLabel}
@@ -132,9 +132,9 @@ export function AgentModel() {
 
 					<PopoverContent align="start" size="fit" className="w-96">
 						<Command>
-							<CommandInput placeholder="Search models…" />
+							<CommandInput placeholder="Buscar modelos…" />
 							<CommandList>
-								<CommandEmpty>No model matches that.</CommandEmpty>
+								<CommandEmpty>Nenhum modelo corresponde.</CommandEmpty>
 
 								<CommandGroup>
 									<CommandItem

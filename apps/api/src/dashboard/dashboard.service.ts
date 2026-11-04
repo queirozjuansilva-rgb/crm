@@ -1,5 +1,6 @@
 import { ActivityType, type Db, DealStage } from "@crm/db";
 import { OPEN_DEAL_STAGES } from "@crm/db/deal-stage";
+import { readMonthlyGoalCents } from "@crm/db/settings";
 import { activityMeta } from "@crm/validation/activity-meta";
 import { Injectable } from "@nestjs/common";
 import { toCents } from "../crm/values";
@@ -20,7 +21,7 @@ const RATE_WINDOW_DAYS = 90;
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
-const MONTH_LABEL = new Intl.DateTimeFormat("en-US", { month: "short" });
+const MONTH_LABEL = new Intl.DateTimeFormat("pt-BR", { month: "short" });
 
 function monthStart(from: Date, offset: number): Date {
 	return new Date(from.getFullYear(), from.getMonth() + offset, 1);
@@ -48,7 +49,10 @@ export class DashboardService {
 		const trendStart = monthStart(now, -(TREND_MONTHS - 1));
 		const rateStart = new Date(now.getTime() - RATE_WINDOW_DAYS * DAY_MS);
 
-		const base = await this.conversion.reportingCurrency();
+		const [base, monthlyGoalCents] = await Promise.all([
+			this.conversion.reportingCurrency(),
+			readMonthlyGoalCents(this.db),
+		]);
 		const counted = this.conversion.countedWhere(base);
 
 		const [
@@ -180,7 +184,7 @@ export class DashboardService {
 
 		const firstBucket = monthKey(trendStart);
 		const trend = Array.from({ length: TREND_MONTHS }, (_, index) => ({
-			month: MONTH_LABEL.format(monthStart(trendStart, index)),
+			month: MONTH_LABEL.format(monthStart(trendStart, index)).replace(".", ""),
 			won: 0,
 			created: 0,
 		}));
@@ -236,6 +240,7 @@ export class DashboardService {
 		return {
 			scope: input.scope,
 			reportingCurrency: base,
+			monthlyGoalCents,
 			unconverted,
 			pipeline: {
 				stages,

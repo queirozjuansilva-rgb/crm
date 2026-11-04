@@ -69,7 +69,7 @@ export function AgentBuilderHome({ name }: { name: string }) {
 
 				<div className="pt-1">
 					<p className="flex h-7 items-center text-muted-foreground text-xs">
-						Suggested agents
+						Agentes sugeridos
 					</p>
 					{SUGGESTIONS.map((suggestion) => (
 						<button

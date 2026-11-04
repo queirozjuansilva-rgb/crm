@@ -107,11 +107,11 @@ function ReportedValue({ deal }: { deal: Deal }) {
 }
 
 const CONTACT_COLUMNS = [
-	{ id: "name", header: "Name", width: "w-[28%]", className: "pl-5" },
-	{ id: "role", header: "Role", width: "w-[20%]" },
-	{ id: "title", header: "Title", width: "w-[22%]" },
-	{ id: "email", header: "Email", width: "w-[22%]" },
-	{ id: "remove", srLabel: "Remove", width: "w-10" },
+	{ id: "name", header: "Nome", width: "w-[28%]", className: "pl-5" },
+	{ id: "role", header: "Função", width: "w-[20%]" },
+	{ id: "title", header: "Cargo", width: "w-[22%]" },
+	{ id: "email", header: "E-mail", width: "w-[22%]" },
+	{ id: "remove", srLabel: "Remover", width: "w-10" },
 ];
 
 const DATE_OPTIONS: Intl.DateTimeFormatOptions = {
@@ -137,12 +137,12 @@ export function DealSheet({ dealId }: { dealId: string }) {
 		? [
 				{
 					value: "overview",
-					label: "Overview",
+					label: "Visão geral",
 					content: <DealOverview deal={deal} />,
 				},
 				{
 					value: "contacts",
-					label: "Contacts",
+					label: "Contatos",
 					count: deal.contacts.length,
 					content: (
 						<DealContacts
@@ -155,12 +155,12 @@ export function DealSheet({ dealId }: { dealId: string }) {
 				},
 				{
 					value: "activity",
-					label: "Activity",
+					label: "Atividade",
 					content: <Timeline anchor={{ dealId: deal.id }} />,
 				},
 				{
 					value: "agent",
-					label: "Agent",
+					label: "Agente",
 					content: <AgentPanel record={{ kind: "deal", id: deal.id }} />,
 					keepMounted: true,
 				},
@@ -171,7 +171,7 @@ export function DealSheet({ dealId }: { dealId: string }) {
 		<RecordSheetFrame
 			loading={query.isPending}
 			error={query.error?.message ?? null}
-			title={deal?.name ?? "Deal"}
+			title={deal?.name ?? "Negócio"}
 			description={
 				deal ? (
 					<button
@@ -214,7 +214,7 @@ export function DealSheet({ dealId }: { dealId: string }) {
 			stats={
 				deal ? (
 					<DetailSheetStats>
-						<DetailSheetStat label="Amount">
+						<DetailSheetStat label="Valor">
 							{deal.amountCents === null ? (
 								<EmptyCellValue />
 							) : (
@@ -223,17 +223,17 @@ export function DealSheet({ dealId }: { dealId: string }) {
 								</span>
 							)}
 						</DetailSheetStat>
-						<DetailSheetStat label="Expected close">
+						<DetailSheetStat label="Previsão de fechamento">
 							{deal.expectedCloseDate ? (
 								<LocalDay date={deal.expectedCloseDate} />
 							) : (
 								<EmptyCellValue />
 							)}
 						</DetailSheetStat>
-						<DetailSheetStat label="In stage">
+						<DetailSheetStat label="Na etapa">
 							<LocalRelativeTime date={deal.stageChangedAt} />
 						</DetailSheetStat>
-						<DetailSheetStat label="Owner">
+						<DetailSheetStat label="Responsável">
 							<OwnerCell owner={deal.owner} />
 						</DetailSheetStat>
 					</DetailSheetStats>
@@ -273,35 +273,35 @@ function DealOverview({ deal }: { deal: Deal }) {
 
 	return (
 		<DetailSheetBody>
-			<DetailSheetSection title="Stage">
+			<DetailSheetSection title="Etapa">
 				<StageStepper dealId={deal.id} stage={deal.stage} />
 
 				{deal.closedReason ? (
 					<DetailSheetProperties>
-						<DetailSheetProperty label="Closed">
+						<DetailSheetProperty label="Fechados">
 							{deal.closedAt ? (
 								<LocalDateTime date={deal.closedAt} options={DATE_OPTIONS} />
 							) : (
 								<EmptyCellValue />
 							)}
 						</DetailSheetProperty>
-						<DetailSheetProperty label="Reason" wide>
+						<DetailSheetProperty label="Motivo" wide>
 							{deal.closedReason}
 						</DetailSheetProperty>
 					</DetailSheetProperties>
 				) : null}
 			</DetailSheetSection>
 
-			<DetailSheetSection title="Details" action={<FieldsCog kind="deal" />}>
+			<DetailSheetSection title="Detalhes" action={<FieldsCog kind="deal" />}>
 				<DetailSheetProperties>
 					<InlineField
-						label="Name"
+						label="Nome"
 						value={deal.name}
 						saving={isSaving("name")}
 						onSave={(name) => name && save({ name })}
 					/>
 					<InlineField
-						label="Amount"
+						label="Valor"
 						value={
 							deal.amountCents === null ? null : String(deal.amountCents / 100)
 						}
@@ -311,7 +311,7 @@ function DealOverview({ deal }: { deal: Deal }) {
 							if (next === "") return save({ amountCents: null });
 							const parsed = Number.parseFloat(next);
 							if (!Number.isFinite(parsed) || parsed < 0) {
-								toast.error("Amount has to be a number.");
+								toast.error("O valor precisa ser um número.");
 								return;
 							}
 							save({ amountCents: Math.round(parsed * 100) });
@@ -321,14 +321,14 @@ function DealOverview({ deal }: { deal: Deal }) {
 						}
 					/>
 					<InlineSelectField
-						label="Currency"
+						label="Moeda"
 						value={currency}
 						options={currencyOptions(currency)}
 						onSave={(currency) => save({ currency })}
 					/>
 					<ReportedValue deal={deal} />
 					<InlineDateField
-						label="Close date"
+						label="Data de fechamento"
 						value={deal.expectedCloseDate}
 						saving={isSaving("expectedCloseDate")}
 						onSave={(next) => save({ expectedCloseDate: next || null })}
@@ -340,7 +340,7 @@ function DealOverview({ deal }: { deal: Deal }) {
 						onSave={(companyId) => save({ companyId })}
 					/>
 					<InlineSelectField
-						label="Owner"
+						label="Responsável"
 						value={deal.owner.id}
 						options={(users.data ?? []).map((user) => ({
 							value: user.id,
@@ -356,9 +356,9 @@ function DealOverview({ deal }: { deal: Deal }) {
 				</DetailSheetProperties>
 			</DetailSheetSection>
 
-			<DetailSheetSection title="Description">
+			<DetailSheetSection title="Descrição">
 				<InlineTextArea
-					label="Description"
+					label="Descrição"
 					value={deal.description}
 					placeholder={`What ${deal.company.name} is buying, why now, and what stands in the way.`}
 					saving={isSaving("description")}
@@ -375,29 +375,29 @@ function WhereItStands({ deal }: { deal: Deal }) {
 	const openRecord = useOpenRecord();
 
 	return (
-		<DetailSheetSection title="Where it stands">
+		<DetailSheetSection title="Situação">
 			<DetailSheetProperties>
-				<DetailSheetProperty label="Opened">
+				<DetailSheetProperty label="Aberto em">
 					<LocalDateTime date={deal.createdAt} options={DATE_OPTIONS} />
 				</DetailSheetProperty>
 
-				<DetailSheetProperty label="In stage since">
+				<DetailSheetProperty label="Na etapa desde">
 					<LocalDateTime date={deal.stageChangedAt} options={DATE_OPTIONS} />
 				</DetailSheetProperty>
 
 				{deal.closedAt ? (
-					<DetailSheetProperty label="Closed">
+					<DetailSheetProperty label="Fechados">
 						<LocalDateTime date={deal.closedAt} options={DATE_OPTIONS} />
 					</DetailSheetProperty>
 				) : null}
 
 				{deal.closedReason ? (
-					<DetailSheetProperty label="Reason" wide>
+					<DetailSheetProperty label="Motivo" wide>
 						{deal.closedReason}
 					</DetailSheetProperty>
 				) : null}
 
-				<DetailSheetProperty label="On it" wide>
+				<DetailSheetProperty label="Envolvidos" wide>
 					{deal.contacts.length === 0 ? (
 						<span className="text-muted-foreground">
 							Nobody from {deal.company.name} is attached yet.
@@ -474,12 +474,12 @@ function DealContacts({
 				{adding ? null : (
 					<DetailSheetEmpty
 						icon={UserMultiple}
-						title="No contacts on this deal"
+						title="Nenhum contato neste negócio"
 						description={`Nobody from ${deal.company.name} is attached yet. Bring the people you are selling to onto the deal and it says who to chase.`}
 						action={
 							<Button variant="outline" size="sm" onClick={onAdd}>
 								<Icon icon={Add} data-icon="inline-start" />
-								Add contact
+								Adicionar contato
 							</Button>
 						}
 					/>
@@ -513,7 +513,7 @@ function DealContacts({
 							<InlineTextCell
 								label={`Role on this deal for ${contactName(contact)}`}
 								value={contact.role}
-								placeholder="Champion"
+								placeholder="Defensor"
 								saving={
 									setRole.isPending &&
 									setRole.variables?.contactId === contact.id
@@ -554,14 +554,14 @@ function DealContacts({
 										</span>
 									</Button>
 								</TooltipTrigger>
-								<TooltipContent>Take off this deal</TooltipContent>
+								<TooltipContent>Tirar deste negócio</TooltipContent>
 							</Tooltip>
 						</TableCell>
 					</SimpleTableRow>
 				))}
 
 				<AddRow
-					label="Add contact"
+					label="Adicionar contato"
 					columns={CONTACT_COLUMNS.length}
 					onClick={onAdd}
 				/>

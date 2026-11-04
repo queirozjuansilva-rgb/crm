@@ -4,7 +4,7 @@ import { requireMailboxAccess } from "@/lib/session";
 import { ResearchForm } from "./research-form";
 
 export const metadata: Metadata = {
-	title: "Research key",
+	title: "Chave de pesquisa",
 };
 
 export const instant = false;
@@ -15,8 +15,8 @@ export default async function ResearchKeyPage() {
 	return (
 		<AuthShell>
 			<AuthHeading
-				title="Level up your CRM data"
-				description="Power your research agent with Context to research every company added to your CRM."
+				title="Turbine os dados do seu CRM"
+				description="Dê ao agente de pesquisa a Context para pesquisar cada empresa adicionada ao CRM."
 			/>
 
 			<ResearchForm />

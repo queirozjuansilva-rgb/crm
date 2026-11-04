@@ -158,3 +158,28 @@ export function maskKey(key: string): string {
 	const trimmed = key.trim();
 	return trimmed.length > 4 ? `••••${trimmed.slice(-4)}` : "••••";
 }
+
+export async function readMonthlyGoalCents(db: Db): Promise<number | null> {
+	const row = await db.appSetting.findUnique({
+		where: { id: SETTINGS_ID },
+		select: { monthlyGoalCents: true },
+	});
+
+	return row?.monthlyGoalCents == null ? null : Number(row.monthlyGoalCents);
+}
+
+export async function writeMonthlyGoalCents(
+	db: Db,
+	cents: number | null,
+): Promise<number | null> {
+	const monthlyGoalCents =
+		cents === null ? null : BigInt(Math.max(0, Math.round(cents)));
+
+	await db.appSetting.upsert({
+		where: { id: SETTINGS_ID },
+		create: { id: SETTINGS_ID, monthlyGoalCents },
+		update: { monthlyGoalCents },
+	});
+
+	return monthlyGoalCents === null ? null : Number(monthlyGoalCents);
+}

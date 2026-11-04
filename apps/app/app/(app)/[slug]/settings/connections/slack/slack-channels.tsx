@@ -60,7 +60,7 @@ export function SlackChannels() {
 	const refresh = useMutation(
 		trpc.slack.refreshPeople.mutationOptions({
 			onSuccess: async () => {
-				toast.success("Reading the channel list from Slack.");
+				toast.success("Lendo a lista de canais do Slack.");
 				await channels.reload();
 			},
 			onError: (error) => toast.error(error.message),
@@ -75,9 +75,11 @@ export function SlackChannels() {
 		<section className="flex flex-col gap-3 px-(--spacing-block-inline)">
 			<div className="flex items-end justify-between gap-4">
 				<div>
-					<h2 className="font-medium text-sm">Channels Comp AI can reach</h2>
+					<h2 className="font-medium text-sm">
+						Canais que a Lugh pode acessar
+					</h2>
 					<p className="text-muted-foreground text-xs">
-						Agents pick from this list.
+						Os agentes escolhem desta lista.
 					</p>
 				</div>
 				<Button
@@ -92,7 +94,7 @@ export function SlackChannels() {
 
 			{channels.stalled ? (
 				<p className="text-warning text-xs">
-					Comp AI is not reading Slack right now. The list can be out of date.
+					A Lugh não está lendo o Slack agora. A lista pode estar desatualizada.
 				</p>
 			) : null}
 
@@ -103,7 +105,7 @@ export function SlackChannels() {
 					</InputGroupAddon>
 					<InputGroupInput
 						onChange={(event) => setQuery(event.target.value)}
-						placeholder="Search channels"
+						placeholder="Buscar canais"
 						value={query}
 					/>
 				</InputGroup>
@@ -167,11 +169,11 @@ function AskDialog({
 		try {
 			await navigator.clipboard.writeText(INVITE_COMMAND);
 		} catch {
-			toast.error("Copying failed. Copy the command above by hand.");
+			toast.error("A cópia falhou. Copie o comando acima manualmente.");
 			return;
 		}
 
-		toast.success("Command copied.");
+		toast.success("Comando copiado.");
 		onConfirm();
 	}
 
@@ -199,7 +201,7 @@ function AskDialog({
 
 				<AlertDialogFooter>
 					<AlertDialogCancel disabled={status === "pending"}>
-						Cancel
+						Cancelar
 					</AlertDialogCancel>
 					<Button
 						disabled={status === "pending"}

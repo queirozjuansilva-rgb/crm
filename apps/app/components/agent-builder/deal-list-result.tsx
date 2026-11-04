@@ -18,17 +18,17 @@ import type { DealListItem, DealListResult } from "@/lib/agent-transcript";
 import { DEAL_STAGE_OPTIONS } from "@/lib/deal-stage";
 
 const COLUMNS: SimpleTableColumn[] = [
-	{ id: "deal", header: "Deal", width: "w-[20%]" },
-	{ id: "company", header: "Company", width: "w-[18%]" },
-	{ id: "stage", header: "Stage", width: "w-[18%]" },
+	{ id: "deal", header: "Negócio", width: "w-[20%]" },
+	{ id: "company", header: "Empresa", width: "w-[18%]" },
+	{ id: "stage", header: "Etapa", width: "w-[18%]" },
 	{
 		id: "amount",
-		header: "Amount",
+		header: "Valor",
 		width: "w-[12%]",
 		align: "right",
 	},
-	{ id: "owner", header: "Owner", width: "w-[14%]" },
-	{ id: "close", header: "Close date", width: "w-[12%]" },
+	{ id: "owner", header: "Responsável", width: "w-[14%]" },
+	{ id: "close", header: "Data de fechamento", width: "w-[12%]" },
 	{ id: "idle", header: "Idle", width: "w-[8%]", align: "right" },
 ];
 
@@ -51,7 +51,7 @@ export function DealListResultTable({ result }: { result: DealListResult }) {
 							colSpan={COLUMNS.length}
 							className="h-32 whitespace-normal py-8 text-center align-middle text-muted-foreground"
 						>
-							No deals met these pipeline filters.
+							Nenhum negócio atende a estes filtros.
 						</TableCell>
 					</SimpleTableRow>
 				) : (
@@ -119,7 +119,7 @@ export function DealListResultTable({ result }: { result: DealListResult }) {
 			<div className="flex flex-wrap items-center justify-between gap-3 text-muted-foreground text-xs">
 				<span>{tableMeta(result)}</span>
 				<span>
-					As of <LocalDay date={result.asOf} />
+					Em <LocalDay date={result.asOf} />
 				</span>
 			</div>
 		</section>

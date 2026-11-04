@@ -94,11 +94,11 @@ export function SlackScopeGroups({
 								{entry.grant}
 							</span>
 							<span className="text-muted-foreground text-xs">
-								Slack held this one back, so it is off.
+								O Slack não liberou este, então está desligado.
 							</span>
 						</span>
 						<span className="shrink-0 whitespace-nowrap pt-0.5 pr-2 text-muted-foreground text-xs">
-							Not granted
+							Não concedido
 						</span>
 					</div>
 				))}

@@ -93,7 +93,7 @@ export function BulkOwnerMenu({
 }) {
 	return (
 		<DropdownMenuSub>
-			<DropdownMenuSubTrigger>Assign owner</DropdownMenuSubTrigger>
+			<DropdownMenuSubTrigger>Definir responsável</DropdownMenuSubTrigger>
 			<DropdownMenuSubContent className="max-h-72 overflow-y-auto">
 				<DropdownMenuGroup>
 					{unassignedLabel && (
@@ -102,7 +102,9 @@ export function BulkOwnerMenu({
 						</DropdownMenuItem>
 					)}
 					{users.length === 0 ? (
-						<DropdownMenuLabel>Nobody else works here yet.</DropdownMenuLabel>
+						<DropdownMenuLabel>
+							Ninguém mais trabalha aqui ainda.
+						</DropdownMenuLabel>
 					) : (
 						users.map((user) => (
 							<DropdownMenuItem
@@ -141,9 +143,9 @@ export function BulkDeleteDialog({
 				</AlertDialogHeader>
 
 				<AlertDialogFooter>
-					<AlertDialogCancel>Cancel</AlertDialogCancel>
+					<AlertDialogCancel>Cancelar</AlertDialogCancel>
 					<AlertDialogAction variant="destructive" onClick={onConfirm}>
-						Delete
+						Excluir
 					</AlertDialogAction>
 				</AlertDialogFooter>
 			</AlertDialogContent>

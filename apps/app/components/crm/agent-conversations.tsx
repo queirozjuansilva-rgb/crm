@@ -58,7 +58,7 @@ export function ConversationPicker({
 
 				<DropdownMenuContent align="start" className="w-72">
 					{conversations.length === 0 ? (
-						<DropdownMenuItem disabled>Nothing yet</DropdownMenuItem>
+						<DropdownMenuItem disabled>Nada ainda</DropdownMenuItem>
 					) : (
 						conversations.map((conversation) => (
 							<DropdownMenuItem
@@ -81,7 +81,7 @@ export function ConversationPicker({
 					<DropdownMenuSeparator />
 					<DropdownMenuItem onSelect={onNew}>
 						<Icon icon={Add} data-icon="inline-start" />
-						New conversation
+						Nova conversa
 					</DropdownMenuItem>
 				</DropdownMenuContent>
 			</DropdownMenu>
@@ -110,7 +110,7 @@ function Forget({
 			onSuccess: async () => {
 				await conversations.invalidate();
 				onDone();
-				toast.success("Conversation deleted.");
+				toast.success("Conversa excluída.");
 			},
 			onError: (error) => toast.error(error.message),
 		}),
@@ -124,7 +124,7 @@ function Forget({
 			onClick={() => remove.mutate({ id: conversation.id })}
 		>
 			<Icon icon={TrashCan} />
-			<span className="sr-only">Delete this conversation</span>
+			<span className="sr-only">Excluir esta conversa</span>
 		</Button>
 	);
 }

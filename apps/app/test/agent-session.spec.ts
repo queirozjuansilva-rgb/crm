@@ -107,9 +107,9 @@ describe("eventsOf", () => {
 
 describe("record context", () => {
 	it("asks about the thing you are actually looking at", () => {
-		expect(recordCopy("contact").title).toBe("Ask about this person");
-		expect(recordCopy("company").title).toBe("Ask about this company");
-		expect(recordCopy("deal").title).toBe("Ask about this deal");
+		expect(recordCopy("contact").title).toBe("Pergunte sobre esta pessoa");
+		expect(recordCopy("company").title).toBe("Pergunte sobre esta empresa");
+		expect(recordCopy("deal").title).toBe("Pergunte sobre este negócio");
 	});
 
 	it("offers questions that suit the record", () => {
@@ -155,7 +155,7 @@ describe("the panel", () => {
 	});
 
 	it("offers a way out of a thread that has ended", () => {
-		expect(source()).toContain("Start a new conversation");
+		expect(source()).toContain("Começar nova conversa");
 		expect(source()).toContain("onClick={onNewThread}");
 	});
 });

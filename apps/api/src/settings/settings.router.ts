@@ -7,9 +7,11 @@ import {
 	agentModelOutput,
 	archiveRetentionOutput,
 	modelCatalogOutput,
+	monthlyGoalOutput,
 	researchKeyOutput,
 	setAgentModelInput,
 	setArchiveRetentionDaysInput,
+	setMonthlyGoalInput,
 	setResearchKeyInput,
 } from "./settings.contracts";
 import { SettingsService } from "./settings.service";
@@ -80,5 +82,22 @@ export class SettingsRouter {
 		@Input() input: z.infer<typeof setArchiveRetentionDaysInput>,
 	) {
 		return this.settings.setArchiveRetention(input.days);
+	}
+
+	@Query({
+		output: monthlyGoalOutput,
+		meta: restMeta("GET", "/settings/monthly-goal", ["Settings"]),
+	})
+	async monthlyGoal() {
+		return this.settings.monthlyGoal();
+	}
+
+	@Mutation({
+		input: setMonthlyGoalInput,
+		output: monthlyGoalOutput,
+		meta: restMeta("PATCH", "/settings/monthly-goal", ["Settings"]),
+	})
+	async setMonthlyGoal(@Input() input: z.infer<typeof setMonthlyGoalInput>) {
+		return this.settings.setMonthlyGoal(input.cents);
 	}
 }
