@@ -10,7 +10,9 @@ import { brief, drainAll, taskAuth } from "../lib/dispatch";
 import { reconcileStaleTasks } from "../lib/stale-tasks";
 
 export default defineSchedule({
-	cron: "* * * * *",
+	// Vercel Hobby only allows daily crons; an external scheduler POSTs
+	// /internal/crm/dispatch every few minutes instead.
+	cron: "0 6 * * *",
 	async run({ to, waitUntil, appAuth }) {
 		waitUntil(
 			Promise.all([
