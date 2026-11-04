@@ -1,4 +1,5 @@
 import { AmbientBackground } from "@crm/ui/components/ambient-background";
+import { PointerSpotlight } from "@crm/ui/components/pointer-spotlight";
 import { notFound, unstable_rethrow } from "next/navigation";
 import { connection } from "next/server";
 import { Suspense } from "react";
@@ -19,6 +20,7 @@ export default function AppLayout({
 		<MobileNavProvider>
 			<div className="isolate flex h-svh flex-col">
 				<AmbientBackground />
+				<PointerSpotlight />
 				<Suspense fallback={<AppHeaderFallback />}>
 					<WorkspaceHeader params={params} />
 				</Suspense>

@@ -139,7 +139,7 @@ export function DashboardSummary() {
 							Os maiores negócios abertos e há quanto tempo estão na etapa
 						</CardDescription>
 						<CardAction>
-							<Button asChild variant="contrast" size="sm">
+							<Button asChild variant="outline" size="sm">
 								<Link href={workspaceUrl("/deals")}>Ver negócios</Link>
 							</Button>
 						</CardAction>
