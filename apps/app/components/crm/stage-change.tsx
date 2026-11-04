@@ -135,7 +135,7 @@ export function CloseReasonDialog() {
 	};
 
 	const setStage = useStageMutation(() => {
-		toast.success("Negócio fechado.");
+		toast.success("Etapa atualizada.");
 		close();
 	});
 
@@ -148,12 +148,12 @@ export function CloseReasonDialog() {
 				<DialogHeader>
 					<DialogTitle>
 						{stage === "CLOSED_LOST"
-							? "Fechar como perdido"
+							? "Mover para Remarketing/Follow-up"
 							: "Marcar como desqualificado"}
 					</DialogTitle>
 					<DialogDescription>
 						{stage === "CLOSED_LOST"
-							? "Para quem perdemos? Esta resposta fica registrada só aqui."
+							? "Por que este negócio parou agora? O motivo fica registrado para o follow-up."
 							: "Por que não tem fit? Isto vai para a linha do tempo para ninguém repetir o mesmo negócio."}
 					</DialogDescription>
 				</DialogHeader>
@@ -173,7 +173,7 @@ export function CloseReasonDialog() {
 							id={reasonId}
 							value={reason}
 							onChange={(event) => setReason(event.target.value)}
-							placeholder="Ficou com o fornecedor atual"
+							placeholder="Sem orçamento agora, retomar em março"
 							rows={3}
 						/>
 					</Field>

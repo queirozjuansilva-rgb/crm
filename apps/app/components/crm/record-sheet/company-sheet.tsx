@@ -25,6 +25,7 @@ import { formatMoney } from "@crm/ui/lib/format";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { AgentPanel } from "@/components/crm/agent-panel";
+import { AttachmentsSection } from "@/components/crm/attachments/attachments-section";
 import { EnrichmentActions } from "@/components/crm/enrichment-actions";
 import { EnrichmentIndicator } from "@/components/crm/enrichment-status";
 import { FieldsCog, RecordFields } from "@/components/crm/fields/record-fields";
@@ -420,6 +421,8 @@ function CompanyOverview({ company }: { company: Company }) {
 					) : null}
 				</DetailSheetRail>
 			</DetailSheetSplit>
+
+			<AttachmentsSection record={{ kind: "company", id: company.id }} />
 		</DetailSheetBody>
 	);
 }

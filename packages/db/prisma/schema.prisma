@@ -52,6 +52,7 @@ model User {
 
   apiKeys Apikey[]
 
+  attachments Attachment[] @relation("AttachmentAuthor")
   @@unique([email])
   @@map("user")
 }
@@ -291,11 +292,15 @@ model RateLimit {
 }
 
 enum DealStage {
-  DEMO_BOOKED
-  QUALIFIED_TO_BUY
+  BUILDING_SNIPER
+  SNIPER_READY
+  SNIPER_SENT
+  ENGAGED_CONVERSATION
+  SCREENING_BOOKED
+  SCREENING_DONE
   UNQUALIFIED_TO_BUY
-  DECISION_MAKER_BOUGHT_IN
-  CONTRACT_SENT
+  PROPOSAL_MEETING
+  NEGOTIATION
   CLOSED_WON
   CLOSED_LOST
 }
@@ -459,6 +464,7 @@ model Company {
   createdAt      DateTime            @default(now())
   updatedAt      DateTime            @updatedAt
 
+  attachments Attachment[]
   @@unique([domain], map: "company_domain_active_key", where: { archivedAt: null })
   @@index([ownerId])
   @@index([name])
@@ -523,6 +529,7 @@ model Contact {
   createdAt       DateTime           @default(now())
   updatedAt       DateTime           @updatedAt
 
+  attachments Attachment[]
   @@unique([email], map: "contact_email_active_key", where: { archivedAt: null })
   @@index([companyId])
   @@index([ownerId])
@@ -1057,7 +1064,7 @@ model Deal {
   ownerId       String
   owner         User                @relation("DealOwner", fields: [ownerId], references: [id])
 
-  stage             DealStage @default(DEMO_BOOKED)
+  stage             DealStage @default(BUILDING_SNIPER)
   stageChangedAt    DateTime  @default(now())
   amount            Decimal?  @db.Decimal(14, 2)
   currency          String    @default("USD")
@@ -1079,6 +1086,7 @@ model Deal {
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
 
+  attachments Attachment[]
   @@index([companyId])
   @@index([ownerId])
   @@index([stage])
@@ -1720,4 +1728,33 @@ model Apikey {
   @@index([configId])
   @@index([key])
   @@map("apikey")
+}
+
+enum AttachmentKind {
+  FILE
+  LINK
+}
+
+model Attachment {
+  id          String         @id @default(cuid())
+  kind        AttachmentKind
+  name        String
+  url         String?
+  storagePath String?        @unique
+  contentType String?
+  size        Int?
+  dealId      String?
+  deal        Deal?          @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  companyId   String?
+  company     Company?       @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  contactId   String?
+  contact     Contact?       @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  createdById String?
+  createdBy   User?          @relation("AttachmentAuthor", fields: [createdById], references: [id], onDelete: SetNull)
+  createdAt   DateTime       @default(now())
+
+  @@index([dealId, createdAt])
+  @@index([companyId, createdAt])
+  @@index([contactId, createdAt])
+  @@map("attachment")
 }

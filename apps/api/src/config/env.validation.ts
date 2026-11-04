@@ -94,6 +94,18 @@ export class EnvironmentVariables {
 	REDIS_URL?: string;
 
 	@IsOptional()
+	@IsUrl({ require_tld: false })
+	SUPABASE_URL?: string;
+
+	@IsOptional()
+	@IsString()
+	SUPABASE_SERVICE_ROLE_KEY?: string;
+
+	@IsOptional()
+	@IsString()
+	ATTACHMENTS_BUCKET?: string;
+
+	@IsOptional()
 	@Type(() => Number)
 	@IsInt()
 	@Min(0)

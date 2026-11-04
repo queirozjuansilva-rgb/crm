@@ -24,6 +24,7 @@ import { TableCell } from "@crm/ui/components/table";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { AgentPanel } from "@/components/crm/agent-panel";
+import { AttachmentsSection } from "@/components/crm/attachments/attachments-section";
 import { InlineCompanyField } from "@/components/crm/company-picker";
 import { contactName } from "@/components/crm/contact-name";
 import { ContactEnrichmentAction } from "@/components/crm/enrichment-actions";
@@ -429,6 +430,8 @@ function ContactOverview({ contact }: { contact: Contact }) {
 					<ContactSocials contact={contact} />
 				</DetailSheetSection>
 			) : null}
+
+			<AttachmentsSection record={{ kind: "contact", id: contact.id }} />
 
 			<WebsiteActivity contactId={contact.id} />
 		</DetailSheetBody>
