@@ -1,6 +1,7 @@
 "use client";
 
 import { DealStage } from "@crm/db/enums";
+import { Badge } from "@crm/ui/components/badge";
 import { KanbanBoard, type KanbanColumn } from "@crm/ui/components/kanban";
 import { Spinner } from "@crm/ui/components/spinner";
 import { formatMoney } from "@crm/ui/lib/format";
@@ -179,6 +180,8 @@ export function DealsBoard() {
 }
 
 function DealCard({ deal, onHover }: { deal: DealRow; onHover: () => void }) {
+	const origin = deal.fields.etiqueta_de_origem;
+
 	return (
 		<div className="flex flex-col gap-2.5" onPointerEnter={onHover}>
 			<div className="flex items-start justify-between gap-2">
@@ -202,6 +205,11 @@ function DealCard({ deal, onHover }: { deal: DealRow; onHover: () => void }) {
 					</span>
 				) : null}
 			</div>
+			{origin ? (
+				<Badge variant="secondary" title="Origem do lead">
+					{origin}
+				</Badge>
+			) : null}
 			{deal.stage === DealStage.UNQUALIFIED_TO_BUY ? (
 				<span className="w-fit rounded-full bg-foreground/8 px-2 py-0.5 text-[11px] text-muted-foreground">
 					Desqualificado
