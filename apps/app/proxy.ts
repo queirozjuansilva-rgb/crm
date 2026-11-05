@@ -18,7 +18,14 @@ const UNGATED = ["/grant-access", "/eve"];
 
 const ANONYMOUS = ["/t"];
 
-const SECTIONS = ["/companies", "/contacts", "/deals", "/settings"];
+const SECTIONS = [
+	"/companies",
+	"/contacts",
+	"/deals",
+	"/settings",
+	"/agenda",
+	"/reports",
+];
 
 export async function proxy(request: NextRequest) {
 	const { pathname } = request.nextUrl;

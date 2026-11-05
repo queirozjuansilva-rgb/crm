@@ -30,6 +30,16 @@ export const SEARCH_PARAM = {
 	deals: {
 		view: "view",
 	},
+	agenda: {
+		period: "period",
+		date: "date",
+	},
+	companies: {
+		layout: "layout",
+	},
+	reports: {
+		months: "months",
+	},
 } as const;
 
 export const RESERVED_SEARCH_PARAM_KEYS: ReadonlySet<string> = new Set(

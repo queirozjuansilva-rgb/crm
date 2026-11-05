@@ -14,6 +14,7 @@ import { z } from "zod";
 const t = initTRPC.create();
 const publicProcedure = t.procedure;
 import { timelineInput, timelineOutput, timelineCountsInput, timelineCountsOutput, myTasksInput, myTasksOutput, activityCreateInput, activityCreateOutput, completeInput, completeOutput } from "../activities/activities.contracts";
+import { agendaRangeInput, agendaRangeOutput } from "../agenda/agenda.contracts";
 import { agentListOutput, agentReviseInput, agentReviseOutput, agentIdInput, agentFilesOutput, agentSaveFileInput, agentSaveFileOutput, agentByIdOutput, agentHistoryInput, agentHistoryOutput, agentActivityOutput, agentUpdateInput, agentUpdateOutput, agentDeployInput, agentDeployOutput, agentPauseOutput, agentResumeOutput, agentArchiveOutput, agentRestoreOutput, agentRemoveOutput, agentRunNowInput, agentRunNowOutput, agentRetryRunInput, agentRetryRunOutput, agentCancelRunInput, agentCancelRunOutput } from "../agent/agents.contracts";
 import { apiKeyListInput, apiKeyListOutput, createApiKeyInput, createApiKeyOutput, revokeApiKeyInput, revokeApiKeyOutput } from "../api-keys/api-keys.contracts";
 import { attachmentListInput, attachmentListOutput, attachmentPrepareInput, attachmentPrepareOutput, attachmentCompleteInput, attachmentOutput, attachmentLinkInput, attachmentIdInput, attachmentRemoveOutput } from "../attachments/attachments.contracts";
@@ -28,6 +29,7 @@ import { fieldListInput, fieldListOutput, fieldByKeyInput, serializedFieldOutput
 import { googleConnectionStatusOutput, setAutoCreateInput, suppressDomainInput, suppressDomainOutput, threadInput, emailThreadOutput, calendarEventInput, calendarEventOutput } from "../google/google.contracts";
 import { purgeSyncedDataOutput, revokeAccessOutput, microsoftConnectionStatusOutput, setOutlookAutoCreateInput } from "../microsoft/microsoft.contracts";
 import { mcpListOutput, mcpGetInput, mcpGetOutput, mcpToolsInput, mcpToolsOutput, mcpStartInput, mcpStartOutput, mcpReconnectInput, mcpReconnectOutput, mcpDisconnectInput, mcpDisconnectOutput, mcpReviewToolsInput, mcpReviewToolsOutput } from "../mcp/mcp.contracts";
+import { reportsOverviewInput, reportsOverviewOutput } from "../reports/reports.contracts";
 import { savedViewListInput, savedViewListOutput, savedViewCreateInput, savedViewOutput, savedViewUpdateArgs, savedViewIdInput, savedViewDeleteOutput } from "../saved-views/saved-views.contracts";
 import { agentModelOutput, modelCatalogOutput, setAgentModelInput, researchKeyOutput, setResearchKeyInput, archiveRetentionOutput, setArchiveRetentionDaysInput, monthlyGoalOutput, setMonthlyGoalInput } from "../settings/settings.contracts";
 import { slackStatusOutput, slackMatchesOutput, slackChannelsInput, slackChannelsOutput, slackJoinChannelInput, slackJoinChannelOutput, slackRefreshPeopleOutput, slackCreateChannelInput, slackCreateChannelOutput, slackDisconnectOutput } from "../slack/slack.contracts";
@@ -58,6 +60,12 @@ const appRouter = t.router({
       .input(completeInput)
       .output(completeOutput)
       .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
+    }),
+  agenda: t.router({
+    range: publicProcedure
+      .input(agendaRangeInput)
+      .output(agendaRangeOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
     }),
   agents: t.router({
     list: publicProcedure
@@ -636,6 +644,12 @@ const appRouter = t.router({
       .input(setOutlookAutoCreateInput)
       .output(microsoftConnectionStatusOutput)
       .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
+    }),
+  reports: t.router({
+    overview: publicProcedure
+      .input(reportsOverviewInput)
+      .output(reportsOverviewOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
     }),
   savedViews: t.router({
     list: publicProcedure
