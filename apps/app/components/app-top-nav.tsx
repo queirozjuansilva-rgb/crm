@@ -25,7 +25,7 @@ export function AppTopNav() {
 	);
 
 	return (
-		<PillNav aria-label="Principal" className="hidden lg:flex">
+		<PillNav aria-label="Principal" className="hidden xl:flex">
 			{items.map((item) => {
 				const active = isActive(item, pathname);
 				return (

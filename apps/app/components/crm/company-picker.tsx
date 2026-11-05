@@ -21,7 +21,7 @@ export function CompanyPicker({
 	id,
 	value,
 	onValueChange,
-	placeholder = "Choose a company",
+	placeholder = "Escolha um cliente",
 	none,
 	selected,
 	disabled,

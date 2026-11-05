@@ -29,6 +29,8 @@ export type CrmCache = {
 	fieldCoverage(id?: string, options?: Options): Promise<void>;
 	savedViews(entity?: RecordKind, options?: Options): Promise<void>;
 	attachments(record: RemovedRecord, options?: Options): Promise<void>;
+	finance(options?: Options): Promise<void>;
+	projects(id?: string, options?: Options): Promise<void>;
 	removed(record: RemovedRecord): Promise<void>;
 	removedMany(records: RemovedRecords): Promise<void>;
 	conversationRemoved(id: string): Promise<void>;
@@ -148,6 +150,23 @@ export function useCrmCache(): CrmCache {
 						: trpc.fields.coverage.queryKey(),
 				],
 				[],
+				options,
+			),
+
+		finance: (options) =>
+			run(
+				[trpc.finance.list.queryKey(), trpc.finance.summary.queryKey()],
+				[],
+				options,
+			),
+
+		projects: (id, options) =>
+			run(
+				[
+					trpc.projects.list.queryKey(),
+					...(id ? [trpc.projects.byId.queryKey({ id })] : []),
+				],
+				[trpc.agenda.range.queryKey()],
 				options,
 			),
 

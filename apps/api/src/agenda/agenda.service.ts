@@ -26,68 +26,87 @@ export class AgendaService {
 		const from = new Date(input.from);
 		const to = new Date(input.to);
 
-		const [events, activities, calendarConnected] = await Promise.all([
-			this.db.calendarEvent.findMany({
-				where: {
-					startsAt: { lt: to },
-					endsAt: { gt: from },
-					status: { not: "cancelled" },
-				},
-				orderBy: { startsAt: "asc" },
-				take: AGENDA.maxItems + 1,
-				select: {
-					id: true,
-					title: true,
-					location: true,
-					conferenceUrl: true,
-					startsAt: true,
-					endsAt: true,
-					isAllDay: true,
-					company: { select: COMPANY_SELECT },
-					contact: { select: { id: true, firstName: true, lastName: true } },
-					attendees: {
-						where: { isOrganizer: false },
-						orderBy: { email: "asc" },
-						select: { email: true, name: true, responseStatus: true },
+		const [events, activities, calendarConnected, projectTasks] =
+			await Promise.all([
+				this.db.calendarEvent.findMany({
+					where: {
+						startsAt: { lt: to },
+						endsAt: { gt: from },
+						status: { not: "cancelled" },
 					},
-				},
-			}),
-			this.db.activity.findMany({
-				where: {
-					OR: [
-						{ type: "TASK", dueAt: { gte: from, lt: to } },
-						{
-							type: "MEETING",
-							calendarEventId: null,
-							occurredAt: { gte: from, lt: to },
-						},
-					],
-				},
-				orderBy: [{ dueAt: "asc" }, { occurredAt: "asc" }],
-				take: AGENDA.maxItems + 1,
-				select: {
-					id: true,
-					type: true,
-					subject: true,
-					body: true,
-					dueAt: true,
-					occurredAt: true,
-					completedAt: true,
-					company: { select: COMPANY_SELECT },
-					contact: { select: { id: true, firstName: true, lastName: true } },
-					deal: {
-						select: {
-							id: true,
-							name: true,
-							company: { select: COMPANY_SELECT },
+					orderBy: { startsAt: "asc" },
+					take: AGENDA.maxItems + 1,
+					select: {
+						id: true,
+						title: true,
+						location: true,
+						conferenceUrl: true,
+						startsAt: true,
+						endsAt: true,
+						isAllDay: true,
+						company: { select: COMPANY_SELECT },
+						contact: { select: { id: true, firstName: true, lastName: true } },
+						attendees: {
+							where: { isOrganizer: false },
+							orderBy: { email: "asc" },
+							select: { email: true, name: true, responseStatus: true },
 						},
 					},
-				},
-			}),
-			this.db.mailboxSync.count({
-				where: { userId, source: "calendar" },
-			}),
-		]);
+				}),
+				this.db.activity.findMany({
+					where: {
+						OR: [
+							{ type: "TASK", dueAt: { gte: from, lt: to } },
+							{
+								type: "MEETING",
+								calendarEventId: null,
+								occurredAt: { gte: from, lt: to },
+							},
+						],
+					},
+					orderBy: [{ dueAt: "asc" }, { occurredAt: "asc" }],
+					take: AGENDA.maxItems + 1,
+					select: {
+						id: true,
+						type: true,
+						subject: true,
+						body: true,
+						dueAt: true,
+						occurredAt: true,
+						completedAt: true,
+						company: { select: COMPANY_SELECT },
+						contact: { select: { id: true, firstName: true, lastName: true } },
+						deal: {
+							select: {
+								id: true,
+								name: true,
+								company: { select: COMPANY_SELECT },
+							},
+						},
+					},
+				}),
+				this.db.mailboxSync.count({
+					where: { userId, source: "calendar" },
+				}),
+				this.db.projectTask.findMany({
+					where: { dueDate: { gte: from, lt: to } },
+					orderBy: { dueDate: "asc" },
+					take: AGENDA.maxItems + 1,
+					select: {
+						id: true,
+						title: true,
+						dueDate: true,
+						status: true,
+						project: {
+							select: {
+								id: true,
+								name: true,
+								company: { select: COMPANY_SELECT },
+							},
+						},
+					},
+				}),
+			]);
 
 		const meetings: AgendaItem[] = events.map((event) => ({
 			id: event.id,
@@ -162,7 +181,34 @@ export class AgendaService {
 			];
 		});
 
-		const items = [...meetings, ...tasks].sort((a, b) =>
+		const projectItems: AgendaItem[] = projectTasks.flatMap((task) =>
+			task.dueDate
+				? [
+						{
+							id: task.id,
+							kind: "task",
+							source: "crm",
+							title: `${task.project.name} · ${task.title}`,
+							startsAt: task.dueDate.toISOString(),
+							endsAt: null,
+							isAllDay: true,
+							location: null,
+							conferenceUrl: null,
+							done: task.status === "DONE",
+							record: {
+								kind: "company",
+								id: task.project.company.id,
+								name: task.project.company.name,
+							},
+							company: task.project.company,
+							attendees: [],
+							attendeeCount: 0,
+						},
+					]
+				: [],
+		);
+
+		const items = [...meetings, ...tasks, ...projectItems].sort((a, b) =>
 			a.startsAt.localeCompare(b.startsAt),
 		);
 
@@ -172,6 +218,7 @@ export class AgendaService {
 			truncated:
 				events.length > AGENDA.maxItems ||
 				activities.length > AGENDA.maxItems ||
+				projectTasks.length > AGENDA.maxItems ||
 				items.length > AGENDA.maxItems,
 		};
 	}

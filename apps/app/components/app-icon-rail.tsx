@@ -5,8 +5,10 @@ import Calendar from "@carbon/icons-react/es/Calendar";
 import ChartLine from "@carbon/icons-react/es/ChartLine";
 import Close from "@carbon/icons-react/es/Close";
 import Dashboard from "@carbon/icons-react/es/Dashboard";
+import Money from "@carbon/icons-react/es/Money";
 import Partnership from "@carbon/icons-react/es/Partnership";
 import Settings from "@carbon/icons-react/es/Settings";
+import TaskView from "@carbon/icons-react/es/TaskView";
 import UserMultiple from "@carbon/icons-react/es/UserMultiple";
 import { Button } from "@crm/ui/components/button";
 import type { CarbonIcon } from "@crm/ui/components/icon";
@@ -49,6 +51,8 @@ export const ITEMS: RailItem[] = [
 		icon: UserMultiple,
 		match: "prefix",
 	},
+	{ title: "Projetos", href: "/projects", icon: TaskView, match: "prefix" },
+	{ title: "Financeiro", href: "/finance", icon: Money, match: "prefix" },
 	{ title: "Agenda", href: "/agenda", icon: Calendar, match: "prefix" },
 	{ title: "Relatórios", href: "/reports", icon: ChartLine, match: "prefix" },
 	{

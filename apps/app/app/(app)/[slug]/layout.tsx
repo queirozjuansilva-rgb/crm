@@ -8,6 +8,7 @@ import { AppIconRail, AppIconRailFallback } from "@/components/app-icon-rail";
 import { QuickSwitcher } from "@/components/crm/quick-switcher";
 import { RecordSheetHost } from "@/components/crm/record-sheet/record-sheet-host";
 import { MobileNavProvider } from "@/components/mobile-nav";
+import { MobileTabBar } from "@/components/mobile-tab-bar";
 import { requireMailboxAccess } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
@@ -25,12 +26,16 @@ export default function AppLayout({
 					<WorkspaceHeader params={params} />
 				</Suspense>
 
-				<div className="flex min-h-0 flex-1">
+				<div className="flex min-h-0 flex-1 max-xl:pb-[calc(5.5rem+env(safe-area-inset-bottom))]">
 					<Suspense fallback={<AppIconRailFallback />}>
 						<AppIconRail />
 					</Suspense>
 					{children}
 				</div>
+
+				<Suspense fallback={null}>
+					<MobileTabBar />
+				</Suspense>
 
 				<Suspense fallback={null}>
 					<RecordSheetHost />

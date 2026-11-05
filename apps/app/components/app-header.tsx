@@ -46,7 +46,7 @@ export function AppHeader({ user }: { user: User }) {
 				<Button
 					variant="ghost"
 					size="icon"
-					className="lg:hidden"
+					className="xl:hidden"
 					aria-label="Abrir navegação"
 					onClick={() => setMobileNavOpen(true)}
 				>
@@ -62,8 +62,11 @@ export function AppHeader({ user }: { user: User }) {
 						lugh
 					</span>
 				</Link>
-				<Separator orientation="vertical" className="mx-1 h-5" />
-				<span className="min-w-0 truncate font-medium font-mono text-[10.5px] text-muted-foreground uppercase tracking-[0.14em]">
+				<Separator
+					orientation="vertical"
+					className="mx-1 hidden h-5 sm:block xl:hidden 2xl:block"
+				/>
+				<span className="hidden min-w-0 truncate font-medium font-mono sm:inline xl:hidden 2xl:inline text-[10.5px] text-muted-foreground uppercase tracking-[0.14em]">
 					{label}
 				</span>
 			</div>

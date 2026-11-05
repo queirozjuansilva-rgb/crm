@@ -22,6 +22,7 @@ import { DatabaseModule } from "./database/database.module";
 import { DealsModule } from "./deals/deals.module";
 import { EnrichmentModule } from "./enrichment/enrichment.module";
 import { FieldsModule } from "./fields/fields.module";
+import { FinanceModule } from "./finance/finance.module";
 import { GoogleModule } from "./google/google.module";
 import { HealthModule } from "./health/health.module";
 import { LoggingModule } from "./logging/logging.module";
@@ -29,6 +30,7 @@ import { logAuthRoute } from "./logging/request-logger.middleware";
 import { MailboxModule } from "./mailbox/mailbox.module";
 import { McpModule } from "./mcp/mcp.module";
 import { MicrosoftModule } from "./microsoft/microsoft.module";
+import { ProjectsModule } from "./projects/projects.module";
 import { ReportsModule } from "./reports/reports.module";
 import { SavedViewsModule } from "./saved-views/saved-views.module";
 import { SearchModule } from "./search/search.module";
@@ -87,6 +89,8 @@ import { WorkspaceModule } from "./workspace/workspace.module";
 		AttachmentsModule,
 		AgendaModule,
 		ReportsModule,
+		FinanceModule,
+		ProjectsModule,
 	],
 })
 export class AppModule {}

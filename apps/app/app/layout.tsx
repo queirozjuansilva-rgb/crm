@@ -5,7 +5,7 @@ import "@crm/ui/globals.css";
 import { Toaster } from "@crm/ui/components/sonner";
 import { TooltipProvider } from "@crm/ui/components/tooltip";
 import { cn } from "@crm/ui/lib/utils";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { LocalDateTimeHydrator } from "@/components/local-date-time";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -25,6 +25,18 @@ export const metadata: Metadata = {
 		apple: "/apple-touch-icon.png",
 	},
 	manifest: "/site.webmanifest",
+	appleWebApp: {
+		capable: true,
+		title: "Lugh CRM",
+		statusBarStyle: "black-translucent",
+	},
+};
+
+export const viewport: Viewport = {
+	themeColor: "#100e18",
+	width: "device-width",
+	initialScale: 1,
+	viewportFit: "cover",
 };
 
 export default function RootLayout({

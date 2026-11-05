@@ -93,7 +93,7 @@ function CreateDealForm({ companyId }: { companyId?: string }) {
 		trpc.deals.create.mutationOptions({
 			onSuccess: async (deal) => {
 				await cache.deal(deal.id);
-				toast.success(`${deal.name} added.`);
+				toast.success(`${deal.name} criado.`);
 				await setOpen(null);
 				setName("");
 				setAmount("");
@@ -245,7 +245,7 @@ function CreateDealForm({ companyId }: { companyId?: string }) {
 						disabled={create.isPending || !ready}
 					>
 						{create.isPending ? <Spinner /> : null}
-						Add deal
+						Criar negócio
 					</Button>
 					<SheetClose asChild>
 						<Button variant="outline">Cancelar</Button>

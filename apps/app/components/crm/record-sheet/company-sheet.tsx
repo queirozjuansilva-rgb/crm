@@ -35,6 +35,7 @@ import {
 	savingValue,
 } from "@/components/crm/inline-field";
 import { OwnerCell } from "@/components/crm/owner-cell";
+import { CompanyProjectsSection } from "@/components/crm/projects/company-projects-section";
 import { CompanySocials } from "@/components/crm/social-links";
 import { DealStageMenu } from "@/components/crm/stage-change";
 import { Timeline } from "@/components/crm/timeline/timeline";
@@ -421,6 +422,8 @@ function CompanyOverview({ company }: { company: Company }) {
 					) : null}
 				</DetailSheetRail>
 			</DetailSheetSplit>
+
+			<CompanyProjectsSection companyId={company.id} />
 
 			<AttachmentsSection record={{ kind: "company", id: company.id }} />
 		</DetailSheetBody>

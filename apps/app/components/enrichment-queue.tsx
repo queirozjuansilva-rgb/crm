@@ -100,7 +100,11 @@ export function EnrichmentQueue() {
 					<StatusIndicator
 						tone={total > 0 ? "primary" : "neutral"}
 						busy={total > 0}
-						label={total > 0 ? `Enriching ${total}` : "Enriquecimento"}
+						label={
+							<span className="max-sm:sr-only">
+								{total > 0 ? `Enriquecendo ${total}` : "Enriquecimento"}
+							</span>
+						}
 					/>
 				</Button>
 			</PopoverTrigger>
