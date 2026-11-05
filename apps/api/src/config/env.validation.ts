@@ -106,14 +106,6 @@ export class EnvironmentVariables {
 	ATTACHMENTS_BUCKET?: string;
 
 	@IsOptional()
-	@IsString()
-	WHATSAPP_ALERT_PHONE?: string;
-
-	@IsOptional()
-	@IsString()
-	CALLMEBOT_API_KEY?: string;
-
-	@IsOptional()
 	@Type(() => Number)
 	@IsInt()
 	@Min(0)

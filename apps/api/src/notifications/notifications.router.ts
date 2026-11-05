@@ -1,33 +1,22 @@
 import { Inject } from "@nestjs/common";
-import { Mutation, Query, Router, UseMiddlewares } from "nestjs-trpc";
+import { Mutation, Router, UseMiddlewares } from "nestjs-trpc";
+import { AgentTriggerService } from "../agent/agent-trigger.service";
 import { AuthMiddleware } from "../trpc/middlewares/auth.middleware";
 import { restMeta } from "../trpc/openapi";
-import { LeadAlertService } from "./lead-alert.service";
-import {
-	notificationsStatusOutput,
-	notificationsTestOutput,
-} from "./notifications.contracts";
+import { notificationsTestOutput } from "./notifications.contracts";
 
 @Router({ alias: "notifications" })
 @UseMiddlewares(AuthMiddleware)
 export class NotificationsRouter {
 	constructor(
-		@Inject(LeadAlertService) private readonly leadAlert: LeadAlertService,
+		@Inject(AgentTriggerService) private readonly agent: AgentTriggerService,
 	) {}
-
-	@Query({
-		output: notificationsStatusOutput,
-		meta: restMeta("GET", "/notifications", ["Notifications"]),
-	})
-	async status() {
-		return { whatsapp: this.leadAlert.enabled };
-	}
 
 	@Mutation({
 		output: notificationsTestOutput,
 		meta: restMeta("POST", "/notifications/test", ["Notifications"]),
 	})
 	async testWhatsApp() {
-		return { sent: await this.leadAlert.test() };
+		return { queued: await this.agent.leadAlertTest() };
 	}
 }

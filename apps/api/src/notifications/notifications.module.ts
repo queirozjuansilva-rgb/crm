@@ -1,11 +1,10 @@
 import { Module } from "@nestjs/common";
+import { AgentModule } from "../agent/agent.module";
 import { TrpcModule } from "../trpc/trpc.module";
-import { LeadAlertService } from "./lead-alert.service";
 import { NotificationsRouter } from "./notifications.router";
 
 @Module({
-	imports: [TrpcModule],
-	providers: [LeadAlertService, NotificationsRouter],
-	exports: [LeadAlertService],
+	imports: [TrpcModule, AgentModule],
+	providers: [NotificationsRouter],
 })
 export class NotificationsModule {}
