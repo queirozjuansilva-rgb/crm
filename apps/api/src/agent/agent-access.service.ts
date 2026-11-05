@@ -22,7 +22,7 @@ export class AgentAccessService {
 		const role = await workspaceRoleOf(userId);
 
 		if (!role) {
-			throw new ForbiddenException("You are not a member of this workspace.");
+			throw new ForbiddenException("Você não faz parte deste espaço.");
 		}
 
 		return role;
@@ -42,7 +42,7 @@ export class AgentAccessService {
 		`;
 
 		if (!member) {
-			throw new ForbiddenException("You are not a member of this workspace.");
+			throw new ForbiddenException("Você não faz parte deste espaço.");
 		}
 
 		const role = toWorkspaceRole(member.role);
@@ -67,7 +67,7 @@ export class AgentAccessService {
 
 		if (agent.createdById !== userId && !isWorkspaceAdmin(role)) {
 			throw new ForbiddenException(
-				"Only the creator or a workspace admin can change this agent.",
+				"Só quem criou ou um administrador pode alterar este agente.",
 			);
 		}
 

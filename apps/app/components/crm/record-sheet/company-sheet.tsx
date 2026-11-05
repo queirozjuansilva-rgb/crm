@@ -92,12 +92,12 @@ function companyConsequence(company: Company): string {
 
 	const gone =
 		deals > 0
-			? `${deals === 1 ? "Its one deal" : `All ${deals} of its deals`} and everything filed against the account go too.`
+			? `${deals === 1 ? "O negócio dele" : `Os ${deals} negócios dele`} e tudo o que está vinculado à conta também saem.`
 			: "Tudo o que está vinculado à conta também sai.";
 
 	const kept =
 		contacts > 0
-			? ` ${contacts === 1 ? "The one person" : `The ${contacts} people`} who work there stay in the CRM, without a company.`
+			? ` ${contacts === 1 ? "A pessoa que trabalha lá continua" : `As ${contacts} pessoas que trabalham lá continuam`} no CRM, sem cliente.`
 			: "";
 
 	return gone + kept;
@@ -221,7 +221,7 @@ export function CompanySheet({ companyId }: { companyId: string }) {
 		<RecordSheetFrame
 			loading={query.isPending}
 			error={query.error?.message ?? null}
-			title={company?.name ?? "Empresa"}
+			title={company?.name ?? "Cliente"}
 			description={
 				company ? (
 					<MetaLine
@@ -468,7 +468,7 @@ function CompanyContacts({
 					<DetailSheetEmpty
 						icon={UserMultiple}
 						title="Nenhum contato ainda"
-						description={`Everyone you talk to at ${company.name} lives here — add the first person and their calls, emails and notes hang off them.`}
+						description={`Todas as pessoas com quem você fala na ${company.name} ficam aqui. Adicione a primeira e as ligações, e-mails e notas ficam ligados a ela.`}
 						action={
 							<Button variant="outline" size="sm" onClick={onAdd}>
 								<Icon icon={Add} data-icon="inline-start" />
@@ -590,7 +590,7 @@ function CompanyDeals({
 					<DetailSheetEmpty
 						icon={Partnership}
 						title="Nenhum negócio ainda"
-						description={`Nothing is being sold to ${company.name} right now. Open one and it joins the pipeline and the forecast.`}
+						description={`Nada está sendo vendido para a ${company.name} agora. Abra um negócio e ele entra no pipeline e na previsão.`}
 						action={
 							<Button variant="outline" size="sm" onClick={onAdd}>
 								<Icon icon={Add} data-icon="inline-start" />

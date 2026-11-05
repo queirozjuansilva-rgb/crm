@@ -36,15 +36,15 @@ export function TrafficSources() {
 			<CardHeader>
 				<CardTitle>Origens de tráfego</CardTitle>
 				<CardDescription>
-					Where your visitors come from. Only people who have submitted a form
-					are attributed to a record.
+					De onde vêm os visitantes. Só quem enviou um formulário é ligado a um
+					registro.
 				</CardDescription>
 			</CardHeader>
 
 			{sources.data.length === 0 ? (
 				<CardTableEmpty>
-					No sources yet. They appear once the script records its first page
-					view.
+					Nenhuma origem ainda. Elas aparecem quando o script registrar a
+					primeira visita.
 				</CardTableEmpty>
 			) : (
 				<SimpleTable columns={COLUMNS}>

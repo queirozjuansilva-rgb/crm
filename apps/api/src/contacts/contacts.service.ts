@@ -11,12 +11,15 @@ import type { FieldDefinitionWithOptions } from "@crm/db/fields";
 import {
 	ConflictException,
 	Injectable,
+	Inject as InjectToken,
 	Logger,
 	NotFoundException,
+	Optional,
 } from "@nestjs/common";
 import { AgentQueueService } from "../agent/agent-queue.service";
 import { AgentTriggerService } from "../agent/agent-trigger.service";
 import { ARCHIVE } from "../archive/archive-config";
+import { AttachmentStorageService } from "../attachments/attachment-storage.service";
 import { CompanyDirectoryService } from "../companies/company-directory.service";
 import {
 	ActivityStampService,
@@ -101,6 +104,9 @@ export class ContactsService {
 		private readonly queue: AgentQueueService,
 		private readonly stamp: ActivityStampService,
 		private readonly fields: FieldsService,
+		@Optional()
+		@InjectToken(AttachmentStorageService)
+		private readonly storage?: AttachmentStorageService,
 	) {}
 
 	async list(input: ContactListInput): Promise<ListResult<ContactRow>> {
@@ -218,7 +224,7 @@ export class ContactsService {
 		});
 
 		if (!contact) {
-			throw new NotFoundException(`No contact with id ${id}.`);
+			throw new NotFoundException(`Contato ${id} não encontrado.`);
 		}
 
 		const relationship = await this.relationship(
@@ -273,7 +279,7 @@ export class ContactsService {
 			});
 			if (existing) {
 				throw new ConflictException(
-					`${[existing.firstName, existing.lastName].filter(Boolean).join(" ")} already uses ${email}.`,
+					`${[existing.firstName, existing.lastName].filter(Boolean).join(" ")} já usa ${email}.`,
 				);
 			}
 		}
@@ -392,6 +398,7 @@ export class ContactsService {
 			targets: StampTargets;
 			name: string;
 			suppressed: boolean;
+			files: string[];
 		} | null;
 
 		try {
@@ -402,7 +409,7 @@ export class ContactsService {
 
 				if (!row) {
 					if (guard) return null;
-					throw new NotFoundException(`No contact with id ${id}.`);
+					throw new NotFoundException(`Contato ${id} não encontrado.`);
 				}
 				if (
 					guard &&
@@ -412,6 +419,10 @@ export class ContactsService {
 				}
 
 				const targets = await this.stamp.targetsOf({ contactId: id }, tx);
+				const files = await tx.attachment.findMany({
+					where: { contactId: id },
+					select: { storagePath: true },
+				});
 
 				await tx.agentTask.deleteMany({ where: { contactId: id } });
 				await tx.agentEvent.deleteMany({ where: { contactId: id } });
@@ -435,7 +446,14 @@ export class ContactsService {
 					});
 				}
 
-				return { targets, name, suppressed: suppress !== null };
+				return {
+					targets,
+					name,
+					suppressed: suppress !== null,
+					files: files.flatMap((file) =>
+						file.storagePath ? [file.storagePath] : [],
+					),
+				};
 			});
 		} catch (error) {
 			throw this.translate(error, id);
@@ -444,6 +462,7 @@ export class ContactsService {
 		if (!deleted) return null;
 
 		await this.stamp.recomputeAfterDelete(deleted.targets, { contactId: id });
+		await this.storage?.removeMany(deleted.files);
 
 		this.logger.log({
 			message: "Contact purged",
@@ -556,7 +575,7 @@ export class ContactsService {
 				select: { id: true },
 			});
 			if (!company) {
-				throw new NotFoundException(`No company with id ${companyId}.`);
+				throw new NotFoundException(`Cliente ${companyId} não encontrado.`);
 			}
 		}
 
@@ -678,7 +697,7 @@ export class ContactsService {
 		});
 
 		if (!contact) {
-			throw new NotFoundException(`No contact with id ${id}.`);
+			throw new NotFoundException(`Contato ${id} não encontrado.`);
 		}
 
 		const queued = await this.agent.contactCreated(
@@ -909,12 +928,10 @@ export class ContactsService {
 	private translate(cause: unknown, id: string): never {
 		if (cause instanceof PrismaNamespace.PrismaClientKnownRequestError) {
 			if (cause.code === "P2025") {
-				throw new NotFoundException(`No contact with id ${id}.`);
+				throw new NotFoundException(`Contato ${id} não encontrado.`);
 			}
 			if (cause.code === "P2002") {
-				throw new ConflictException(
-					"Another contact already uses that email address.",
-				);
+				throw new ConflictException("Outro contato já usa esse e-mail.");
 			}
 		}
 		throw cause;

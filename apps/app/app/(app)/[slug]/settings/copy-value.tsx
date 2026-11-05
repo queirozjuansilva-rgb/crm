@@ -8,7 +8,7 @@ import { toast } from "sonner";
 export function CopyValue({ value, label }: { value: string; label: string }) {
 	const unavailable = () =>
 		toast.error(
-			`Could not copy the ${label.toLowerCase()}. Select it instead.`,
+			`Não foi possível copiar ${label.toLowerCase()}. Selecione o texto.`,
 		);
 
 	return (

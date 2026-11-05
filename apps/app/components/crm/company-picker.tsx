@@ -79,9 +79,7 @@ export function CompanyPicker({
 			disabled={disabled}
 			placeholder={placeholder}
 			searchPlaceholder="Search companies…"
-			empty={
-				companies.isFetching ? "Searching…" : "Nenhuma empresa encontrada."
-			}
+			empty={companies.isFetching ? "Buscando…" : "Nenhum cliente encontrado."}
 			search={text}
 			onSearchChange={setText}
 			stale={stale}
@@ -119,14 +117,14 @@ export function CompanyMenuSearch({
 		>
 			<CommandInput
 				ref={inputRef}
-				placeholder="Buscar empresas…"
+				placeholder="Buscar clientes…"
 				value={text}
 				onValueChange={setText}
 				autoFocus
 			/>
 			<CommandList>
 				<CommandEmpty>
-					{companies.isFetching ? "Searching…" : "Nenhuma empresa encontrada."}
+					{companies.isFetching ? "Buscando…" : "Nenhum cliente encontrado."}
 				</CommandEmpty>
 				<CommandGroup>
 					{none && !query.trim() ? (
@@ -160,7 +158,7 @@ export function CompanyMenuSearch({
 }
 
 export function InlineCompanyField({
-	label = "Empresa",
+	label = "Cliente",
 	value,
 	onSave,
 	saving = false,

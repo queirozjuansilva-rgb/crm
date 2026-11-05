@@ -187,7 +187,7 @@ export class AgentRunsService {
 			}
 
 			if (agent.status !== "LIVE" || !agent.currentVersionId) {
-				throw new BadRequestException("This agent is not live yet.");
+				throw new BadRequestException("Este agente ainda não está no ar.");
 			}
 
 			const active = await tx.agentRun.findFirst({
@@ -199,7 +199,7 @@ export class AgentRunsService {
 			});
 			if (active) {
 				throw new ConflictException(
-					"This agent already has an active run. Stop it or wait for it to finish.",
+					"Este agente já está rodando. Pare ou espere terminar.",
 				);
 			}
 
@@ -282,7 +282,7 @@ export class AgentRunsService {
 				throw new NotFoundException(`No agent with id ${input.id}.`);
 			}
 			if (agent.status !== "LIVE" || !agent.currentVersionId) {
-				throw new BadRequestException("This agent is not live yet.");
+				throw new BadRequestException("Este agente ainda não está no ar.");
 			}
 
 			const active = await tx.agentRun.findFirst({
@@ -291,7 +291,7 @@ export class AgentRunsService {
 			});
 			if (active) {
 				throw new ConflictException(
-					"This agent already has an active run. Stop it or wait for it to finish.",
+					"Este agente já está rodando. Pare ou espere terminar.",
 				);
 			}
 
@@ -356,7 +356,7 @@ export class AgentRunsService {
 
 			if (!agent.canManage && run.initiatedById !== userId) {
 				throw new ForbiddenException(
-					"Only the person who started this run, or a workspace admin, can stop it.",
+					"Só quem iniciou a execução ou um administrador pode parar.",
 				);
 			}
 

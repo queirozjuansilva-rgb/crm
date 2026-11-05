@@ -138,7 +138,7 @@ describe("MCP connections", () => {
 				accessMode: "read_only",
 				returnPath: "/tripwire/settings/connections/linear",
 			}),
-		).rejects.toThrow("Only an owner or an admin");
+		).rejects.toThrow("Só um dono ou administrador");
 	});
 
 	it("refuses an expired OAuth state", async () => {

@@ -25,8 +25,8 @@ export default function TrackingSettingsPage() {
 				<PageShellHeading>
 					<PageShellTitle>Rastreamento e análise</PageShellTitle>
 					<PageShellDescription>
-						Track website visitors and automatically add contacts when a form is
-						submitted.
+						Acompanhe os visitantes do site e crie contatos automaticamente
+						quando um formulário for enviado.
 					</PageShellDescription>
 				</PageShellHeading>
 			</PageShellHeader>

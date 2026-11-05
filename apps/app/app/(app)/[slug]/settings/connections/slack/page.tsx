@@ -39,15 +39,21 @@ const PRIVATE_CHANNEL_SCOPES = [
 ];
 
 const never = [
-	"Send anything at all until you build an automation and switch it on",
-	"Post anywhere except the destination approved in that automation",
+	"Enviar qualquer coisa antes de você criar e ligar uma automação",
+	"Publicar fora do destino aprovado na automação",
 	"Read a direct message between two people",
 ];
 
 const suggestions = [
-	["When a deal is created", "Post the deal to an approved sales channel."],
-	["When a deal is won", "Tell an approved channel that the deal closed."],
-	["When a deal reopens", "Notify one approved channel or teammate."],
+	[
+		"Quando um negócio é criado",
+		"Publicar o negócio num canal de vendas aprovado.",
+	],
+	[
+		"Quando um negócio vira venda",
+		"Avisar um canal aprovado que o negócio fechou.",
+	],
+	["Quando um negócio é reaberto", "Avisar um canal ou pessoa aprovada."],
 ];
 
 type SlackConnectionPageProps = {
@@ -86,9 +92,8 @@ async function SlackConnectionPageContent({
 					</span>
 				</div>
 				<p className="text-muted-foreground text-sm leading-relaxed">
-					Connecting Slack gives the CRM a way in and a way out. What it
-					actually does with that is up to you afterwards, one automation at a
-					time.
+					Conectar o Slack dá ao CRM um canal de entrada e de saída. O que ele
+					faz com isso você decide depois, uma automação por vez.
 				</p>
 			</header>
 			<SlackScopeGroups
@@ -109,8 +114,7 @@ async function SlackConnectionPageContent({
 					connectError={connectErrorOf(query, "slack")}
 				/>
 				<p className="text-muted-foreground text-xs">
-					You approve the workspace in Slack. You can disconnect it here at any
-					time.
+					Você aprova o espaço no Slack e pode desconectar aqui quando quiser.
 				</p>
 			</div>
 			<section className="flex flex-col gap-3 px-(--spacing-block-inline)">
@@ -119,8 +123,8 @@ async function SlackConnectionPageContent({
 						Depois, a maioria das equipes começa por um destes
 					</h2>
 					<p className="text-muted-foreground text-xs">
-						Suggestions, not settings. None of them exist until you pick one and
-						switch it on.
+						São sugestões, não configurações. Nenhuma existe até você escolher e
+						ligar.
 					</p>
 				</div>
 				<div className="grid gap-3 md:grid-cols-3">
@@ -197,8 +201,8 @@ function ConnectedSlack({
 				</div>
 				<p className="text-muted-foreground text-sm">
 					{status.canManage
-						? "Here is what Slack gave us. Agents only post where their automation says."
-						: "Here is what Slack gave us. Only an owner or an admin can disconnect it."}
+						? "Isto é o que o Slack liberou. Os agentes só publicam onde a automação manda."
+						: "Isto é o que o Slack liberou. Só um dono ou administrador pode desconectar."}
 				</p>
 			</header>
 			<MissingGrant missing={missing} slug={slug} />
@@ -264,8 +268,8 @@ function ConnectedSlack({
 			<div className="flex items-center justify-between gap-4 px-(--spacing-block-inline)">
 				<p className="text-sm">
 					{status.people.reviewed === 0
-						? "No workspace people have been reviewed yet."
-						: `${status.people.matched} of ${status.people.reviewed} reviewed people are matched.`}
+						? "Ninguém do espaço foi revisado ainda."
+						: `${status.people.matched} de ${status.people.reviewed} pessoas revisadas estão vinculadas.`}
 				</p>
 				<Button asChild variant="outline" size="sm">
 					<Link href={`/${slug}/settings/connections/slack/people`}>

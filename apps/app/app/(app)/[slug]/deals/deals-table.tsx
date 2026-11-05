@@ -42,7 +42,7 @@ const COLUMNS: DataTableColumn<DealRow>[] = [
 	},
 	{
 		id: "company",
-		header: "Empresa",
+		header: "Cliente",
 		sortable: true,
 		width: "w-[18%]",
 		cell: (row) => <CompanyCell company={row.company} />,
@@ -230,7 +230,7 @@ export function DealsTable() {
 	return (
 		<DataTable
 			query={query}
-			search={<ListSearch placeholder="Buscar negócios por nome ou empresa…" />}
+			search={<ListSearch placeholder="Buscar negócios por nome ou cliente…" />}
 			actions={
 				<Button
 					variant={input.archived ? "contrast" : "outline"}

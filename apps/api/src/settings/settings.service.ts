@@ -61,7 +61,7 @@ export class SettingsService {
 
 		if (!models) {
 			throw new BadRequestException(
-				"Could not reach the AI Gateway to check that model. Try again in a moment.",
+				"Não foi possível consultar esse modelo no AI Gateway. Tente de novo em instantes.",
 			);
 		}
 

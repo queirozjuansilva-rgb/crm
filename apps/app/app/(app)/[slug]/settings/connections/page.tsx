@@ -83,10 +83,10 @@ async function ConnectionsSettingsPageContent({
 					{
 						name: "Slack",
 						status: slack.workspace
-							? `Connected to ${slack.workspace}`
+							? `Conectado a ${slack.workspace}`
 							: "Conectado",
-						bringsIn: "Workspace members and channels the app has joined",
-						sends: "Messages to approved channels and people",
+						bringsIn: "Membros do espaço e canais em que o app entrou",
+						sends: "Mensagens para canais e pessoas aprovados",
 						href: `/${slug}/settings/connections/slack`,
 						mark: <SlackLogo className="size-5 shrink-0" />,
 					},
@@ -146,7 +146,7 @@ async function ConnectionsSettingsPageContent({
 						<StarterRow
 							logo={GoogleLogo}
 							name="Google Workspace"
-							description="Vincula e-mails e reuniões à empresa certa"
+							description="Vincula e-mails e reuniões ao cliente certo"
 							href={`/${slug}/settings/connections/google`}
 						/>
 						<StarterRow
@@ -158,12 +158,12 @@ async function ConnectionsSettingsPageContent({
 						<StarterRow
 							logo={MicrosoftLogo}
 							name="Microsoft 365"
-							description="Vincula e-mails do Outlook à empresa certa"
+							description="Vincula e-mails do Outlook ao cliente certo"
 							href={`/${slug}/settings/connections/microsoft`}
 						/>
 					</div>
 					<p className="px-(--spacing-block-inline) text-muted-foreground text-sm">
-						Looking for something else?{" "}
+						Procurando outra coisa?{" "}
 						<Link
 							className="font-medium text-foreground underline underline-offset-4"
 							href={`/${slug}/settings/connections?add=1`}

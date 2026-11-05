@@ -127,8 +127,8 @@ export function TrackingCookies() {
 						</SelectContent>
 					</Select>
 					<FieldDescription>
-						After this a returning visitor counts as somebody new. Shorten it if
-						your policy asks you to.
+						Depois disso, quem volta conta como visitante novo. Reduza se a sua
+						política pedir.
 					</FieldDescription>
 				</Field>
 			</CardContent>

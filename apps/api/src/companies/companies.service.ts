@@ -12,12 +12,15 @@ import {
 	BadRequestException,
 	ConflictException,
 	Injectable,
+	Inject as InjectToken,
 	Logger,
 	NotFoundException,
+	Optional,
 } from "@nestjs/common";
 import { AgentQueueService } from "../agent/agent-queue.service";
 import { AgentTriggerService } from "../agent/agent-trigger.service";
 import { ARCHIVE } from "../archive/archive-config";
+import { AttachmentStorageService } from "../attachments/attachment-storage.service";
 import {
 	ActivityStampService,
 	type StampTargets,
@@ -80,6 +83,9 @@ export class CompaniesService {
 		private readonly stamp: ActivityStampService,
 		private readonly conversion: ConversionService,
 		private readonly fields: FieldsService,
+		@Optional()
+		@InjectToken(AttachmentStorageService)
+		private readonly storage?: AttachmentStorageService,
 	) {}
 
 	async list(input: CompanyListInput): Promise<ListResult<CompanyRow>> {
@@ -288,7 +294,7 @@ export class CompaniesService {
 		});
 
 		if (!company) {
-			throw new NotFoundException(`No company with id ${id}.`);
+			throw new NotFoundException(`Cliente ${id} não encontrado.`);
 		}
 
 		const {
@@ -340,7 +346,7 @@ export class CompaniesService {
 			});
 			if (existing) {
 				throw new ConflictException(
-					`${existing.name} already uses the domain ${domain}.`,
+					`${existing.name} já usa o domínio ${domain}.`,
 				);
 			}
 		}
@@ -408,7 +414,7 @@ export class CompaniesService {
 			const domain = normalizeDomain(input.domain);
 			if (input.domain.trim() && !domain) {
 				throw new BadRequestException(
-					`"${input.domain}" is not a domain — try something like "stripe.com".`,
+					`"${input.domain}" não é um domínio. Tente algo como "stripe.com".`,
 				);
 			}
 			data.domain = domain;
@@ -493,7 +499,11 @@ export class CompaniesService {
 		id: string,
 		guard?: { archivedBefore: Date },
 	): Promise<{ id: string; name: string } | null> {
-		let deleted: { targets: StampTargets; name: string } | null;
+		let deleted: {
+			targets: StampTargets;
+			name: string;
+			files: string[];
+		} | null;
 
 		try {
 			deleted = await this.db.$transaction(async (tx) => {
@@ -503,7 +513,7 @@ export class CompaniesService {
 
 				if (!row) {
 					if (guard) return null;
-					throw new NotFoundException(`No company with id ${id}.`);
+					throw new NotFoundException(`Cliente ${id} não encontrado.`);
 				}
 				if (
 					guard &&
@@ -521,6 +531,10 @@ export class CompaniesService {
 					where: { companyId: id },
 					select: { id: true },
 				});
+				const files = await tx.attachment.findMany({
+					where: { OR: [{ companyId: id }, { deal: { companyId: id } }] },
+					select: { storagePath: true },
+				});
 
 				await tx.agentTask.deleteMany({
 					where: {
@@ -536,7 +550,13 @@ export class CompaniesService {
 					select: { name: true },
 				});
 
-				return { targets, name: company.name };
+				return {
+					targets,
+					name: company.name,
+					files: files.flatMap((file) =>
+						file.storagePath ? [file.storagePath] : [],
+					),
+				};
 			});
 		} catch (error) {
 			throw this.translate(error, id);
@@ -545,6 +565,7 @@ export class CompaniesService {
 		if (!deleted) return null;
 
 		await this.stamp.recomputeAfterDelete(deleted.targets, { companyId: id });
+		await this.storage?.removeMany(deleted.files);
 
 		this.logger.log({
 			message: "Company purged",
@@ -617,7 +638,7 @@ export class CompaniesService {
 		});
 
 		if (!company) {
-			throw new NotFoundException(`No company with id ${id}.`);
+			throw new NotFoundException(`Cliente ${id} não encontrado.`);
 		}
 
 		const queued = await this.agent.companyRequested(
@@ -642,12 +663,12 @@ export class CompaniesService {
 		});
 
 		if (!company) {
-			throw new NotFoundException(`No company with id ${id}.`);
+			throw new NotFoundException(`Cliente ${id} não encontrado.`);
 		}
 
 		if (!company.domain) {
 			throw new BadRequestException(
-				"There is nothing to read without a domain — add one first.",
+				"Sem domínio não há o que pesquisar. Adicione um primeiro.",
 			);
 		}
 
@@ -666,11 +687,11 @@ export class CompaniesService {
 				select: { companyId: true },
 			});
 			if (!contact) {
-				throw new NotFoundException(`No contact with id ${contactId}.`);
+				throw new NotFoundException(`Contato ${contactId} não encontrado.`);
 			}
 			if (contact.companyId !== companyId) {
 				throw new BadRequestException(
-					"That contact does not work at this company.",
+					"Esse contato não trabalha neste cliente.",
 				);
 			}
 		}
@@ -782,12 +803,10 @@ export class CompaniesService {
 	private translate(cause: unknown, id: string): never {
 		if (cause instanceof PrismaNamespace.PrismaClientKnownRequestError) {
 			if (cause.code === "P2025") {
-				throw new NotFoundException(`No company with id ${id}.`);
+				throw new NotFoundException(`Cliente ${id} não encontrado.`);
 			}
 			if (cause.code === "P2002") {
-				throw new ConflictException(
-					"Another company already uses that domain.",
-				);
+				throw new ConflictException("Outro cliente já usa esse domínio.");
 			}
 		}
 		throw cause;

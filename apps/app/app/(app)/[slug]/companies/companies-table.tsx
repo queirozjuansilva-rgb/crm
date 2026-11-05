@@ -41,7 +41,7 @@ type CompanyRow = RouterOutputs["companies"]["list"]["rows"][number];
 const COLUMNS: DataTableColumn<CompanyRow>[] = [
 	{
 		id: "name",
-		header: "Empresa",
+		header: "Cliente",
 		sortable: true,
 		hideable: false,
 		width: "w-[26%]",
@@ -245,7 +245,7 @@ export function CompaniesTable() {
 	return (
 		<DataTable
 			query={query}
-			search={<ListSearch placeholder="Buscar empresas por nome ou domínio…" />}
+			search={<ListSearch placeholder="Buscar clientes por nome ou domínio…" />}
 			actions={
 				<>
 					<SavedViewsMenu entity="COMPANY" table={table} />
@@ -282,8 +282,8 @@ export function CompaniesTable() {
 			onRowClick={(row) => openRecord({ kind: "company", id: row.id })}
 			empty={
 				input.archived
-					? "Nenhuma empresa arquivada."
-					: "Nenhuma empresa corresponde a esta visão."
+					? "Nenhum cliente arquivado."
+					: "Nenhum cliente corresponde a esta visão."
 			}
 		/>
 	);

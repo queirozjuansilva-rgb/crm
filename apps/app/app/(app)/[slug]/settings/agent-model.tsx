@@ -46,7 +46,7 @@ function perMillion(rate: number): string {
 
 function priceHint(model: CatalogModel): string | null {
 	if (!model.pricing) return null;
-	return `${perMillion(model.pricing.input)} in · ${perMillion(model.pricing.output)} out per 1M`;
+	return `${perMillion(model.pricing.input)} entrada · ${perMillion(model.pricing.output)} saída por 1M`;
 }
 
 function contextHint(tokens: number): string {
@@ -174,7 +174,7 @@ export function AgentModel() {
 
 				<p className="text-muted-foreground text-xs">
 					{unavailable
-						? `Could not reach the AI Gateway to list models. The agent is still running ${effectiveId}.`
+						? `Não foi possível consultar os modelos no AI Gateway. O agente continua usando ${effectiveId}.`
 						: effective
 							? `${effectiveId} · ${contextHint(effective.contextWindowTokens)}${
 									priceHint(effective) ? ` · ${priceHint(effective)}` : ""

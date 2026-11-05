@@ -107,8 +107,7 @@ function CreateApiKeyForm() {
 					<SheetHeader>
 						<SheetTitle>Nova chave de API</SheetTitle>
 						<SheetDescription>
-							Acts as you. Anything it can read or change is exactly what you
-							can.
+							Age como você. Ela lê e altera exatamente o que você pode.
 						</SheetDescription>
 					</SheetHeader>
 

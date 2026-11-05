@@ -159,7 +159,7 @@ export const builderQuestionResponseInput = z
 		text: z.string().trim().min(1).max(20_000).optional(),
 	})
 	.refine((input) => Boolean(input.optionId) !== Boolean(input.text), {
-		message: "Choose one option or enter a written answer.",
+		message: "Escolha uma opção ou escreva uma resposta.",
 	});
 
 export type BuilderQuestionResponseInput = z.infer<

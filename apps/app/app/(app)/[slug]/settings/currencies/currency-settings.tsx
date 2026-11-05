@@ -72,7 +72,7 @@ export function CurrencySettings() {
 			onSuccess: async (next) => {
 				await invalidate();
 				toast.success(
-					`Every total is now reported in ${next.reportingCurrency}.`,
+					`Todos os totais agora aparecem em ${next.reportingCurrency}.`,
 				);
 			},
 			onError: (error) => toast.error(error.message),

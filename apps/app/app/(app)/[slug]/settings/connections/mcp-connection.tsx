@@ -255,7 +255,7 @@ export function McpConnection({
 						<StatusIndicator
 							busy
 							tone="primary"
-							label={`Connecting to ${entry.name}`}
+							label={`Conectando ao ${entry.name}`}
 						/>
 					</CardContent>
 				</Card>
@@ -276,8 +276,7 @@ export function McpConnection({
 								<Icon icon={Warning} />
 								<AlertTitle>Conexões MCP não estão configuradas</AlertTitle>
 								<AlertDescription>
-									Set MCP_ENCRYPTION_KEY in the root .env file. Then restart the
-									API.
+									Defina MCP_ENCRYPTION_KEY no .env da raiz e reinicie a API.
 								</AlertDescription>
 							</Alert>
 						</CardContent>
@@ -319,8 +318,8 @@ export function McpConnection({
 							</ToggleGroup>
 							<p className="text-muted-foreground text-sm">
 								{mode === "read_only"
-									? `Agents read ${entry.name} and change nothing.`
-									: `Agents read ${entry.name} and make approved changes.`}
+									? `Os agentes leem o ${entry.name} e não alteram nada.`
+									: `Os agentes leem o ${entry.name} e fazem as mudanças aprovadas.`}
 							</p>
 						</CardContent>
 					) : null}
@@ -342,8 +341,8 @@ export function McpConnection({
 						<CardTitle>Acesso a ferramentas</CardTitle>
 						<CardDescription>
 							{presentation.pendingReviewCount > 0
-								? `${presentation.pendingReviewCount} tools need review. Open a tool to inspect it.`
-								: "All tools are reviewed. Open a tool to inspect it."}
+								? `${presentation.pendingReviewCount} ferramentas precisam de revisão. Abra uma para ver os detalhes.`
+								: "Todas as ferramentas foram revisadas. Abra uma para ver os detalhes."}
 						</CardDescription>
 						{presentation.pendingReadTools.length > 0 && canManage ? (
 							<CardAction>

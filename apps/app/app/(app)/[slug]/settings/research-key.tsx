@@ -54,7 +54,7 @@ export function ResearchKey() {
 			<CardHeader>
 				<CardTitle>Pesquisa de empresas</CardTitle>
 				<CardDescription>
-					Informe sua chave da Context para os agentes pesquisarem cada empresa
+					Informe sua chave da Context para os agentes pesquisarem cado cliente
 					do CRM.
 				</CardDescription>
 

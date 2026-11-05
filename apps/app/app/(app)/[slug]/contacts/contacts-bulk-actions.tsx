@@ -169,7 +169,7 @@ export function ContactsBulkActions({
 				onSelect={(ownerId) => assignOwner.mutate({ ids, ownerId })}
 			/>
 			<DropdownMenuSub>
-				<DropdownMenuSubTrigger>Mover para empresa</DropdownMenuSubTrigger>
+				<DropdownMenuSubTrigger>Mover para cliente</DropdownMenuSubTrigger>
 				<DropdownMenuSubContent
 					className="w-64 p-0"
 					onFocus={(event) => {
@@ -179,7 +179,7 @@ export function ContactsBulkActions({
 					}}
 				>
 					<CompanyMenuSearch
-						none="Sem empresa"
+						none="Sem cliente"
 						inputRef={companySearch}
 						onSelect={(companyId) => {
 							setMenuOpen(false);

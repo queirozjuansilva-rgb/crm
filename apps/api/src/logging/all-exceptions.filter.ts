@@ -93,7 +93,7 @@ function body(
 
 function exceptionBody(exception: unknown, status: number): ErrorBody {
 	if (!(exception instanceof HttpException)) {
-		return { statusCode: status, message: "Internal server error" };
+		return { statusCode: status, message: "Erro interno do servidor" };
 	}
 
 	const original = exception.getResponse();

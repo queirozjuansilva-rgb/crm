@@ -19,7 +19,7 @@ import { DEAL_STAGE_OPTIONS } from "@/lib/deal-stage";
 
 const COLUMNS: SimpleTableColumn[] = [
 	{ id: "deal", header: "Negócio", width: "w-[20%]" },
-	{ id: "company", header: "Empresa", width: "w-[18%]" },
+	{ id: "company", header: "Cliente", width: "w-[18%]" },
 	{ id: "stage", header: "Etapa", width: "w-[18%]" },
 	{
 		id: "amount",

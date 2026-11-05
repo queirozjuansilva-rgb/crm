@@ -132,8 +132,7 @@ function columns(
 								Revoke {row.name ?? "this API key"}?
 							</AlertDialogTitle>
 							<AlertDialogDescription>
-								Anything using it stops working immediately. This cannot be
-								undone.
+								Tudo o que usa esta chave para na hora. Não dá para desfazer.
 							</AlertDialogDescription>
 						</AlertDialogHeader>
 

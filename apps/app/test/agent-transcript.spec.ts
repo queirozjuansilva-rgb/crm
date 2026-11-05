@@ -178,7 +178,7 @@ describe("toTranscript", () => {
 
 		expect(item).toMatchObject({
 			kind: "did",
-			label: "Named this chat",
+			label: "Deu nome ao chat",
 			pending: false,
 		});
 	});

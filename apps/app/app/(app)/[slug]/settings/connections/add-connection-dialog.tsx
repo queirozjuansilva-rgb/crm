@@ -108,7 +108,7 @@ export function AddConnectionDialog({
 				</div>
 				<p className="px-(--spacing-block-inline) py-4 text-muted-foreground text-xs">
 					{connected.length > 0
-						? `${connected.join(", ")} ${connected.length === 1 ? "is" : "are"} already connected.`
+						? `${connected.join(", ")} ${connected.length === 1 ? "já está conectado" : "já estão conectados"}.`
 						: "Nada conectado ainda."}
 				</p>
 			</DialogContent>
@@ -121,8 +121,9 @@ function mcpDescription(
 	configured: boolean,
 	canManage: boolean,
 ) {
-	if (!configured) return "Set MCP_ENCRYPTION_KEY to enable";
-	if (!canManage) return "An owner or admin can connect this service";
+	if (!configured) return "Defina MCP_ENCRYPTION_KEY para ativar";
+	if (!canManage)
+		return "Só um dono ou administrador pode conectar este serviço";
 	return description;
 }
 

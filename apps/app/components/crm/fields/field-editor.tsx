@@ -153,10 +153,10 @@ function Coverage({ field }: { field: FieldRecord }) {
 					<StatusIndicator
 						tone="primary"
 						className="font-medium text-foreground"
-						label={`Filled on ${filled} of ${total} ${noun}`}
+						label={`Preenchido em ${filled} de ${total} ${noun}`}
 					/>
 					<span className="pl-4 text-muted-foreground text-xs">
-						{covered ? ALL_FILLED : `${total - filled} still to go`}
+						{covered ? ALL_FILLED : `faltam ${total - filled}`}
 					</span>
 				</div>
 				<Button

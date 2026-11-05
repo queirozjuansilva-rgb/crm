@@ -50,7 +50,7 @@ export function TrackingScript() {
 				await cache.tracking();
 				toast.success(
 					input.enabled
-						? "Tracking paused. The script stops recording within five minutes."
+						? "Rastreamento pausado. O script para de registrar em até cinco minutos."
 						: "Tracking resumed.",
 				);
 			},
@@ -108,7 +108,7 @@ export function TrackingScript() {
 									? "Pausado"
 									: receivingSince
 										? "Receiving page views"
-										: "No page views yet"
+										: "Nenhuma visita ainda"
 							}
 						/>
 					</div>
@@ -153,7 +153,7 @@ export function TrackingScript() {
 							<p className="text-muted-foreground text-xs/relaxed">
 								Site ID{" "}
 								<span className="font-mono text-foreground">{siteId}</span> ·
-								Rotating it stops every copy of the old script at once.
+								Trocar o ID para todas as cópias do script antigo na hora.
 							</p>
 						</AccordionContent>
 					</AccordionItem>
@@ -198,8 +198,8 @@ export function TrackingScript() {
 					>
 						<span className="text-sm">Pausar rastreamento</span>
 						<span className="font-normal text-muted-foreground text-xs">
-							The script keeps loading and records nothing. Your domains and
-							settings are kept
+							O script continua carregando e não registra nada. Seus domínios e
+							ajustes ficam guardados
 						</span>
 					</Label>
 
@@ -230,10 +230,10 @@ export function TrackingScript() {
 								<AlertDialogHeader>
 									<AlertDialogTitle>Trocar o ID do site?</AlertDialogTitle>
 									<AlertDialogDescription>
-										Every copy of the old script stops recording at once,
-										including any you have forgotten about. You will need to
-										paste the new tag on every page that carries the old one.
-										Nothing already collected is lost.
+										Toda cópia do script antigo para de registrar na hora,
+										inclusive as esquecidas. Você vai precisar colar a tag nova
+										em toda página que tem a antiga. Nada do que já foi coletado
+										se perde.
 									</AlertDialogDescription>
 								</AlertDialogHeader>
 

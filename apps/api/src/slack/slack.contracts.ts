@@ -21,7 +21,7 @@ export const slackCreateChannelInput = z.object({
 		.trim()
 		.min(1)
 		.max(80)
-		.regex(/^[a-z0-9-_]+$/, "Use lowercase letters, numbers and dashes."),
+		.regex(/^[a-z0-9-_]+$/, "Use letras minúsculas, números e hífens."),
 	isPrivate: z.boolean().default(false),
 });
 

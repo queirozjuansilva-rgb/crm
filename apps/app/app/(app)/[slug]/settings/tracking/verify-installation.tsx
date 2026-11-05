@@ -60,8 +60,8 @@ export function VerifyInstallation() {
 					</div>
 				</CardTitle>
 				<CardDescription>
-					We load one page and look for the script, then read your Tag Manager
-					container if it is not in the HTML.
+					Abrimos uma página e procuramos o script. Se não estiver no HTML,
+					lemos o contêiner do Tag Manager.
 				</CardDescription>
 
 				<CardAction>
@@ -109,8 +109,8 @@ export function VerifyInstallation() {
 							/>
 						</InputGroup>
 						<FieldDescription>
-							The page has to be public. A page behind a login always fails this
-							check.
+							A página precisa ser pública. Uma página atrás de login sempre
+							falha nesta verificação.
 						</FieldDescription>
 					</Field>
 				</form>
@@ -142,7 +142,9 @@ function Indicator({ result }: { result: Result }) {
 		<StatusIndicator
 			size="sm"
 			tone="warning"
-			label={result.status === "found" ? "No page view yet" : "Not detected"}
+			label={
+				result.status === "found" ? "Nenhuma visita ainda" : "Não encontrado"
+			}
 		/>
 	);
 }
@@ -202,8 +204,8 @@ function Outcome({ result, siteId }: { result: Result; siteId: string }) {
 			<Icon icon={CheckmarkFilled} className="text-success" />
 			<AlertTitle>
 				{result.container
-					? `Script found in container ${result.container.id}`
-					: `Script found on ${result.host}`}
+					? `Script encontrado no contêiner ${result.container.id}`
+					: `Script encontrado em ${result.host}`}
 			</AlertTitle>
 			<AlertDescription>
 				It answered in {result.responseMs} ms. Site ID {siteId} matched, and

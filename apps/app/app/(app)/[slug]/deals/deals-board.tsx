@@ -133,7 +133,7 @@ export function DealsBoard() {
 	return (
 		<div className="flex min-h-0 flex-1 flex-col gap-4">
 			<div className="flex flex-wrap items-center gap-3">
-				<ListSearch placeholder="Buscar negócios por nome ou empresa…" />
+				<ListSearch placeholder="Buscar negócios por nome ou cliente…" />
 				{deals.isFetching ? (
 					<Spinner className="text-muted-foreground" />
 				) : null}

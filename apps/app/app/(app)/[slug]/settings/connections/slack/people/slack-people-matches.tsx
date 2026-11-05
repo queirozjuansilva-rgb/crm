@@ -59,13 +59,13 @@ export function SlackPeopleMatches({
 					onClick={() => refresh.mutate()}
 				>
 					{refreshing ? <Spinner data-icon="inline-start" /> : null}
-					{refreshing ? "Refreshing…" : "Refresh from Slack"}
+					{refreshing ? "Refreshing…" : "Atualizar pelo Slack"}
 				</Button>
 			</div>
 			{matches.data.sync === "stalled" ? (
 				<p className="text-center text-warning text-xs">
-					Comp AI is not reading Slack right now. These matches can be out of
-					date.
+					A Lugh não está lendo o Slack agora. Estes vínculos podem estar
+					desatualizados.
 				</p>
 			) : null}
 			<div className="flex flex-col divide-y border-y">
@@ -100,9 +100,9 @@ export function SlackPeopleMatches({
 				))}
 			</div>
 			<p className="text-muted-foreground text-xs leading-relaxed">
-				Refresh after a Slack email changes. The CRM matches exact email
-				addresses only. Someone with no exact match stays unmatched, and an
-				agent stops instead of guessing at a similar name.
+				Atualize depois que um e-mail mudar no Slack. O CRM só vincula e-mails
+				idênticos. Quem não tiver correspondência exata fica sem vínculo, e o
+				agente para em vez de adivinhar por nome parecido.
 			</p>
 			<div className="flex justify-end">
 				<Button asChild>

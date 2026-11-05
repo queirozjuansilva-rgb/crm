@@ -15,7 +15,7 @@ const DESCRIPTION = {
 	google:
 		"This CRM reads your Gmail and Calendar so meetings and email threads show up on the right company. It is read-only — nothing is ever sent on your behalf.",
 	microsoft:
-		"This CRM reads your Outlook mail so email threads show up on the right company. It is read-only — nothing is ever sent on your behalf.",
+		"Este CRM lê seu Outlook para mostrar as conversas no cliente certo. É só leitura: nada é enviado em seu nome.",
 } satisfies Record<MailboxProviderId, string>;
 
 const BOTH =
@@ -42,8 +42,8 @@ export default async function GrantAccessPage() {
 			<GrantAccess providers={providers} />
 
 			<p className="text-center text-muted-foreground text-sm/5">
-				Only conversations with companies in the CRM are stored. Personal mail
-				is discarded without being saved.
+				Só ficam salvas as conversas com clientes do CRM. E-mails pessoais são
+				descartados sem salvar.
 			</p>
 		</AuthShell>
 	);

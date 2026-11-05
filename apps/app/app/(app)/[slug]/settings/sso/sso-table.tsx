@@ -104,8 +104,8 @@ function columns(
 							<AlertDialogHeader>
 								<AlertDialogTitle>Remove {row.name}?</AlertDialogTitle>
 								<AlertDialogDescription>
-									Nobody can sign in through it again. If this is the only
-									provider, the sign-in page goes back to Google.
+									Ninguém mais entra por ele. Se for o único provedor, a página
+									de login volta para o Google.
 								</AlertDialogDescription>
 							</AlertDialogHeader>
 

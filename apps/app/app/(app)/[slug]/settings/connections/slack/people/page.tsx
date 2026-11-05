@@ -42,8 +42,8 @@ async function SlackPeoplePageContent({ params }: SlackPeoplePageProps) {
 				<SlackLogo className="mx-auto size-7" />
 				<h1 className="font-medium text-2xl tracking-tight">Slack conectado</h1>
 				<p className="text-muted-foreground text-sm">
-					Match your CRM people to Slack once. Agents use these exact accounts
-					later instead of guessing from a similar name.
+					Vincule as pessoas do CRM ao Slack uma vez. Depois os agentes usam
+					exatamente essas contas em vez de adivinhar por nome parecido.
 				</p>
 			</header>
 			<SlackPeopleMatches slug={slug} initialMatches={matches} />
