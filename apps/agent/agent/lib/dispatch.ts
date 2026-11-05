@@ -7,6 +7,7 @@ import { queueEventAgentRuns } from "./custom-agent-dispatch";
 import { settledWithin } from "./deadline";
 import { DISPATCH } from "./dispatch-config";
 import { markRunning, settle } from "./enrichment";
+import { runLeadAlert } from "./lead-alert";
 import { runMcpToolDiscovery } from "./mcp-discovery";
 import { collapsing, runLimited } from "./pool";
 import { runPortrait } from "./portrait";
@@ -121,6 +122,13 @@ async function handleDirect(task: LeasedTask): Promise<void> {
 				? "Queued 1 matching agent run."
 				: `Queued ${queued} matching agent runs.`,
 		);
+		return;
+	}
+
+	if (task.kind === "lead-alert") {
+		const alert = await runLeadAlert(task.payload);
+		if (alert.outcome === "retry") throw new Error(alert.note);
+		await completeTask(task.id, alert.note);
 		return;
 	}
 

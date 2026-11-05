@@ -2,6 +2,7 @@
 
 import Add from "@carbon/icons-react/es/Add";
 import ArrowLeft from "@carbon/icons-react/es/ArrowLeft";
+import Edit from "@carbon/icons-react/es/Edit";
 import TrashCan from "@carbon/icons-react/es/TrashCan";
 import { Button } from "@crm/ui/components/button";
 import { DatePicker } from "@crm/ui/components/date-picker";
@@ -293,6 +294,7 @@ export function ProjectBoard({ projectId }: { projectId: string }) {
 				renderItem={(task) => (
 					<TaskCard
 						task={task}
+						onEdit={() => setEditing(task.id)}
 						onRemove={() => removeTask.mutate({ id: task.id })}
 					/>
 				)}
@@ -307,7 +309,15 @@ export function ProjectBoard({ projectId }: { projectId: string }) {
 	);
 }
 
-function TaskCard({ task, onRemove }: { task: Task; onRemove: () => void }) {
+function TaskCard({
+	task,
+	onEdit,
+	onRemove,
+}: {
+	task: Task;
+	onEdit: () => void;
+	onRemove: () => void;
+}) {
 	const done = task.status === "DONE";
 	const late = isOverdue(task.dueDate, done);
 	return (
@@ -323,8 +333,22 @@ function TaskCard({ task, onRemove }: { task: Task; onRemove: () => void }) {
 				</span>
 				<button
 					type="button"
+					aria-label="Editar tarefa"
+					onPointerDown={(event) => event.stopPropagation()}
+					onKeyDown={(event) => event.stopPropagation()}
+					onClick={(event) => {
+						event.stopPropagation();
+						onEdit();
+					}}
+					className="flex size-6 shrink-0 items-center justify-center rounded-full text-muted-foreground opacity-0 transition-opacity hover:bg-foreground/8 hover:text-foreground focus-visible:opacity-100 group-hover/task:opacity-100 max-lg:opacity-60"
+				>
+					<Edit className="size-3.5" />
+				</button>
+				<button
+					type="button"
 					aria-label="Excluir tarefa"
 					onPointerDown={(event) => event.stopPropagation()}
+					onKeyDown={(event) => event.stopPropagation()}
 					onClick={(event) => {
 						event.stopPropagation();
 						onRemove();

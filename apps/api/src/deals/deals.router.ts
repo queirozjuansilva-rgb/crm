@@ -8,7 +8,7 @@ import {
 	UseMiddlewares,
 } from "nestjs-trpc";
 import type { z } from "zod";
-import { LeadAlertService } from "../notifications/lead-alert.service";
+import { AgentTriggerService } from "../agent/agent-trigger.service";
 import type { AuthedTrpcContext } from "../trpc/context.types";
 import { AuthMiddleware } from "../trpc/middlewares/auth.middleware";
 import { restMeta } from "../trpc/openapi";
@@ -42,7 +42,7 @@ import { DealsService } from "./deals.service";
 export class DealsRouter {
 	constructor(
 		@Inject(DealsService) private readonly deals: DealsService,
-		@Inject(LeadAlertService) private readonly leadAlert: LeadAlertService,
+		@Inject(AgentTriggerService) private readonly agent: AgentTriggerService,
 	) {}
 
 	@Query({
@@ -73,7 +73,7 @@ export class DealsRouter {
 		@Input() input: z.infer<typeof dealCreateInput>,
 	) {
 		const deal = await this.deals.create(input);
-		if (ctx.req?.headers["x-api-key"]) await this.leadAlert.newLead(deal.id);
+		if (ctx.req?.headers["x-api-key"]) await this.agent.leadAlert(deal.id);
 		return deal;
 	}
 

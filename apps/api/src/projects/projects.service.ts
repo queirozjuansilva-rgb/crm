@@ -171,18 +171,23 @@ export class ProjectsService {
 
 	async updateTask(input: TaskUpdateInput): Promise<ProjectTask> {
 		const { data } = input;
+		const current = await this.db.projectTask.findUnique({
+			where: { id: input.id },
+			select: { status: true },
+		});
+		if (!current) throw new NotFoundException("Esta tarefa não existe mais.");
+		const moved = data.status !== undefined && data.status !== current.status;
 		const row = await this.db.projectTask
 			.update({
 				where: { id: input.id },
 				data: {
 					title: data.title,
 					status: data.status,
-					completedAt:
-						data.status === undefined
-							? undefined
-							: data.status === "DONE"
-								? new Date()
-								: null,
+					completedAt: moved
+						? data.status === "DONE"
+							? new Date()
+							: null
+						: undefined,
 					dueDate: toDate(data.dueDate),
 					assigneeId: data.assigneeId,
 				},

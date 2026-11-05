@@ -191,6 +191,28 @@ export class AgentTriggerService {
 		);
 	}
 
+	async leadAlert(dealId: string): Promise<boolean> {
+		return this.enqueue({
+			kind: "lead-alert",
+			reason: "Avisar no WhatsApp que um lead chegou",
+			priority: PRIORITY.leadAlert,
+			budget: 1,
+			subject: { path: ["dealId"], value: dealId },
+			payload: { type: "lead.alert", dealId },
+		});
+	}
+
+	async leadAlertTest(): Promise<boolean> {
+		return this.enqueue({
+			kind: "lead-alert",
+			reason: "Mandar uma mensagem de teste no WhatsApp",
+			priority: PRIORITY.leadAlert,
+			budget: 1,
+			subject: { path: ["type"], value: "lead.alert.test" },
+			payload: { type: "lead.alert.test" },
+		});
+	}
+
 	async withCrmEvents<Result>(
 		work: (
 			tx: Prisma.TransactionClient,

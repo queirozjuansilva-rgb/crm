@@ -121,7 +121,7 @@ function TaskForm({
 						id: task.id,
 						data: {
 							title,
-							status,
+							status: status === task.status ? undefined : status,
 							dueDate: dueDate || null,
 							assigneeId: assigneeId === NOBODY ? null : assigneeId,
 						},
