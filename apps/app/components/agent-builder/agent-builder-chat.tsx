@@ -118,7 +118,7 @@ export type SupportedChatConnection = {
 	brand: ProviderBrand | null;
 };
 
-const BUILDER_STEPS = ["Scope", "Instructions", "Manifest", "Review"] as const;
+const BUILDER_STEPS = ["Escopo", "Instruções", "Manifesto", "Revisão"] as const;
 const BUILDER_STEP_ARTIFACTS = [
 	null,
 	"agent/instructions.md",
@@ -814,7 +814,9 @@ function SharedAgentChat({
 		<main className="flex min-h-0 flex-1 flex-col">
 			<header className="flex h-12 shrink-0 items-center gap-3 border-b px-5">
 				<h1 className="min-w-0 flex-1 truncate font-medium text-sm">
-					{conversation.agent?.name ?? conversation.title ?? "Agent builder"}
+					{conversation.agent?.name ??
+						conversation.title ??
+						"Construtor de agentes"}
 				</h1>
 				<span className="text-muted-foreground text-xs">Read-only</span>
 			</header>
@@ -824,8 +826,8 @@ function SharedAgentChat({
 					<div className="rounded-lg border bg-card px-4 py-3 text-sm">
 						<p className="font-medium">Shared by {conversation.ownerName}</p>
 						<p className="mt-1 text-muted-foreground text-xs">
-							You can read this builder chat, but only its owner can continue or
-							change it.
+							Você pode ler este chat, mas só quem criou pode continuar ou
+							alterar.
 						</p>
 					</div>
 				</ChatThreadItem>
@@ -881,7 +883,7 @@ function ChatHeader({
 	const title =
 		(creatingAgent ? conversation.agent?.name : null) ??
 		conversation.title ??
-		"Agent chat";
+		"Chat com agente";
 
 	return (
 		<header className="flex h-12 shrink-0 items-center gap-2 border-b px-4 sm:gap-2.5 sm:pr-4 sm:pl-5">
@@ -934,7 +936,7 @@ function UserSubmission({
 	sending?: boolean;
 }) {
 	const message = submission.message;
-	const messageText = message.text ?? "Message unavailable";
+	const messageText = message.text ?? "Mensagem indisponível";
 	const command =
 		submission.commandType === "CREATE_AGENT"
 			? consumeBuilderCommand(messageText)
@@ -958,7 +960,7 @@ function UserSubmission({
 								aria-busy={retrying}
 								onClick={onRetry}
 							>
-								{retrying ? "Sending" : "Send again"}
+								{retrying ? "Enviando" : "Enviar de novo"}
 							</Button>
 						) : null}
 					</div>
@@ -1112,7 +1114,7 @@ function FollowUpTranscriptItem({
 			<div className="flex items-center justify-between gap-3 text-xs">
 				<span className="font-medium">Follow-up</span>
 				<span className="text-muted-foreground">
-					{answered ? "Answered" : "Waiting for your answer"}
+					{answered ? "Respondida" : "Esperando sua resposta"}
 				</span>
 			</div>
 			<Markdown className="mt-1.5 wrap-break-word text-sm leading-5">
@@ -1165,7 +1167,7 @@ function PermissionModeMenu({
 					variant="ghost"
 					size="sm"
 					disabled={pending}
-					aria-label={`Permission mode: ${selected?.label ?? "Manual"}`}
+					aria-label={`Modo de permissão: ${selected?.label ?? "Manual"}`}
 				>
 					<Icon icon={Security} data-icon="inline-start" />
 					{selected?.label ?? "Manual"}
@@ -1239,7 +1241,7 @@ function AgentApprovalCard({
 					Recusar
 				</Button>
 				<Button type="button" size="sm" onClick={() => onDecision("approve")}>
-					{pending ? "Approving" : "Approve"}
+					{pending ? "Aprovando" : "Aprovar"}
 				</Button>
 			</div>
 		</fieldset>
@@ -1404,8 +1406,8 @@ function BuildingAgentCard({
 											: done
 												? "Feito"
 												: active
-													? "Working"
-													: "Queued"}
+													? "Trabalhando"
+													: "Na fila"}
 									</span>
 								</div>
 								{active && writingPath ? (
@@ -1487,14 +1489,14 @@ function AgentConnectionCard({
 					<div className="flex min-w-0 flex-1 flex-col gap-1">
 						<p className="font-medium text-sm">
 							{connected
-								? `${connection.name} is ready`
+								? `${connection.name} está pronto`
 								: `Connect ${connection.name}`}
 						</p>
 						<p className="text-pretty text-muted-foreground text-sm">
 							{connected
-								? "Continue the request with this connection."
+								? "Continue o pedido com esta conexão."
 								: connecting
-									? "Reading the available tools."
+									? "Lendo as ferramentas disponíveis."
 									: connection.description}
 						</p>
 					</div>
@@ -1537,7 +1539,7 @@ function AgentConnectionCard({
 							aria-busy={connecting || start.isPending}
 							onClick={connect}
 						>
-							{connecting || start.isPending ? "Connecting" : "Connect"}
+							{connecting || start.isPending ? "Conectando" : "Conectar"}
 						</Button>
 					) : (
 						<Button asChild size="sm" variant="outline">
@@ -1567,14 +1569,14 @@ function BuilderFailureCard({
 }) {
 	const message =
 		failure.kind === "cancelled"
-			? "You stopped this request. Ask again when you are ready."
+			? "Você parou este pedido. Pergunte de novo quando quiser."
 			: failure.kind === "rate-limit"
-				? "Vercel AI Gateway rate-limited this model before it could start. Try again in a moment or add AI Gateway credits in Vercel."
+				? "O Vercel AI Gateway limitou este modelo antes de começar. Tente de novo em instantes ou adicione créditos do AI Gateway na Vercel."
 				: failure.kind === "restricted"
-					? "This model requires paid AI Gateway credits. Add credits in Vercel, then try again."
+					? "Este modelo precisa de créditos pagos do AI Gateway. Adicione créditos na Vercel e tente de novo."
 					: failure.kind === "credits"
-						? "Vercel AI Gateway has no available credits. Add credits in Vercel, then try again."
-						: "The builder could not finish this request. Try again.";
+						? "O Vercel AI Gateway está sem créditos. Adicione créditos na Vercel e tente de novo."
+						: "O construtor não conseguiu terminar este pedido. Tente de novo.";
 
 	return (
 		<div
@@ -1585,7 +1587,9 @@ function BuilderFailureCard({
 				<Icon icon={WarningAlt} className="mt-0.5 size-4 text-destructive" />
 				<div className="min-w-0 flex-1">
 					<p className="font-medium text-sm">
-						{creatingAgent ? "Agent creation stopped" : "Response stopped"}
+						{creatingAgent
+							? "Criação do agente interrompida"
+							: "Resposta interrompida"}
 					</p>
 					<p className="mt-0.5 text-pretty text-muted-foreground text-xs leading-5">
 						{message}
@@ -1602,7 +1606,7 @@ function BuilderFailureCard({
 				>
 					<AsyncButtonContent
 						status={retrying ? "pending" : "idle"}
-						pendingLabel="Asking"
+						pendingLabel="Perguntando"
 					>
 						Perguntar de novo
 					</AsyncButtonContent>
@@ -1633,7 +1637,7 @@ function ReviewAgentCard({
 			<p className="max-w-[640px] text-pretty text-sm leading-5">
 				Seu rascunho privado está pronto para revisão.
 			</p>
-			<AgentCardShell name={manifest.name ?? agent.name} status="Private">
+			<AgentCardShell name={manifest.name ?? agent.name} status="Privado">
 				<div className="flex flex-col gap-2 p-4">
 					<ReviewRow label="Quando" value={manifest.trigger} />
 					<ReviewRow label="Buscar" value={manifest.looksAt} />
@@ -1641,11 +1645,11 @@ function ReviewAgentCard({
 					<ReviewRow label="Escopo">
 						<AgentScopeBadges
 							scopes={manifest.access}
-							fallback="Bounded CRM read access"
+							fallback="Leitura limitada do CRM"
 						/>
 					</ReviewRow>
 				</div>
-				<AgentCardFooter note="Sandboxed · credentials never enter the sandbox">
+				<AgentCardFooter note="Ambiente isolado · as credenciais nunca entram nele">
 					<Button asChild size="sm">
 						<Link
 							href={workspaceUrl(`/agents/${agent.id}`)}
@@ -1761,11 +1765,11 @@ function DeployedAgentCard({
 			<div className="flex flex-col gap-1">
 				<p className="text-sm leading-5">{agent.name} is live.</p>
 				<p className="text-muted-foreground text-sm leading-5">
-					I created the Eve agent, applied its bounded CRM and integration
-					access, and made it live for the team.
+					Criei o agente, apliquei os acessos limitados ao CRM e às integrações
+					e coloquei no ar para o time.
 				</p>
 			</div>
-			<AgentCardShell name={agent.name} status="Live">
+			<AgentCardShell name={agent.name} status="No ar">
 				<div className="flex flex-col gap-2 p-4">
 					<ReviewRow
 						label="Gatilho"
@@ -1785,13 +1789,13 @@ function DeployedAgentCard({
 							)
 						}
 					/>
-					<ReviewRow label="Roda em" value="Eve runtime · isolated sandbox" />
+					<ReviewRow label="Roda em" value="Eve · ambiente isolado" />
 					<ReviewRow
 						label="Responsável"
 						value={`Team · ${agent.createdBy.name}`}
 					/>
 				</div>
-				<AgentCardFooter note="The chat stays private. The agent is team-owned.">
+				<AgentCardFooter note="O chat continua privado. O agente pertence ao time.">
 					<div className="flex items-center gap-2">
 						<Button
 							variant="outline"
@@ -1802,8 +1806,8 @@ function DeployedAgentCard({
 						>
 							<AsyncButtonContent
 								status={runAction.status}
-								pendingLabel="Queueing"
-								successLabel="Queued"
+								pendingLabel="Colocando na fila"
+								successLabel="Na fila"
 								errorLabel="Tentar de novo"
 							>
 								<Icon icon={Play} data-icon="inline-start" />
@@ -1824,7 +1828,7 @@ function DeployedAgentCard({
 				<p className="flex h-7 items-center text-muted-foreground text-sm">
 					Sugestões de continuação
 				</p>
-				{["Add another teammate to the notification"].map((suggestion) => (
+				{["Adicionar outra pessoa do time ao aviso"].map((suggestion) => (
 					<button
 						key={suggestion}
 						type="button"
@@ -1935,20 +1939,20 @@ function manifestOf(manifest: AgentManifestSummary) {
 			manifest.triggers
 				.map((trigger) =>
 					trigger.type === "MANUAL"
-						? "On demand"
+						? "Sob demanda"
 						: compactSummary(
 								trigger.summary,
-								trigger.type === "EVENT" ? "On CRM event" : "On schedule",
+								trigger.type === "EVENT" ? "Em evento do CRM" : "Agendado",
 							),
 				)
-				.join(" · ") || "On demand",
+				.join(" · ") || "Sob demanda",
 		looksAt: textOf(
 			manifest.dataScope.summary,
-			"CRM records in the approved scope",
+			"Registros do CRM no escopo aprovado",
 		),
 		action: compactSummary(
 			manifest.actions[0]?.summary,
-			"Perform the requested team action",
+			"Executar a ação pedida pelo time",
 		),
 		access: manifest.access,
 	};

@@ -102,7 +102,7 @@ export function AgentBuilderSidebar({
 						{group.items.map((conversation) => {
 							const href = workspaceUrl(`/chat/${conversation.id}`);
 							const active = pathname === href;
-							const title = conversation.title ?? "Untitled chat";
+							const title = conversation.title ?? "Chat sem título";
 							return (
 								<div
 									key={conversation.id}

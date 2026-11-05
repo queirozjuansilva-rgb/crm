@@ -115,7 +115,7 @@ describe("record context", () => {
 	it("offers questions that suit the record", () => {
 		expect(recordCopy("company").suggestions.join(" ")).not.toContain("person");
 		expect(recordCopy("deal").suggestions.join(" ")).not.toContain("person");
-		expect(recordCopy("contact").suggestions[0]).toBe("Who is this person?");
+		expect(recordCopy("contact").suggestions[0]).toBe("Quem é esta pessoa?");
 	});
 
 	it("tells the agent which record it is on", () => {

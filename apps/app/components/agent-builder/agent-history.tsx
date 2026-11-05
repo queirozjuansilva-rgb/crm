@@ -202,9 +202,9 @@ export function AgentRuns({
 					<AlertDialogHeader>
 						<AlertDialogTitle>Parar esta execução?</AlertDialogTitle>
 						<AlertDialogDescription>
-							The agent stops where it is and the run is recorded as cancelled.
-							Anything it has already done — a note, a task, a Slack message —
-							stays done.
+							O agente para onde está e a execução fica registrada como
+							cancelada. O que ele já fez (uma nota, uma tarefa, uma mensagem no
+							Slack) continua feito.
 						</AlertDialogDescription>
 					</AlertDialogHeader>
 
@@ -253,9 +253,9 @@ function ExpandedRun({ run }: { run: RunRow }) {
 				<RunMeta label="Gatilho" value={humanStatus(run.triggerType)} />
 				<RunMeta
 					label="Iniciado por"
-					value={run.initiatedBy?.name ?? "Eve scheduler"}
+					value={run.initiatedBy?.name ?? "Agendador"}
 				/>
-				<RunMeta label="Modelo" value={run.modelId ?? "Gateway default"} />
+				<RunMeta label="Modelo" value={run.modelId ?? "Padrão do Gateway"} />
 				<RunMeta label="Versão" value={String(run.version.number)} last />
 			</div>
 
@@ -425,7 +425,7 @@ function formatTime(value: string): string {
 
 function duration(startedAt: string | null, finishedAt: string | null): string {
 	if (!startedAt) return "—";
-	if (!finishedAt) return "In progress";
+	if (!finishedAt) return "Em andamento";
 
 	const milliseconds =
 		new Date(finishedAt).getTime() - new Date(startedAt).getTime();

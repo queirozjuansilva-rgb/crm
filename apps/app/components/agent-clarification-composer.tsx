@@ -72,7 +72,7 @@ export function AgentClarificationComposer({
 			setTransportError(
 				error instanceof Error && error.message.trim()
 					? error.message
-					: "Unable to submit. Check your connection and try again.",
+					: "Não foi possível enviar. Verifique a conexão e tente de novo.",
 			);
 		}
 	};
@@ -89,8 +89,8 @@ export function AgentClarificationComposer({
 				<QuestionnaireTitle>{question.prompt}</QuestionnaireTitle>
 				<QuestionnaireDescription>
 					{options.length > 0
-						? "Choose an answer, then submit."
-						: "Add the detail the agent needs to continue."}
+						? "Escolha uma resposta e envie."
+						: "Adicione o detalhe que o agente precisa para continuar."}
 				</QuestionnaireDescription>
 				<QuestionnaireChoices>
 					{options.map((option) => (
@@ -109,7 +109,9 @@ export function AgentClarificationComposer({
 					))}
 					{showFreeform ? (
 						<QuestionnaireInput
-							aria-label={options.length > 0 ? "Another answer" : "Your answer"}
+							aria-label={
+								options.length > 0 ? "Outra resposta" : "Sua resposta"
+							}
 							placeholder="Adicione o detalhe que o agente precisa"
 							disabled={pending}
 						/>
@@ -126,7 +128,7 @@ export function AgentClarificationComposer({
 				<QuestionnaireSubmit disabled={pending} aria-busy={pending} size="sm">
 					<AsyncButtonContent
 						status={pending ? "pending" : "idle"}
-						pendingLabel="Submitting"
+						pendingLabel="Enviando"
 					>
 						Enviar resposta
 					</AsyncButtonContent>

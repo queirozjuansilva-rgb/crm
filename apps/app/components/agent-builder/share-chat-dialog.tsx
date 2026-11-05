@@ -187,7 +187,7 @@ export function ShareChatDialog({
 									<span className="min-w-0 flex-1 truncate font-mono text-xs">
 										{shareToken
 											? `${workspaceUrl(`/chat/${shareToken.slice(0, 12)}`)}…`
-											: "An active read-only link exists"}
+											: "Existe um link ativo só de leitura"}
 									</span>
 									<Button
 										variant="outline"
@@ -206,14 +206,14 @@ export function ShareChatDialog({
 											status={
 												shareToken ? copyAction.status : createAction.status
 											}
-											pendingLabel={shareToken ? "Copying" : "Creating link"}
-											successLabel={shareToken ? "Copied" : "Link created"}
+											pendingLabel={shareToken ? "Copiando" : "Criando link"}
+											successLabel={shareToken ? "Copiado" : "Link criado"}
 											errorLabel="Tentar de novo"
 										>
 											{shareToken ? (
 												<Icon icon={Copy} data-icon="inline-start" />
 											) : null}
-											{shareToken ? "Copy link" : "Replace link"}
+											{shareToken ? "Copiar link" : "Trocar link"}
 										</AsyncButtonContent>
 									</Button>
 								</div>
@@ -236,8 +236,8 @@ export function ShareChatDialog({
 					>
 						<AsyncButtonContent
 							status={revokeAction.status}
-							pendingLabel="Revoking"
-							successLabel="Revoked"
+							pendingLabel="Revogando"
+							successLabel="Revogado"
 							errorLabel="Tentar de novo"
 						>
 							Revogar link

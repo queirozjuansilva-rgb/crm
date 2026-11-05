@@ -44,7 +44,7 @@ export function TeamAgentsIndex({ initialAgents }: { initialAgents: Agents }) {
 									</span>
 								</span>
 								<span className="mt-1 block wrap-break-word text-muted-foreground text-xs sm:mt-0 sm:truncate">
-									{agent.description ?? "No description"}
+									{agent.description ?? "Sem descrição"}
 								</span>
 								<span className="mt-2 block font-mono text-muted-foreground text-xs sm:hidden">
 									{agent.runCount} runs
@@ -67,8 +67,8 @@ export function TeamAgentsIndex({ initialAgents }: { initialAgents: Agents }) {
 						Nenhum agente do time ainda
 					</h2>
 					<p className="mt-1 text-muted-foreground text-xs">
-						Create one from a private chat, then review its access before
-						deploying it.
+						Crie um a partir de um chat privado e revise os acessos antes de
+						publicar.
 					</p>
 					<Link
 						href={workspaceUrl("/chat")}

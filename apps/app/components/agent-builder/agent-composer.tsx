@@ -571,9 +571,7 @@ export function AgentComposer({
 						disabled={!canSend}
 						aria-busy={submitAction.pending || state.attachmentsReading}
 						aria-label={
-							state.attachmentsReading
-								? "Preparing attachments"
-								: "Send message"
+							state.attachmentsReading ? "Preparando anexos" : "Enviar mensagem"
 						}
 						onClick={submit}
 						className="rounded-full"
@@ -584,9 +582,7 @@ export function AgentComposer({
 							}
 							pendingLabel={
 								<span className="sr-only">
-									{state.attachmentsReading
-										? "Preparing attachments"
-										: "Sending"}
+									{state.attachmentsReading ? "Preparando anexos" : "Enviando"}
 								</span>
 							}
 							successLabel={<span className="sr-only">Enviado</span>}
@@ -635,8 +631,8 @@ function ComposerEditor({
 	const parts = composerEditorParts(state);
 	const placeholder =
 		mode === "home"
-			? "Ask about your CRM or automate a task…"
-			: "Send a message";
+			? "Pergunte sobre o CRM ou automatize uma tarefa…"
+			: "Envie uma mensagem";
 	const commit = () => {
 		const root = editorRef.current;
 		if (!root || composingRef.current) return;
@@ -1550,11 +1546,11 @@ async function readFiles(
 
 	for (const file of Array.from(files).slice(0, 5)) {
 		if (file.size === 0) {
-			toast.error(`${file.name} is empty.`);
+			toast.error(`${file.name} está vazio.`);
 			continue;
 		}
 		if (file.size > 2_000_000) {
-			toast.error(`${file.name} is larger than 2 MB.`);
+			toast.error(`${file.name} passa de 2 MB.`);
 			continue;
 		}
 		if (file.name.length > 180) {
@@ -1562,7 +1558,7 @@ async function readFiles(
 			continue;
 		}
 		if (file.type.length > 120) {
-			toast.error(`${file.name} has an unsupported file type.`);
+			toast.error(`${file.name} tem um tipo de arquivo não aceito.`);
 			continue;
 		}
 		acceptedFiles.push(file);
@@ -1580,7 +1576,7 @@ async function readFiles(
 					),
 				};
 			} catch {
-				toast.error(`${file.name} could not be read.`);
+				toast.error(`Não foi possível ler ${file.name}.`);
 				return null;
 			}
 		}),

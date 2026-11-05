@@ -121,7 +121,7 @@ function AgentCodeWorkspaceSurface({
 						motion="none"
 					/>
 					<span className="truncate font-medium text-sm">
-						{working ? "Writing agent code" : "Agent code"}
+						{working ? "Escrevendo o código do agente" : "Código do agente"}
 					</span>
 					<span className="hidden shrink-0 text-muted-foreground text-xs sm:inline">
 						{paths.length} {paths.length === 1 ? "file" : "files"}

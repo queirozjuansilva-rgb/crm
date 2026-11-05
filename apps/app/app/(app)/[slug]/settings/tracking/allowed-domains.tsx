@@ -43,7 +43,7 @@ const CELL = "px-3 py-2.5 align-middle";
 
 const COLUMNS: SimpleTableColumn[] = [
 	{ id: "domain", header: "Domínio" },
-	{ id: "scope", header: "Scope", width: "w-40" },
+	{ id: "scope", header: "Escopo", width: "w-40" },
 	{ id: "pageViews", header: "Page views", width: "w-28", align: "right" },
 	{ id: "lastSeen", header: "Last seen", width: "w-28", align: "right" },
 	{ id: "actions", srLabel: "Ações", width: "w-24" },

@@ -314,7 +314,7 @@ describe("toTranscript", () => {
 
 		expect(grouped[0]?.items[0]).toMatchObject({
 			kind: "did",
-			errorText: "This step failed. Ask again to retry.",
+			errorText: "Este passo falhou. Pergunte de novo para tentar outra vez.",
 			tone: "warning",
 		});
 	});
@@ -494,7 +494,7 @@ describe("eventStreamSettled", () => {
 describe("describe", () => {
 	it("says what happened in a rep's words, not the tool's", () => {
 		expect(describeStep(tool("read_crm_history") as never)).toBe(
-			"Read our emails and meetings with them",
+			"Leu nossos e-mails e reuniões com eles",
 		);
 	});
 
@@ -504,13 +504,13 @@ describe("describe", () => {
 		});
 
 		expect(describeStep(step as never)).toBe(
-			"Checked a profile against the account itself",
+			"Conferiu um perfil com a própria conta",
 		);
 	});
 
 	it("hides an unknown completed tool name", () => {
 		expect(describeStep(tool("some_new_tool") as never)).toBe(
-			"Finished a step",
+			"Concluiu um passo",
 		);
 	});
 
@@ -519,7 +519,7 @@ describe("describe", () => {
 			describeStep(
 				tool("some_new_tool", { state: "input-available" }) as never,
 			),
-		).toBe("Working on it");
+		).toBe("Trabalhando nisso");
 	});
 });
 
@@ -865,7 +865,7 @@ describe("tool call details", () => {
 
 		expect(row?.items[0]).toMatchObject({
 			kind: "did",
-			errorText: "This step failed. Ask again to retry.",
+			errorText: "Este passo falhou. Pergunte de novo para tentar outra vez.",
 		});
 	});
 

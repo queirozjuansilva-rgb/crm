@@ -148,7 +148,9 @@ export function TeamAgentDetail({
 			onSuccess: async (result) => {
 				await invalidate();
 				toast.success(
-					result.cancelled ? "Run stopped." : "That run had already finished.",
+					result.cancelled
+						? "Execução parada."
+						: "Essa execução já tinha terminado.",
 				);
 			},
 			onError: (error) => toast.error(error.message),
@@ -213,7 +215,7 @@ export function TeamAgentDetail({
 						<span className="block">{displayedDescription}</span>
 						<span className="mt-2 block text-xs">
 							Created by {data.createdBy.name} ·{" "}
-							{isDraft ? "Private draft" : "Team agent"} · Version{" "}
+							{isDraft ? "Rascunho privado" : "Agente do time"} · Version{" "}
 							{displayedVersionNumber ?? "—"}
 						</span>
 					</PageShellDescription>
@@ -221,11 +223,11 @@ export function TeamAgentDetail({
 				<PageShellActions className="col-start-1 row-start-3 justify-self-start sm:col-start-2 sm:row-start-1 sm:justify-self-end">
 					<div className="flex min-w-0 flex-col items-start gap-2 sm:items-end">
 						<span className="text-muted-foreground text-xs">
-							{isDraft ? "Visibility" : "Trigger"}
+							{isDraft ? "Visibilidade" : "Gatilho"}
 						</span>
 						<span className="font-mono text-sm">
 							{isDraft
-								? "Private draft"
+								? "Rascunho privado"
 								: nextRun
 									? formatDate(nextRun)
 									: triggerSummary}
@@ -255,8 +257,8 @@ export function TeamAgentDetail({
 								>
 									<AsyncButtonContent
 										status={runAction.status}
-										pendingLabel="Queueing"
-										successLabel="Queued"
+										pendingLabel="Colocando na fila"
+										successLabel="Na fila"
 										errorLabel="Tentar de novo"
 									>
 										<Icon icon={Play} data-icon="inline-start" />
@@ -273,7 +275,7 @@ export function TeamAgentDetail({
 								>
 									<AsyncButtonContent
 										status={pauseAction.status}
-										pendingLabel="Pausing"
+										pendingLabel="Pausando"
 										successLabel="Pausado"
 										errorLabel="Tentar de novo"
 									>
@@ -291,8 +293,8 @@ export function TeamAgentDetail({
 								>
 									<AsyncButtonContent
 										status={resumeAction.status}
-										pendingLabel="Resuming"
-										successLabel="Resumed"
+										pendingLabel="Retomando"
+										successLabel="Retomado"
 										errorLabel="Tentar de novo"
 									>
 										<Icon icon={Play} data-icon="inline-start" />
@@ -408,8 +410,8 @@ function DraftAgentActions({
 			>
 				<AsyncButtonContent
 					status={deployAction.status}
-					pendingLabel="Deploying"
-					successLabel="Deployed"
+					pendingLabel="Publicando"
+					successLabel="Publicado"
 					errorLabel="Tentar de novo"
 				>
 					Publicar agente
@@ -445,7 +447,7 @@ function DeleteAgentAction({
 					}),
 				]);
 				setConfirming(false);
-				toast.success(`${name} was deleted.`);
+				toast.success(`${name} foi excluído.`);
 				router.replace(workspaceUrl("/agents"));
 			},
 			onError: (error) => toast.error(error.message),
@@ -489,9 +491,10 @@ function DeleteAgentAction({
 					<AlertDialogHeader>
 						<AlertDialogTitle>Delete {name}?</AlertDialogTitle>
 						<AlertDialogDescription>
-							This removes it from the team agent list, disables its triggers,
-							and cancels queued runs. Its run and action history stays in the
-							audit log. A run already in progress may finish.
+							Isto tira o agente da lista do time, desliga os gatilhos e cancela
+							as execuções na fila. O histórico de execuções e ações fica no
+							registro de auditoria. Uma execução em andamento ainda pode
+							terminar.
 						</AlertDialogDescription>
 					</AlertDialogHeader>
 
@@ -507,8 +510,8 @@ function DeleteAgentAction({
 						>
 							<AsyncButtonContent
 								status={removeAction.status}
-								pendingLabel="Deleting"
-								successLabel="Deleted"
+								pendingLabel="Excluindo"
+								successLabel="Excluído"
 								errorLabel="Tentar de novo"
 							>
 								Excluir agente
@@ -539,8 +542,8 @@ function AgentOverview({ agent }: { agent: AgentDetail }) {
 			<div className="flex flex-col gap-9">
 				{deployed ? null : (
 					<p className="text-muted-foreground text-sm">
-						This is a draft. Deploy it to the team before you change what it can
-						do.
+						Isto é um rascunho. Publique para o time antes de mudar o que ele
+						pode fazer.
 					</p>
 				)}
 				<AgentCapabilities

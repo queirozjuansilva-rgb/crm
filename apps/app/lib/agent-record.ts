@@ -26,13 +26,12 @@ const COPY: RecordCopyByKind = {
 		header: "x-crm-contact",
 		field: "contactId",
 		title: "Pergunte sobre esta pessoa",
-		blurb:
-			"Every step is shown as it happens — including the leads it throws away.",
+		blurb: "Cada passo aparece na hora, inclusive as pistas que ele descarta.",
 		placeholder: "Ainda trabalham lá?",
 		suggestions: [
-			"Who is this person?",
-			"Are they still there?",
-			"What should I know before a call?",
+			"Quem é esta pessoa?",
+			"Ainda trabalha lá?",
+			"O que preciso saber antes de uma ligação?",
 		],
 	},
 	company: {
@@ -40,25 +39,24 @@ const COPY: RecordCopyByKind = {
 		field: "companyId",
 		title: "Pergunte sobre esta empresa",
 		blurb:
-			"It reads their site and our own history with them, and shows its working.",
+			"Lê o site deles e o nosso histórico com eles, e mostra o raciocínio.",
 		placeholder: "O que eles vendem?",
 		suggestions: [
-			"What do they do?",
-			"Who do we know here?",
-			"What has changed recently?",
+			"O que eles fazem?",
+			"Quem conhecemos lá?",
+			"O que mudou recentemente?",
 		],
 	},
 	deal: {
 		header: "x-crm-deal",
 		field: "dealId",
 		title: "Pergunte sobre este negócio",
-		blurb:
-			"It can read the thread, the meetings and the people on both sides of it.",
+		blurb: "Lê os e-mails, as reuniões e as pessoas dos dois lados.",
 		placeholder: "Onde isso travou?",
 		suggestions: [
-			"Where does this stand?",
-			"Who else should be involved?",
-			"What is the risk here?",
+			"Em que pé está?",
+			"Quem mais deveria participar?",
+			"Qual é o risco aqui?",
 		],
 	},
 };

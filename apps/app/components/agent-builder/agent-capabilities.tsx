@@ -33,9 +33,9 @@ export type Resource = Extract<
 >["dataScope"]["resources"][number];
 
 const ACTION_LABELS = new Map([
-	["slack.message.post", "Post a message"],
-	["crm.activity.create", "Write a note or task on the record"],
-	["run.summary", "Write a summary of the run"],
+	["slack.message.post", "Publicar uma mensagem"],
+	["crm.activity.create", "Escrever uma nota ou tarefa no registro"],
+	["run.summary", "Escrever um resumo da execução"],
 ]);
 
 export function AgentCapabilities({
@@ -95,7 +95,7 @@ export function AgentCapabilities({
 				<Icon icon={Warning} />
 				<AlertTitle>O manifesto desta versão não pode ser lido</AlertTitle>
 				<AlertDescription>
-					{capabilities.problem ?? "The manifest is not in a shape we know."}
+					{capabilities.problem ?? "O manifesto está num formato desconhecido."}
 				</AlertDescription>
 			</Alert>
 		);
@@ -119,9 +119,9 @@ export function AgentCapabilities({
 		shownResources.length === 0 &&
 		capabilities.dataScope?.mode !== "WORKSPACE";
 	const blocked = everyActionOff
-		? "Leave one action on. An agent that does nothing cannot be saved."
+		? "Deixe uma ação ligada. Um agente que não faz nada não pode ser salvo."
 		: scopeEmptied
-			? "Add one record. An empty list opens every record in the workspace."
+			? "Adicione um registro. Uma lista vazia libera todos os registros do espaço."
 			: null;
 
 	const save = () => {
@@ -166,7 +166,7 @@ export function AgentCapabilities({
 							</CreateChannelDialog>
 						) : null
 					}
-					summary="One channel. Comp AI joins it when you save."
+					summary="Um canal. A Lugh entra nele quando você salvar."
 					title="Fica em"
 				>
 					<ChannelPicker
@@ -183,7 +183,7 @@ export function AgentCapabilities({
 			) : null}
 
 			<Section
-				summary="If it is off here, it cannot do it."
+				summary="Se estiver desligado aqui, o agente não faz."
 				title="O que ele pode fazer lá"
 			>
 				<div className="flex flex-col">
@@ -221,7 +221,7 @@ export function AgentCapabilities({
 
 			{capabilities.mcp.length > 0 ? (
 				<Section
-					summary="Every tool is fixed in this version. Changed tools stop until review."
+					summary="Toda ferramenta fica fixa nesta versão. Ferramentas alteradas param até a revisão."
 					title="Ferramentas conectadas"
 				>
 					<div className="flex flex-col">
@@ -249,7 +249,8 @@ export function AgentCapabilities({
 
 			<Section
 				summary={
-					capabilities.dataScope?.summary || "What it reads to do its job."
+					capabilities.dataScope?.summary ||
+					"O que ele lê para fazer o trabalho."
 				}
 				title="O que ele pode ver"
 			>
@@ -312,16 +313,16 @@ export function AgentCapabilities({
 				description={
 					blocked ??
 					(channelChanged
-						? `Comp AI joins #${to}. It stays in #${from} until you remove it.`
-						: "The old version stays in the history.")
+						? `A Lugh entra em #${to} e continua em #${from} até você remover.`
+						: "A versão antiga fica no histórico.")
 				}
 				open={dirty}
 				title={
 					blocked
-						? "This change cannot be saved"
+						? "Esta mudança não pode ser salva"
 						: channelChanged
-							? `Moving from #${from} to #${to}`
-							: "Changing what this agent can do"
+							? `Mudando de #${from} para #${to}`
+							: "Mudando o que este agente pode fazer"
 				}
 			>
 				<Button

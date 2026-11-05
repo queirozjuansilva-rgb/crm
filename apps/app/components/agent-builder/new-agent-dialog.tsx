@@ -81,7 +81,7 @@ export function NewAgentDialog({ children }: { children: React.ReactNode }) {
 						: null,
 					allowed,
 				},
-				"This agent",
+				"Este agente",
 			);
 
 			create.mutate({
@@ -95,7 +95,7 @@ export function NewAgentDialog({ children }: { children: React.ReactNode }) {
 			toast.error(
 				error instanceof InvalidInput
 					? error.message
-					: "Could not hand this to the builder.",
+					: "Não foi possível enviar ao construtor.",
 			);
 		}
 	};
@@ -108,8 +108,8 @@ export function NewAgentDialog({ children }: { children: React.ReactNode }) {
 				<DialogHeader>
 					<DialogTitle>Novo agente</DialogTitle>
 					<DialogDescription>
-						Say what it is and where it lives. The builder writes the rest. You
-						can change all of this later.
+						Diga o que ele faz e onde fica. O construtor escreve o resto. Você
+						pode mudar tudo depois.
 					</DialogDescription>
 				</DialogHeader>
 
@@ -152,9 +152,9 @@ export function NewAgentDialog({ children }: { children: React.ReactNode }) {
 						<p className="text-muted-foreground text-xs">
 							{channel
 								? channel.isMember
-									? `Comp AI is already in #${channel.name}.`
-									: `Comp AI is not in #${channel.name} yet. It joins when you create this.`
-								: "Leave this empty and the builder will ask."}
+									? `A Lugh já está em #${channel.name}.`
+									: `A Lugh ainda não está em #${channel.name}. Ela entra quando você criar.`
+								: "Deixe vazio e o construtor vai perguntar."}
 						</p>
 					</div>
 
@@ -205,7 +205,7 @@ export function NewAgentDialog({ children }: { children: React.ReactNode }) {
 						Cancelar
 					</Button>
 					<Button disabled={!ready || create.isPending} onClick={hand}>
-						{create.isPending ? "Handing over…" : "Hand to the builder"}
+						{create.isPending ? "Enviando…" : "Enviar ao construtor"}
 					</Button>
 				</DialogFooter>
 			</DialogContent>
