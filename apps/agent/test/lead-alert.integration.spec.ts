@@ -58,11 +58,11 @@ async function lead() {
 	return deal.id;
 }
 
-function recorder(status = 200) {
+function recorder(status = 200, body = "Message queued") {
 	const urls: URL[] = [];
 	const send = (async (input: string | URL | Request) => {
 		urls.push(new URL(String(input)));
-		return new Response("ok", { status });
+		return new Response(body, { status });
 	}) as typeof fetch;
 	return { urls, send };
 }
@@ -113,6 +113,21 @@ describe("runLeadAlert", () => {
 			{ env, send },
 		);
 		expect(result.outcome).toBe("retry");
+	});
+
+	it("skips without a retry when CallMeBot refuses the message", async () => {
+		const { send } = recorder(
+			200,
+			"ERROR: Phone number <b>format</b> is incorrect",
+		);
+		const result = await runLeadAlert(
+			{ type: "lead.alert.test" },
+			{ env, send },
+		);
+		expect(result).toEqual({
+			outcome: "skipped",
+			note: "CallMeBot refused: ERROR: Phone number format is incorrect",
+		});
 	});
 
 	it("skips a deal that no longer exists", async () => {

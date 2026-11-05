@@ -91,6 +91,18 @@ export async function sendWhatsApp(
 	if (!response.ok) {
 		throw new Error(`CallMeBot answered HTTP ${response.status}`);
 	}
+	const body = await response.text();
+	const refusal = body.match(LEAD_ALERT.refusal);
+	if (refusal) throw new CallMeBotRefusal(stripTags(refusal[0]));
+}
+
+export class CallMeBotRefusal extends Error {}
+
+function stripTags(html: string): string {
+	return html
+		.replace(/<[^>]*>/g, "")
+		.replace(/\s+/g, " ")
+		.trim();
 }
 
 export async function runLeadAlert(
@@ -120,6 +132,12 @@ export async function runLeadAlert(
 		await sendWhatsApp(target, text, options.send);
 		return { outcome: "sent", note: "WhatsApp alert sent." };
 	} catch (error) {
+		if (error instanceof CallMeBotRefusal) {
+			return {
+				outcome: "skipped",
+				note: `CallMeBot refused: ${error.message}`,
+			};
+		}
 		return {
 			outcome: "retry",
 			note: error instanceof Error ? error.message : String(error),
