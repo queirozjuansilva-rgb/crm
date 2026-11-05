@@ -57,8 +57,8 @@ export function CreateChannelDialog({
 				<DialogHeader>
 					<DialogTitle>Criar um canal</DialogTitle>
 					<DialogDescription>
-						Comp AI makes it in Slack and joins it. You can put the agent in it
-						straight after.
+						A Lugh cria o canal no Slack e entra nele. Você pode colocar o
+						agente lá logo em seguida.
 					</DialogDescription>
 				</DialogHeader>
 
@@ -73,8 +73,8 @@ export function CreateChannelDialog({
 						/>
 						<p className="text-muted-foreground text-xs">
 							{slug && !valid
-								? "Use lowercase letters, numbers and dashes."
-								: `Slack will call it #${slug || "renewals"}.`}
+								? "Use letras minúsculas, números e hífens."
+								: `No Slack, o canal vai se chamar #${slug || "renovacoes"}.`}
 						</p>
 					</div>
 
@@ -102,7 +102,7 @@ export function CreateChannelDialog({
 						disabled={!valid || create.isPending}
 						onClick={() => create.mutate({ name: slug, isPrivate })}
 					>
-						{create.isPending ? "Creating…" : "Create channel"}
+						{create.isPending ? "Creating…" : "Criar canal"}
 					</Button>
 				</DialogFooter>
 			</DialogContent>

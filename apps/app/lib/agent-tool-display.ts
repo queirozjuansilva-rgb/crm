@@ -5,9 +5,9 @@ import { z } from "zod";
 type ArtifactNames = Record<string, string>;
 
 const ARTIFACT_NAMES: ArtifactNames = {
-	"agent/instructions.md": "instructions",
-	"agent/manifest.json": "the manifest",
-	"agent/README.md": "the readme",
+	"agent/instructions.md": "as instruções",
+	"agent/manifest.json": "o manifesto",
+	"agent/README.md": "o readme",
 };
 
 type LabelInput = {
@@ -31,16 +31,18 @@ export function toolLabel(item: LabelInput): string {
 	if (match) {
 		const vendor = vendorBySlug(match[1]?.toLowerCase() ?? "");
 		if (!vendor) {
-			return item.pending ? "Using a connected tool" : "Used a connected tool";
+			return item.pending
+				? "Usando uma ferramenta conectada"
+				: "Usou uma ferramenta conectada";
 		}
 
-		return item.pending ? `Using ${vendor.name}` : `Used ${vendor.name}`;
+		return item.pending ? `Usando ${vendor.name}` : `Usou ${vendor.name}`;
 	}
 
 	if (item.tool === "write_agent_file") {
 		const path = writeAgentFileInput.parse(item.input).path;
-		const name = ARTIFACT_NAMES[path] ?? "a file";
-		return item.pending ? `Writing ${name}` : `Wrote ${name}`;
+		const name = ARTIFACT_NAMES[path] ?? "um arquivo";
+		return item.pending ? `Escrevendo ${name}` : `Escreveu ${name}`;
 	}
 
 	if (item.tool === "connection_execute") {
@@ -49,21 +51,23 @@ export function toolLabel(item: LabelInput): string {
 			? vendorBySlug(input.data.connection.toLowerCase())
 			: null;
 		if (!input.success || !vendor) {
-			return item.pending ? "Using a connected tool" : "Used a connected tool";
+			return item.pending
+				? "Usando uma ferramenta conectada"
+				: "Usou uma ferramenta conectada";
 		}
 
 		const action = input.data.tool.replaceAll("_", " ");
 		return item.pending
-			? `Asking ${vendor.name} to ${action}`
-			: `Asked ${vendor.name} to ${action}`;
+			? `Pedindo ao ${vendor.name}: ${action}`
+			: `Pediu ao ${vendor.name}: ${action}`;
 	}
 
 	if (item.tool === "save_agent_draft") {
-		return item.pending ? "Saving draft" : "Saved draft";
+		return item.pending ? "Salvando rascunho" : "Rascunho salvo";
 	}
 
 	if (item.tool === "set_chat_title") {
-		return item.pending ? "Naming this chat" : "Named this chat";
+		return item.pending ? "Dando nome ao chat" : "Deu nome ao chat";
 	}
 
 	return item.label;

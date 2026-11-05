@@ -11,9 +11,9 @@ import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 import { AgentComposer, type BuilderComposerPrompt } from "./agent-composer";
 
 const SUGGESTIONS = [
-	"Brief every deal owner before a renewal call",
-	"Flag deals with no activity for 14 days",
-	"Hand new customers from Sales to Onboarding",
+	"Mandar um resumo ao responsável antes de cada reunião de renovação",
+	"Sinalizar negócios sem atividade há 14 dias",
+	"Passar clientes novos de Vendas para o Onboarding",
 ];
 
 export function AgentBuilderHome({ name }: { name: string }) {
@@ -47,11 +47,11 @@ export function AgentBuilderHome({ name }: { name: string }) {
 		<main className="relative flex min-h-0 flex-1 flex-col items-center justify-center overflow-y-auto px-4 pt-14 pb-20 sm:px-6 sm:pt-12 sm:pb-28">
 			<div className="flex w-full max-w-3xl flex-col items-center gap-3 pb-6 text-center">
 				<h1 className="text-balance font-medium text-2xl tracking-tight sm:text-3xl">
-					What can I help with, {firstName(name)}?
+					Como posso ajudar, {firstName(name)}?
 				</h1>
 				<p className="max-w-xl text-balance text-muted-foreground text-sm">
-					Ask about your CRM, tag a record or integration, or describe an agent
-					to build to automate a task.
+					Pergunte sobre o CRM, marque um registro ou integração, ou descreva um
+					agente para automatizar uma tarefa.
 				</p>
 			</div>
 
@@ -63,8 +63,8 @@ export function AgentBuilderHome({ name }: { name: string }) {
 					onSubmit={submit}
 				/>
 				<p className="flex h-8 items-center px-px text-muted-foreground text-xs">
-					Chats and agent drafts stay private to you. Deploying an agent makes
-					it available to the whole team.
+					Chats e rascunhos de agentes são privados. Publicar um agente libera
+					ele para o time todo.
 				</p>
 
 				<div className="pt-1">

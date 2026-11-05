@@ -29,7 +29,7 @@ const COLUMNS: SimpleTableColumn[] = [
 	},
 	{ id: "owner", header: "Responsável", width: "w-[14%]" },
 	{ id: "close", header: "Data de fechamento", width: "w-[12%]" },
-	{ id: "idle", header: "Idle", width: "w-[8%]", align: "right" },
+	{ id: "idle", header: "Parado", width: "w-[8%]", align: "right" },
 ];
 
 export function DealListResultTable({ result }: { result: DealListResult }) {
@@ -105,7 +105,7 @@ export function DealListResultTable({ result }: { result: DealListResult }) {
 									className="overflow-hidden px-3 py-3 text-right text-muted-foreground tabular-nums"
 									title={
 										deal.neverActive
-											? "No activity has ever been recorded"
+											? "Nenhuma atividade registrada"
 											: undefined
 									}
 								>
@@ -143,7 +143,7 @@ function tableTitle(result: DealListResult): string {
 		result.criteria.status === "all" ? "" : `${result.criteria.status} `;
 	const stale = result.criteria.inactiveForDays === null ? "" : "stale ";
 	return count === 0
-		? "No matching deals"
+		? "Nenhum negócio encontrado"
 		: `${count} ${stale}${status}deal${count === 1 ? "" : "s"}`;
 }
 
@@ -153,8 +153,8 @@ function tableMeta(result: DealListResult): string {
 		pipelineTotal(result.deals),
 		result.criteria.inactiveForDays === null
 			? null
-			: `${result.criteria.inactiveForDays}+ days inactive`,
-		result.hasMore ? "More results available" : null,
+			: `${result.criteria.inactiveForDays}+ dias sem atividade`,
+		result.hasMore ? "Há mais resultados" : null,
 	].filter((detail): detail is string => Boolean(detail));
 
 	return details.join(" · ");

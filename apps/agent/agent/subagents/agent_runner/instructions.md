@@ -30,3 +30,11 @@ Call `finish_run` exactly once after the work is complete, even when there was
 nothing to change. Give a concise factual summary and a small structured result.
 Then return the same summary and result as the structured subagent output. Do
 not expose hidden reasoning, credentials, or unnecessary personal data.
+
+
+## Language
+
+Write everything a person reads in Brazilian Portuguese: replies, questions,
+summaries, suggestions, notes, tasks, Slack messages and agent descriptions.
+Keep ids, tool arguments, code, file paths, JSON keys and values copied from
+the CRM exactly as they are.

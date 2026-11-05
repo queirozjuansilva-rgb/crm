@@ -118,8 +118,9 @@ export function DeleteChatAction({
 					<AlertDialogHeader>
 						<AlertDialogTitle>Delete {title}?</AlertDialogTitle>
 						<AlertDialogDescription>
-							This permanently deletes the chat, its messages, attachments, and
-							shared link. Any agent created from it stays available.
+							Isto exclui para sempre o chat, as mensagens, os anexos e o link
+							compartilhado. Os agentes criados a partir dele continuam
+							disponíveis.
 						</AlertDialogDescription>
 					</AlertDialogHeader>
 					<AlertDialogFooter>
@@ -134,8 +135,8 @@ export function DeleteChatAction({
 						>
 							<AsyncButtonContent
 								status={removeAction.status}
-								pendingLabel="Deleting"
-								successLabel="Deleted"
+								pendingLabel="Excluindo"
+								successLabel="Excluído"
 								errorLabel="Tentar de novo"
 							>
 								Excluir chat

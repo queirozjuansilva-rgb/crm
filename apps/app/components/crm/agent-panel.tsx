@@ -267,8 +267,7 @@ function Thread({
 
 			{thread?.status === "working" && !busy ? (
 				<p className="border-t px-4 py-2 text-pretty text-muted-foreground text-xs sm:px-5">
-					Still working on the last question. Your next one can go in when it
-					finishes.
+					Ainda respondendo a última pergunta. A próxima entra quando terminar.
 				</p>
 			) : null}
 
@@ -360,9 +359,9 @@ function Idle({
 
 function Failure({ message }: { message: string }) {
 	const hint = message.includes("not reachable")
-		? "Start it with `bun run dev`, or check AGENT_URL."
+		? "Inicie com `bun run dev` ou confira o AGENT_URL."
 		: message.includes("not configured")
-			? "Set AGENT_BRIDGE_SECRET for both the app and the agent."
+			? "Defina AGENT_BRIDGE_SECRET no app e no agente."
 			: null;
 
 	return (

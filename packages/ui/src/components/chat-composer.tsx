@@ -27,11 +27,11 @@ export function ChatComposer({
 	disabled = false,
 	size = "page",
 	tools,
-	placeholder = "Ask a question…",
-	label = "Message",
-	sendLabel = "Send message",
-	stopLabel = "Stop reply",
-	busyLabel = "Reply in progress",
+	placeholder = "Faça uma pergunta…",
+	label = "Mensagem",
+	sendLabel = "Enviar mensagem",
+	stopLabel = "Parar resposta",
+	busyLabel = "Resposta em andamento",
 }: {
 	value: string;
 	onValueChange: (value: string) => void;

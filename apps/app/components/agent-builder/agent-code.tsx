@@ -147,8 +147,8 @@ export function AgentCode({
 		return (
 			<p className="text-muted-foreground text-sm">
 				{code.isPending
-					? "Reading the agent's files…"
-					: "This agent has no files yet. The builder writes them when it deploys."}
+					? "Lendo os arquivos do agente…"
+					: "Este agente ainda não tem arquivos. O construtor escreve quando publicar."}
 			</p>
 		);
 	}
@@ -171,7 +171,7 @@ export function AgentCode({
 								size="sm"
 								variant="outline"
 							>
-								{showDiff ? "Hide changes" : "Changes"}
+								{showDiff ? "Ocultar mudanças" : "Mudanças"}
 							</Button>
 						) : null}
 						{canManage ? (
@@ -183,7 +183,7 @@ export function AgentCode({
 								size="sm"
 								variant="outline"
 							>
-								{editing ? "Feito" : "Edit"}
+								{editing ? "Feito" : "Editar"}
 							</Button>
 						) : null}
 					</div>
@@ -228,7 +228,7 @@ export function AgentCode({
 			</section>
 
 			<SaveBar
-				description={`${changed.length} file${changed.length === 1 ? "" : "s"} changed. Saving writes a new revision.`}
+				description={`${changed.length} ${changed.length === 1 ? "arquivo alterado" : "arquivos alterados"}. Salvar grava uma nova revisão.`}
 				open={changed.length > 0}
 				title="Código não salvo"
 			>

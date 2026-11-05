@@ -6,7 +6,7 @@ export function handoffResources(handoff: Handoff) {
 			kind: "integration" as const,
 			id: "slack:workspace",
 			label: "Slack",
-			detail: "Connected workspace",
+			detail: "Espaço conectado",
 		},
 		...(handoff.channel
 			? [
@@ -15,8 +15,8 @@ export function handoffResources(handoff: Handoff) {
 						id: `slack:channel:${handoff.channel.id}`,
 						label: `#${handoff.channel.name}`,
 						detail: handoff.channel.isMember
-							? "Comp AI is a member"
-							: "Comp AI is not in this channel yet",
+							? "A Lugh já está no canal"
+							: "A Lugh ainda não está neste canal",
 					},
 				]
 			: []),
