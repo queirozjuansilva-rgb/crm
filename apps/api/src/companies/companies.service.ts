@@ -1,5 +1,6 @@
 import {
 	type Db,
+	DealStage,
 	type EnrichmentStatus,
 	type Prisma,
 	Prisma as PrismaNamespace,
@@ -123,9 +124,10 @@ export class CompaniesService {
 		]);
 
 		const ids = rows.map((row) => row.id);
-		const [queued, tableFields] = await Promise.all([
+		const [queued, tableFields, totals] = await Promise.all([
 			this.queue.queuedCompanies(ids),
 			this.fields.tableValuesFor("COMPANY", ids),
+			this.dealTotals(ids),
 		]);
 
 		return {
@@ -145,6 +147,9 @@ export class CompaniesService {
 				owner: row.owner,
 				contactCount: row._count.contacts,
 				openDealCount: row._count.deals,
+				wonDealCount: totals.get(row.id)?.wonCount ?? 0,
+				openValueCents: totals.get(row.id)?.openCents ?? 0,
+				wonValueCents: totals.get(row.id)?.wonCents ?? 0,
 				lastActivityAt: row.lastActivityAt?.toISOString() ?? null,
 				createdAt: row.createdAt.toISOString(),
 				archivedAt: row.archivedAt?.toISOString() ?? null,
@@ -153,6 +158,60 @@ export class CompaniesService {
 			total,
 			facetCounts,
 		};
+	}
+
+	private async dealTotals(ids: string[]) {
+		const totals = new Map<
+			string,
+			{ wonCount: number; wonCents: number; openCents: number }
+		>();
+		if (ids.length === 0) return totals;
+		const base = await this.conversion.reportingCurrency();
+		const groups = await this.db.deal.groupBy({
+			by: ["companyId", "stage"],
+			where: {
+				companyId: { in: ids },
+				archivedAt: null,
+				stage: { in: [DealStage.CLOSED_WON, ...OPEN_DEAL_STAGES] },
+			},
+			_count: { _all: true },
+		});
+		const counted = await this.db.deal.groupBy({
+			by: ["companyId", "stage"],
+			where: {
+				AND: [
+					{
+						companyId: { in: ids },
+						archivedAt: null,
+						stage: { in: [DealStage.CLOSED_WON, ...OPEN_DEAL_STAGES] },
+					},
+					this.conversion.countedWhere(base),
+				],
+			},
+			_sum: { baseAmount: true },
+		});
+		const sums = new Map(
+			counted.map((group) => [
+				`${group.companyId}:${group.stage}`,
+				toCents(group._sum.baseAmount) ?? 0,
+			]),
+		);
+		for (const group of groups) {
+			const entry = totals.get(group.companyId) ?? {
+				wonCount: 0,
+				wonCents: 0,
+				openCents: 0,
+			};
+			const cents = sums.get(`${group.companyId}:${group.stage}`) ?? 0;
+			if (group.stage === DealStage.CLOSED_WON) {
+				entry.wonCount += group._count._all;
+				entry.wonCents += cents;
+			} else {
+				entry.openCents += cents;
+			}
+			totals.set(group.companyId, entry);
+		}
+		return totals;
 	}
 
 	async byId(id: string) {

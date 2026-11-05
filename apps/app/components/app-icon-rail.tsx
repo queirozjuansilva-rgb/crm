@@ -1,6 +1,8 @@
 "use client";
 
 import Building from "@carbon/icons-react/es/Building";
+import Calendar from "@carbon/icons-react/es/Calendar";
+import ChartLine from "@carbon/icons-react/es/ChartLine";
 import Close from "@carbon/icons-react/es/Close";
 import Dashboard from "@carbon/icons-react/es/Dashboard";
 import Partnership from "@carbon/icons-react/es/Partnership";
@@ -40,13 +42,15 @@ export const SETTINGS_HREF = "/settings";
 export const ITEMS: RailItem[] = [
 	{ title: "Visão geral", href: "/", icon: Dashboard, match: "exact" },
 	{ title: "Pipeline", href: "/deals", icon: Partnership, match: "prefix" },
-	{ title: "Empresas", href: "/companies", icon: Building, match: "prefix" },
+	{ title: "Clientes", href: "/companies", icon: Building, match: "prefix" },
 	{
 		title: "Contatos",
 		href: "/contacts",
 		icon: UserMultiple,
 		match: "prefix",
 	},
+	{ title: "Agenda", href: "/agenda", icon: Calendar, match: "prefix" },
+	{ title: "Relatórios", href: "/reports", icon: ChartLine, match: "prefix" },
 	{
 		title: "Agentes",
 		href: CHAT_HREF,

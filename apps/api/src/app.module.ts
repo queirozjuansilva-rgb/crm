@@ -3,6 +3,7 @@ import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { AuthModule as BetterAuthModule } from "@thallesp/nestjs-better-auth";
 import { ActivitiesModule } from "./activities/activities.module";
+import { AgendaModule } from "./agenda/agenda.module";
 import { AgentModule } from "./agent/agent.module";
 import { ApiKeysModule } from "./api-keys/api-keys.module";
 import { ArchiveModule } from "./archive/archive.module";
@@ -28,6 +29,7 @@ import { logAuthRoute } from "./logging/request-logger.middleware";
 import { MailboxModule } from "./mailbox/mailbox.module";
 import { McpModule } from "./mcp/mcp.module";
 import { MicrosoftModule } from "./microsoft/microsoft.module";
+import { ReportsModule } from "./reports/reports.module";
 import { SavedViewsModule } from "./saved-views/saved-views.module";
 import { SearchModule } from "./search/search.module";
 import { SettingsModule } from "./settings/settings.module";
@@ -83,6 +85,8 @@ import { WorkspaceModule } from "./workspace/workspace.module";
 		ArchiveModule,
 		SavedViewsModule,
 		AttachmentsModule,
+		AgendaModule,
+		ReportsModule,
 	],
 })
 export class AppModule {}

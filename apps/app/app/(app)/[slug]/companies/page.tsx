@@ -13,12 +13,18 @@ import {
 import { requireSession } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
+import { CompaniesCards } from "./companies-cards";
+import {
+	CompaniesLayoutSwitch,
+	CompaniesLayoutToggle,
+	CompaniesLayoutToggleFallback,
+} from "./companies-layout";
 import { companiesSearchParams } from "./companies-search-params";
 import { CompaniesTable } from "./companies-table";
 import { CreateCompanySheet } from "./create-company-sheet";
 
 export const metadata: Metadata = {
-	title: "Empresas",
+	title: "Clientes",
 };
 
 export default function CompaniesPage({
@@ -28,12 +34,15 @@ export default function CompaniesPage({
 		<PageShell className="min-h-0">
 			<PageShellHeader>
 				<PageShellHeading>
-					<PageShellTitle>Empresas</PageShellTitle>
+					<PageShellTitle>Clientes</PageShellTitle>
 					<PageShellDescription>
-						Todas as contas do pipeline.
+						Quem já comprou, quem está negociando e quem ainda é prospect.
 					</PageShellDescription>
 				</PageShellHeading>
 				<PageShellActions>
+					<Suspense fallback={<CompaniesLayoutToggleFallback />}>
+						<CompaniesLayoutToggle />
+					</Suspense>
 					<CreateCompanySheet />
 				</PageShellActions>
 			</PageShellHeader>
@@ -66,7 +75,10 @@ async function Companies({
 
 	return (
 		<HydrateClient>
-			<CompaniesTable />
+			<CompaniesLayoutSwitch
+				cards={<CompaniesCards />}
+				list={<CompaniesTable />}
+			/>
 		</HydrateClient>
 	);
 }
