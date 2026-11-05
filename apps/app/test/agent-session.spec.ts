@@ -108,7 +108,7 @@ describe("eventsOf", () => {
 describe("record context", () => {
 	it("asks about the thing you are actually looking at", () => {
 		expect(recordCopy("contact").title).toBe("Pergunte sobre esta pessoa");
-		expect(recordCopy("company").title).toBe("Pergunte sobre esta empresa");
+		expect(recordCopy("company").title).toBe("Pergunte sobre este cliente");
 		expect(recordCopy("deal").title).toBe("Pergunte sobre este negócio");
 	});
 

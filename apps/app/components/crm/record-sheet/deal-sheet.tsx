@@ -81,7 +81,7 @@ function currencyOptions(currency: string) {
 	}
 
 	return [
-		{ value: currency, label: `${currency} — no longer supported` },
+		{ value: currency, label: `${currency}: não é mais aceita` },
 		...CURRENCY_OPTIONS,
 	];
 }
@@ -514,7 +514,7 @@ function DealContacts({
 						</TableCell>
 						<TableCell className="truncate px-1 py-2.5">
 							<InlineTextCell
-								label={`Role on this deal for ${contactName(contact)}`}
+								label={`Papel de ${contactName(contact)} neste negócio`}
 								value={contact.role}
 								placeholder="Defensor"
 								saving={

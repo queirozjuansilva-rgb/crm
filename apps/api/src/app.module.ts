@@ -30,6 +30,7 @@ import { logAuthRoute } from "./logging/request-logger.middleware";
 import { MailboxModule } from "./mailbox/mailbox.module";
 import { McpModule } from "./mcp/mcp.module";
 import { MicrosoftModule } from "./microsoft/microsoft.module";
+import { NotificationsModule } from "./notifications/notifications.module";
 import { ProjectsModule } from "./projects/projects.module";
 import { ReportsModule } from "./reports/reports.module";
 import { SavedViewsModule } from "./saved-views/saved-views.module";
@@ -91,6 +92,7 @@ import { WorkspaceModule } from "./workspace/workspace.module";
 		ReportsModule,
 		FinanceModule,
 		ProjectsModule,
+		NotificationsModule,
 	],
 })
 export class AppModule {}

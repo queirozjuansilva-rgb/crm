@@ -244,7 +244,7 @@ describe("manual agent runs", () => {
 		} catch (error) {
 			runError = error;
 		}
-		expect((runError as Error).message).toBe("This agent is not live yet.");
+		expect((runError as Error).message).toBe("Este agente ainda não está no ar.");
 		expect(pokeCount).toBe(beforePokeCount);
 	});
 
@@ -286,7 +286,7 @@ describe("manual agent runs", () => {
 		}
 
 		expect(error?.message).toBe(
-			"This agent already has an active run. Stop it or wait for it to finish.",
+			"Este agente já está rodando. Pare ou espere terminar.",
 		);
 		expect(
 			await db.agentRun.count({
@@ -311,7 +311,7 @@ describe("manual agent runs", () => {
 		} catch (caught) {
 			error = caught as Error;
 		}
-		expect(error?.message).toBe("You are not a member of this workspace.");
+		expect(error?.message).toBe("Você não faz parte deste espaço.");
 	});
 
 	it("retries a failed run against the version that run executed", async () => {
@@ -552,7 +552,7 @@ describe("cancelling a run", () => {
 		} catch (caught) {
 			error = caught as Error;
 		}
-		expect(error?.message).toBe("You are not a member of this workspace.");
+		expect(error?.message).toBe("Você não faz parte deste espaço.");
 	});
 
 	it("reports cancellable runs to the caller who may stop them", async () => {

@@ -8,6 +8,7 @@ import {
 	UseMiddlewares,
 } from "nestjs-trpc";
 import type { z } from "zod";
+import { LeadAlertService } from "../notifications/lead-alert.service";
 import type { AuthedTrpcContext } from "../trpc/context.types";
 import { AuthMiddleware } from "../trpc/middlewares/auth.middleware";
 import { restMeta } from "../trpc/openapi";
@@ -39,7 +40,10 @@ import { DealsService } from "./deals.service";
 @Router({ alias: "deals" })
 @UseMiddlewares(AuthMiddleware)
 export class DealsRouter {
-	constructor(@Inject(DealsService) private readonly deals: DealsService) {}
+	constructor(
+		@Inject(DealsService) private readonly deals: DealsService,
+		@Inject(LeadAlertService) private readonly leadAlert: LeadAlertService,
+	) {}
 
 	@Query({
 		input: dealListInput,
@@ -64,8 +68,13 @@ export class DealsRouter {
 		output: dealCreateOutput,
 		meta: restMeta("POST", "/deals", ["Deals"]),
 	})
-	async create(@Input() input: z.infer<typeof dealCreateInput>) {
-		return this.deals.create(input);
+	async create(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof dealCreateInput>,
+	) {
+		const deal = await this.deals.create(input);
+		if (ctx.req?.headers["x-api-key"]) await this.leadAlert.newLead(deal.id);
+		return deal;
 	}
 
 	@Mutation({

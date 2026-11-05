@@ -117,7 +117,7 @@ function CreateDealForm({ companyId }: { companyId?: string }) {
 				<SheetHeader>
 					<SheetTitle>Novo negócio</SheetTitle>
 					<SheetDescription>
-						Todo negócio pertence a uma empresa e tem um responsável.
+						Todo negócio pertence a um cliente e tem um responsável.
 					</SheetDescription>
 				</SheetHeader>
 
@@ -154,7 +154,7 @@ function CreateDealForm({ companyId }: { companyId?: string }) {
 						</Field>
 
 						<Field>
-							<FieldLabel htmlFor="create-deal-company">Empresa</FieldLabel>
+							<FieldLabel htmlFor="create-deal-company">Cliente</FieldLabel>
 							<CompanyPicker
 								id="create-deal-company"
 								value={company}

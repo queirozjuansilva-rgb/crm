@@ -16,11 +16,14 @@ import type { FieldDefinitionWithOptions } from "@crm/db/fields";
 import {
 	BadRequestException,
 	Injectable,
+	Inject as InjectToken,
 	Logger,
 	NotFoundException,
+	Optional,
 } from "@nestjs/common";
 import { AgentTriggerService } from "../agent/agent-trigger.service";
 import { ARCHIVE } from "../archive/archive-config";
+import { AttachmentStorageService } from "../attachments/attachment-storage.service";
 import {
 	ActivityStampService,
 	type StampTargets,
@@ -109,6 +112,9 @@ export class DealsService {
 		private readonly stamp: ActivityStampService,
 		private readonly conversion: ConversionService,
 		private readonly fields: FieldsService,
+		@Optional()
+		@InjectToken(AttachmentStorageService)
+		private readonly storage?: AttachmentStorageService,
 	) {}
 
 	async list(input: DealListInput) {
@@ -220,7 +226,7 @@ export class DealsService {
 		});
 
 		if (!deal) {
-			throw new NotFoundException(`No deal with id ${id}.`);
+			throw new NotFoundException(`Negócio ${id} não encontrado.`);
 		}
 
 		const {
@@ -338,7 +344,7 @@ export class DealsService {
 			});
 
 			if (!current) {
-				throw new NotFoundException(`No deal with id ${id}.`);
+				throw new NotFoundException(`Negócio ${id} não encontrado.`);
 			}
 
 			const amount =
@@ -411,7 +417,11 @@ export class DealsService {
 		id: string,
 		guard?: { archivedBefore: Date },
 	): Promise<{ id: string; name: string } | null> {
-		let deleted: { targets: StampTargets; name: string } | null;
+		let deleted: {
+			targets: StampTargets;
+			name: string;
+			files: string[];
+		} | null;
 
 		try {
 			deleted = await this.db.$transaction(async (tx) => {
@@ -421,7 +431,7 @@ export class DealsService {
 
 				if (!row) {
 					if (guard) return null;
-					throw new NotFoundException(`No deal with id ${id}.`);
+					throw new NotFoundException(`Negócio ${id} não encontrado.`);
 				}
 				if (
 					guard &&
@@ -431,6 +441,10 @@ export class DealsService {
 				}
 
 				const targets = await this.stamp.targetsOf({ dealId: id }, tx);
+				const files = await tx.attachment.findMany({
+					where: { dealId: id },
+					select: { storagePath: true },
+				});
 				await tx.agentTask.deleteMany({ where: { dealId: id } });
 
 				const deal = await tx.deal.delete({
@@ -438,7 +452,13 @@ export class DealsService {
 					select: { name: true },
 				});
 
-				return { targets, name: deal.name };
+				return {
+					targets,
+					name: deal.name,
+					files: files.flatMap((file) =>
+						file.storagePath ? [file.storagePath] : [],
+					),
+				};
 			});
 		} catch (error) {
 			throw this.translate(error, id);
@@ -447,6 +467,7 @@ export class DealsService {
 		if (!deleted) return null;
 
 		await this.stamp.recomputeAfterDelete(deleted.targets, { dealId: id });
+		await this.storage?.removeMany(deleted.files);
 
 		this.logger.log({
 			message: "Deal purged",
@@ -484,7 +505,7 @@ export class DealsService {
 			`;
 
 			if (!deal) {
-				throw new NotFoundException(`No deal with id ${input.id}.`);
+				throw new NotFoundException(`Negócio ${input.id} não encontrado.`);
 			}
 
 			if (deal.stage === input.stage) {
@@ -497,7 +518,7 @@ export class DealsService {
 			}
 			if (LOSING.has(input.stage) && !closedReason) {
 				throw new BadRequestException(
-					"Say why it was lost — a closed-lost deal with no reason teaches nobody anything.",
+					"Diga o motivo. Um negócio que sai do funil sem motivo não ensina nada.",
 				);
 			}
 
@@ -583,7 +604,7 @@ export class DealsService {
 		});
 
 		if (!deal) {
-			throw new NotFoundException(`No deal with id ${dealId}.`);
+			throw new NotFoundException(`Negócio ${dealId} não encontrado.`);
 		}
 
 		return this.db.contact.findMany({
@@ -605,12 +626,12 @@ export class DealsService {
 		});
 
 		if (!contact) {
-			throw new NotFoundException(`No contact with id ${input.contactId}.`);
+			throw new NotFoundException(`Contato ${input.contactId} não encontrado.`);
 		}
 
 		if (contact.companyId !== company.id) {
 			throw new BadRequestException(
-				`That contact does not work at ${company.name}.`,
+				`Esse contato não trabalha na ${company.name}.`,
 			);
 		}
 
@@ -642,7 +663,7 @@ export class DealsService {
 		});
 
 		if (count === 0) {
-			throw new NotFoundException("That contact is not on this deal.");
+			throw new NotFoundException("Esse contato não está neste negócio.");
 		}
 
 		this.logger.log({
@@ -663,7 +684,7 @@ export class DealsService {
 		});
 
 		if (count === 0) {
-			throw new NotFoundException("That contact is not on this deal.");
+			throw new NotFoundException("Esse contato não está neste negócio.");
 		}
 
 		return { dealId: input.dealId, contactId: input.contactId, role };
@@ -701,7 +722,7 @@ export class DealsService {
 
 		if (LOSING.has(input.stage) && !closedReason) {
 			throw new BadRequestException(
-				"Say why they were lost — a closed-lost deal with no reason teaches nobody anything.",
+				"Diga o motivo. Negócios que saem do funil sem motivo não ensinam nada.",
 			);
 		}
 
@@ -729,7 +750,7 @@ export class DealsService {
 		});
 
 		if (!deal) {
-			throw new NotFoundException(`No deal with id ${dealId}.`);
+			throw new NotFoundException(`Negócio ${dealId} não encontrado.`);
 		}
 
 		return deal.company;
@@ -832,7 +853,7 @@ export class DealsService {
 			cause instanceof PrismaNamespace.PrismaClientKnownRequestError &&
 			cause.code === "P2025"
 		) {
-			throw new NotFoundException(`No deal with id ${id}.`);
+			throw new NotFoundException(`Negócio ${id} não encontrado.`);
 		}
 		return this.translateRelations(cause);
 	}
@@ -843,7 +864,7 @@ export class DealsService {
 			(cause.code === "P2003" || cause.code === "P2025")
 		) {
 			throw new BadRequestException(
-				"That company or owner does not exist any more.",
+				"Esse cliente ou responsável não existe mais.",
 			);
 		}
 		throw cause;
@@ -885,7 +906,7 @@ function parseDate(value: string | null | undefined): Date | null {
 	if (value === null || value === undefined || value === "") return null;
 	const date = new Date(value);
 	if (Number.isNaN(date.getTime())) {
-		throw new BadRequestException(`"${value}" is not a date.`);
+		throw new BadRequestException(`"${value}" não é uma data.`);
 	}
 	return date;
 }

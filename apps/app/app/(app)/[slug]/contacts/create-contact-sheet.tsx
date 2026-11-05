@@ -167,12 +167,12 @@ function CreateContactForm({ companyId }: { companyId?: string }) {
 						</Field>
 
 						<Field>
-							<FieldLabel htmlFor="create-contact-company">Empresa</FieldLabel>
+							<FieldLabel htmlFor="create-contact-company">Cliente</FieldLabel>
 							<CompanyPicker
 								id="create-contact-company"
 								value={company}
 								onValueChange={setCompany}
-								none={{ value: NONE, label: "Sem empresa" }}
+								none={{ value: NONE, label: "Sem cliente" }}
 							/>
 						</Field>
 

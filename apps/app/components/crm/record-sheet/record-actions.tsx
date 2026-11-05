@@ -34,9 +34,9 @@ import {
 } from "./record-stack";
 
 const NOUN = {
-	company: "company",
-	contact: "contact",
-	deal: "deal",
+	company: "Cliente",
+	contact: "Contato",
+	deal: "Negócio",
 } satisfies Record<RecordKind, string>;
 
 const RECORD_PROCEDURES = {
@@ -51,9 +51,7 @@ function useArchiveRecord(record: RecordRef) {
 
 	const handlers = {
 		onSuccess: (archived: { name: string }) => {
-			toast.success(
-				`${archived.name || `The ${NOUN[record.kind]}`} was archived.`,
-			);
+			toast.success(`${archived.name || NOUN[record.kind]} foi arquivado.`);
 			void cache[record.kind](record.id);
 		},
 		onError: (error: { message: string }) => toast.error(error.message),
@@ -70,9 +68,7 @@ function useRestoreRecord(record: RecordRef) {
 
 	const handlers = {
 		onSuccess: (restored: { name: string }) => {
-			toast.success(
-				`${restored.name || `The ${NOUN[record.kind]}`} was restored.`,
-			);
+			toast.success(`${restored.name || NOUN[record.kind]} foi restaurado.`);
 			void cache[record.kind](record.id);
 		},
 		onError: (error: { message: string }) => toast.error(error.message),
@@ -91,7 +87,7 @@ function usePurgeRecord(record: RecordRef) {
 	const handlers = {
 		onSuccess: (purged: { name: string }) => {
 			toast.success(
-				`${purged.name || `The ${NOUN[record.kind]}`} was deleted forever.`,
+				`${purged.name || NOUN[record.kind]} foi excluído para sempre.`,
 			);
 			void cache.removed(record);
 			close();
@@ -138,14 +134,14 @@ export function RecordActions({
 								onSelect={() => restore.mutate({ id: record.id })}
 							>
 								<Icon icon={Undo} />
-								Restore {NOUN[record.kind]}
+								Restaurar
 							</DropdownMenuItem>
 							<DropdownMenuItem
 								variant="destructive"
 								onSelect={() => setConfirming(true)}
 							>
 								<Icon icon={TrashCan} />
-								Delete {NOUN[record.kind]} forever
+								Excluir para sempre
 							</DropdownMenuItem>
 						</>
 					) : (
@@ -153,7 +149,7 @@ export function RecordActions({
 							onSelect={() => archive.mutate({ id: record.id })}
 						>
 							<Icon icon={Archive} />
-							Archive {NOUN[record.kind]}
+							Arquivar
 						</DropdownMenuItem>
 					)}
 				</DropdownMenuContent>
@@ -162,7 +158,7 @@ export function RecordActions({
 			<AlertDialog open={confirming} onOpenChange={setConfirming}>
 				<AlertDialogContent>
 					<AlertDialogHeader>
-						<AlertDialogTitle>Delete {name} forever?</AlertDialogTitle>
+						<AlertDialogTitle>Excluir {name} para sempre?</AlertDialogTitle>
 						<AlertDialogDescription>{consequence}</AlertDialogDescription>
 					</AlertDialogHeader>
 

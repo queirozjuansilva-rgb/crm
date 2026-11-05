@@ -22,7 +22,7 @@ import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useTRPC } from "@/lib/trpc/client";
 
 const GROUP_LABEL = {
-	company: "Empresas",
+	company: "Clientes",
 	contact: "Contatos",
 	deal: "Negócios",
 } as const;
@@ -70,11 +70,11 @@ export function QuickSwitcher() {
 			open={open}
 			onOpenChange={(next) => setOpen(next || null)}
 			title="Buscar"
-			description="Ir para uma empresa, contato ou negócio"
+			description="Ir para um cliente, contato ou negócio"
 		>
 			<Command shouldFilter={false}>
 				<CommandInput
-					placeholder="Buscar empresas, contatos e negócios…"
+					placeholder="Buscar clientes, contatos e negócios…"
 					value={query}
 					onValueChange={setQuery}
 				/>

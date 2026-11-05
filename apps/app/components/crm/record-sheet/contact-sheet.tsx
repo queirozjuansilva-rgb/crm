@@ -156,7 +156,7 @@ export function ContactSheet({ contactId }: { contactId: string }) {
 						{contact.isPrimaryContact ? (
 							<StatusIndicator
 								tone="success"
-								label={`Primary contact at ${contact.company?.name ?? "this company"}`}
+								label={`Contato principal na ${contact.company?.name ?? "cliente"}`}
 							/>
 						) : null}
 						{contact.enrichmentStatus !== "COMPLETE" ? (
@@ -208,7 +208,7 @@ export function ContactSheet({ contactId }: { contactId: string }) {
 						<RecordActions
 							record={{ kind: "contact", id: contact.id }}
 							name={contactName(contact)}
-							consequence={`Their notes, agent conversations and everything the agent found go too; emails and meetings stay filed against the company.${contact.email ? ` The sync will not bring ${contact.email} back — only adding them yourself will.` : ""}`}
+							consequence={`As notas, as conversas com o agente e tudo o que o agente encontrou também saem. E-mails e reuniões continuam no cliente.${contact.email ? ` A sincronização não traz ${contact.email} de volta; só se você adicionar de novo.` : ""}`}
 							archivedAt={contact.archivedAt}
 						/>
 					</>
@@ -217,7 +217,7 @@ export function ContactSheet({ contactId }: { contactId: string }) {
 			stats={
 				contact ? (
 					<DetailSheetStats>
-						<DetailSheetStat label="Empresa">
+						<DetailSheetStat label="Cliente">
 							{contact.company ? (
 								<CompanyStat company={contact.company} />
 							) : (
@@ -391,7 +391,7 @@ function ContactOverview({ contact }: { contact: Contact }) {
 						value={contact.company?.id ?? NONE}
 						company={contact.company}
 						saving={isSaving("companyId")}
-						none={{ value: NONE, label: "Sem empresa" }}
+						none={{ value: NONE, label: "Sem cliente" }}
 						onSave={(companyId) =>
 							save({ companyId: companyId === NONE ? null : companyId })
 						}
@@ -535,7 +535,7 @@ function WeKnowThem({
 									last reply <LocalRelativeDate date={lastReplyAt} />
 								</>
 							) : (
-								`${first} has never replied`
+								`${first} nunca respondeu`
 							)}
 						</span>
 					</DetailSheetProperty>
@@ -604,7 +604,7 @@ function ContactDeals({ contact }: { contact: Contact }) {
 			<DetailSheetEmpty
 				icon={Partnership}
 				title="Em nenhum negócio"
-				description={`${contactName(contact)} is not attached to anything being sold yet. Deals are opened on the company, then people are added to them.`}
+				description={`${contactName(contact)} ainda não está em nenhum negócio. Os negócios são abertos no cliente e depois as pessoas são adicionadas.`}
 			/>
 		);
 	}

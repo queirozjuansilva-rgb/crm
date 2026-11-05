@@ -182,7 +182,7 @@ export function AttachDealContact({
 				await cache.deal(dealId);
 				toast.success(
 					person
-						? `${contactName(person)} is on the deal.`
+						? `${contactName(person)} entrou no negócio.`
 						: "Adicionado ao negócio.",
 				);
 				onDone();
@@ -196,7 +196,7 @@ export function AttachDealContact({
 	const placeholder = options.isPending
 		? "Loading…"
 		: nobody
-			? `Everybody at ${companyName} is already on it`
+			? `Todos da ${companyName} já estão nele`
 			: "Escolha alguém";
 
 	return (

@@ -45,10 +45,10 @@ export function SlackChannels() {
 				setAsking(null);
 				toast.success(
 					result.alreadyJoined
-						? "Comp AI is already in there."
+						? "A Lugh já está lá."
 						: result.queued
-							? "Comp AI is joining."
-							: "Ask someone inside to invite Comp AI.",
+							? "A Lugh está entrando."
+							: "Peça para alguém de dentro convidar a Lugh.",
 				);
 			},
 			onError: (error) => toast.error(error.message),
@@ -117,10 +117,10 @@ export function SlackChannels() {
 				empty={
 					<p className="px-4 py-4 text-muted-foreground text-sm">
 						{channels.pending
-							? "Reading the channel list from Slack…"
+							? "Lendo a lista de canais do Slack…"
 							: query
-								? `No channel matches “${query}”.`
-								: "No channels yet. Comp AI reads the list from Slack after it connects."}
+								? `Nenhum canal corresponde a “${query}”.`
+								: "Nenhum canal ainda. A Lugh lê a lista do Slack depois de conectar."}
 					</p>
 				}
 				onAdd={(channel) => void joinAction.run(channel.id)}
@@ -184,12 +184,12 @@ function AskDialog({
 					<AlertDialogTitle>
 						{canInviteItself
 							? `Add Comp AI to #${channel.name}?`
-							: "Ask someone to add Comp AI"}
+							: "Peça para alguém adicionar a Lugh"}
 					</AlertDialogTitle>
 					<AlertDialogDescription>
 						{canInviteItself
-							? `It is a private channel, so Comp AI joins as you. Same as typing the invite yourself. Everyone in the channel sees it join. It reads nothing until you turn a permission on.`
-							: `We cannot add Comp AI to a private channel yet. Someone already in #${channel.name} has to run this.`}
+							? `É um canal privado, então a Lugh entra em seu nome, como se você mesmo convidasse. Todos no canal veem a entrada. Ela não lê nada até você ligar uma permissão.`
+							: `Ainda não dá para adicionar a Lugh a um canal privado. Alguém que já está em #${channel.name} precisa fazer isso.`}
 					</AlertDialogDescription>
 				</AlertDialogHeader>
 
@@ -208,7 +208,7 @@ function AskDialog({
 						onClick={canInviteItself ? onConfirm : () => void copyThenConfirm()}
 					>
 						<AsyncButtonContent pendingLabel="Adding…" status={status}>
-							{canInviteItself ? "Add Comp AI" : "Copy and mark as asked"}
+							{canInviteItself ? "Add Comp AI" : "Copiar e marcar como pedido"}
 						</AsyncButtonContent>
 					</Button>
 				</AlertDialogFooter>

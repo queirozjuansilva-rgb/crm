@@ -126,10 +126,9 @@ function describe(channel: PickerChannel, canInviteItself: boolean): string {
 		channel.memberCount === null ? "" : ` · ${channel.memberCount} people`;
 
 	if (channel.isMember) return `Comp AI is in${people}`;
-	if (!channel.classified) return `Not read from Slack yet${people}`;
-	if (!channel.isPrivate) return `Comp AI can join this one${people}`;
-	if (canInviteItself) return `Private. Comp AI joins as you${people}`;
-	if (channel.inviteRequestedAt)
-		return `Private. Waiting on an invite${people}`;
-	return `Private. Someone inside has to invite Comp AI${people}`;
+	if (!channel.classified) return `Ainda não lido do Slack${people}`;
+	if (!channel.isPrivate) return `A Lugh pode entrar neste${people}`;
+	if (canInviteItself) return `Privado. A Lugh entra em seu nome${people}`;
+	if (channel.inviteRequestedAt) return `Privado. Aguardando convite${people}`;
+	return `Privado. Alguém de dentro precisa convidar a Lugh${people}`;
 }

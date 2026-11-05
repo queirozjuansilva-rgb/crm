@@ -103,7 +103,7 @@ const VERBS: ToolVerbs = {
 	record_job_change: "Sinalizou uma troca de emprego",
 	list_deals: "Revisou o pipeline",
 	list_outstanding_work: "Procurou pendências",
-	set_chat_title: "Named this chat",
+	set_chat_title: "Deu nome ao chat",
 	list_fields: "Leu o que este espaço acompanha",
 	set_field_value: "Preencheu um campo personalizado",
 	manage_fields: "Mudou o que o CRM acompanha",

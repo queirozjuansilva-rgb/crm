@@ -26,7 +26,7 @@ export function EnrichmentActions({
 				await cache.company(companyId);
 				toast.success(
 					result.queued
-						? "Looking it up — this page will update when it finishes."
+						? "Pesquisando. Esta página atualiza quando terminar."
 						: "Already running.",
 				);
 			},
@@ -40,7 +40,7 @@ export function EnrichmentActions({
 				await cache.activity();
 				toast.success(
 					result.queued
-						? "Researching — the brief lands on the timeline when it finishes."
+						? "Pesquisando. O resumo aparece na linha do tempo quando terminar."
 						: "Already researching.",
 				);
 			},
@@ -90,7 +90,7 @@ export function ContactEnrichmentAction({ contactId }: { contactId: string }) {
 				await cache.contact(contactId);
 				toast.success(
 					result.queued
-						? "Taking another look — this page will update when it finishes."
+						? "Olhando de novo. Esta página atualiza quando terminar."
 						: "Already running.",
 				);
 			},

@@ -38,8 +38,8 @@ export function SlackScopeGroups({
 			<div>
 				<h2 className="font-medium text-sm">{title}</h2>
 				<p className="text-muted-foreground text-xs">
-					Broad means the whole workspace, not one channel. Open a group to see
-					the details.
+					Amplo quer dizer o espaço inteiro, não um canal. Abra um grupo para
+					ver os detalhes.
 				</p>
 			</div>
 

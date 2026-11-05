@@ -167,7 +167,7 @@ export class SsoService {
 
 		if (domains.length === 0) {
 			throw new BadRequestException(
-				"Give the email domain your people sign in with, for example acme.com.",
+				"Informe o domínio de e-mail que o time usa para entrar, por exemplo lugh.com.br.",
 			);
 		}
 
@@ -271,7 +271,7 @@ export class SsoService {
 	private async requireConfigurer(userId: string): Promise<void> {
 		if (!canConfigureSso(await workspaceRoleOf(userId, this.db))) {
 			throw new ForbiddenException(
-				"Only an owner or an admin can change how people sign in.",
+				"Só um dono ou administrador pode mudar a forma de login.",
 			);
 		}
 	}

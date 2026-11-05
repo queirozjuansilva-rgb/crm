@@ -110,11 +110,15 @@ export class AttachmentStorageService {
 	}
 
 	async remove(path: string): Promise<void> {
-		if (!this.config) return;
+		await this.removeMany([path]);
+	}
+
+	async removeMany(paths: string[]): Promise<void> {
+		if (!this.config || paths.length === 0) return;
 		try {
 			await this.call(`/object/${this.config.bucket}`, {
 				method: "DELETE",
-				body: JSON.stringify({ prefixes: [path] }),
+				body: JSON.stringify({ prefixes: paths }),
 			});
 		} catch (error) {
 			this.logger.warn({

@@ -40,7 +40,7 @@ import { isSyncing, SYNC_POLL_MS } from "@/lib/sync-status";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 
-const AUTO_CREATE = "Add the company and contact when you reply to someone new";
+const AUTO_CREATE = "Criar cliente e contato quando você responder alguém novo";
 
 const CONNECT_ERRORS = new Map([
 	[
@@ -60,8 +60,8 @@ function MicrosoftUnavailable() {
 					</div>
 				</CardTitle>
 				<CardDescription>
-					Set MICROSOFT_CLIENT_ID and MICROSOFT_CLIENT_SECRET in the root .env
-					file and restart.
+					Defina MICROSOFT_CLIENT_ID e MICROSOFT_CLIENT_SECRET no .env da raiz e
+					reinicie.
 				</CardDescription>
 			</CardHeader>
 		</Card>
@@ -79,7 +79,7 @@ function ConnectMicrosoft({
 
 	function fail(message?: string) {
 		setPending(false);
-		toast.error(message ?? "Could not reach Microsoft.");
+		toast.error(message ?? "Não foi possível acessar a Microsoft.");
 	}
 
 	async function handleConnect() {
@@ -107,8 +107,8 @@ function ConnectMicrosoft({
 					</div>
 				</CardTitle>
 				<CardDescription>
-					Read-only Outlook mail. Only conversations with companies in the CRM
-					are stored.
+					E-mail do Outlook só para leitura. Só ficam salvas as conversas com
+					clientes do CRM.
 				</CardDescription>
 
 				<CardAction>
@@ -137,7 +137,7 @@ function ConnectMicrosoft({
 						<AlertTitle>A Microsoft não terminou a conexão</AlertTitle>
 						<AlertDescription>
 							{CONNECT_ERRORS.get(connectError) ??
-								"Microsoft returned an error before the connection was made. Try again."}
+								"A Microsoft retornou um erro antes de conectar. Tente de novo."}
 						</AlertDescription>
 					</Alert>
 				</CardContent>
@@ -233,7 +233,7 @@ export function MicrosoftConnection({
 					</div>
 				</CardTitle>
 				<CardDescription>
-					As conversas de e-mail entram na empresa certa assim que acontecem.
+					As conversas de e-mail entram no cliente certo assim que acontecem.
 				</CardDescription>
 
 				<CardAction>
@@ -320,9 +320,8 @@ export function MicrosoftConnection({
 										Excluir dados sincronizados?
 									</AlertDialogTitle>
 									<AlertDialogDescription>
-										Every email brought in from Outlook is removed from the CRM.
-										The next check starts from now, so nothing deleted here
-										comes back.
+										Todo e-mail trazido do Outlook sai do CRM. A próxima
+										verificação começa de agora, então nada apagado aqui volta.
 									</AlertDialogDescription>
 								</AlertDialogHeader>
 
@@ -350,10 +349,10 @@ export function MicrosoftConnection({
 									<AlertDialogTitle>Desconectar Microsoft?</AlertDialogTitle>
 									<AlertDialogDescription>
 										{required
-											? "You will be signed out, and you cannot use the CRM again until you grant access."
-											: "New email stops arriving. Everything already synced stays, and you can connect Microsoft again from this page."}{" "}
-										Microsoft has no way for us to withdraw the consent itself —
-										remove this app from your Microsoft account to do that.
+											? "Você vai sair da conta e só volta a usar o CRM depois de liberar o acesso."
+											: "E-mails novos param de chegar. O que já foi sincronizado continua, e você pode conectar a Microsoft de novo nesta página."}{" "}
+										A Microsoft não deixa o CRM retirar a autorização. Para
+										isso, remova este app da sua conta Microsoft.
 									</AlertDialogDescription>
 								</AlertDialogHeader>
 

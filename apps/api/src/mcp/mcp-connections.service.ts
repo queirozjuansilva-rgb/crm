@@ -865,7 +865,7 @@ export class McpConnectionsService {
 		const role = await workspaceRoleOf(userId, this.db);
 		if (!canManageConnections(role)) {
 			throw new ForbiddenException(
-				"Only an owner or an admin can manage MCP connections.",
+				"Só um dono ou administrador pode gerenciar conexões MCP.",
 			);
 		}
 	}

@@ -79,7 +79,7 @@ const COLUMNS: DataTableColumn<ContactRow>[] = [
 	},
 	{
 		id: "company",
-		header: "Empresa",
+		header: "Cliente",
 		sortable: true,
 		width: "w-[18%]",
 		cell: (row) => <CompanyCell company={row.company} />,
@@ -207,18 +207,16 @@ export function ContactsTable() {
 		},
 		{
 			id: "company",
-			label: "Empresa",
+			label: "Cliente",
 			searchable: true,
 			search: companyText,
 			onSearchChange: setCompanyText,
 			stale: companies.isFetching || companyText.trim() !== companyQuery.trim(),
-			empty: companies.isFetching
-				? "Searching…"
-				: "Nenhuma empresa encontrada.",
+			empty: companies.isFetching ? "Buscando…" : "Nenhum cliente encontrado.",
 			options: [
 				...(companyQuery.trim()
 					? []
-					: [{ value: "none", label: "Sem empresa" }]),
+					: [{ value: "none", label: "Sem cliente" }]),
 				...(companies.data ?? []).map((company) => ({
 					value: company.id,
 					label: company.name,
@@ -268,7 +266,7 @@ export function ContactsTable() {
 	return (
 		<DataTable
 			query={query}
-			search={<ListSearch placeholder="Buscar por nome, e-mail ou empresa…" />}
+			search={<ListSearch placeholder="Buscar por nome, e-mail ou cliente…" />}
 			actions={
 				<>
 					<SavedViewsMenu entity="CONTACT" table={table} />

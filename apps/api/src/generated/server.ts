@@ -30,6 +30,7 @@ import { financeListInput, financeListOutput, financeSummaryInput, financeSummar
 import { googleConnectionStatusOutput, setAutoCreateInput, suppressDomainInput, suppressDomainOutput, threadInput, emailThreadOutput, calendarEventInput, calendarEventOutput } from "../google/google.contracts";
 import { purgeSyncedDataOutput, revokeAccessOutput, microsoftConnectionStatusOutput, setOutlookAutoCreateInput } from "../microsoft/microsoft.contracts";
 import { mcpListOutput, mcpGetInput, mcpGetOutput, mcpToolsInput, mcpToolsOutput, mcpStartInput, mcpStartOutput, mcpReconnectInput, mcpReconnectOutput, mcpDisconnectInput, mcpDisconnectOutput, mcpReviewToolsInput, mcpReviewToolsOutput } from "../mcp/mcp.contracts";
+import { notificationsStatusOutput, notificationsTestOutput } from "../notifications/notifications.contracts";
 import { projectListInput, projectListOutput, projectIdInput, projectDetailOutput, projectCreateInput, projectUpdateInput, removedOutput, taskCreateInput, projectTaskOutput, taskUpdateInput } from "../projects/projects.contracts";
 import { reportsOverviewInput, reportsOverviewOutput } from "../reports/reports.contracts";
 import { savedViewListInput, savedViewListOutput, savedViewCreateInput, savedViewOutput, savedViewUpdateArgs, savedViewIdInput, savedViewDeleteOutput } from "../saved-views/saved-views.contracts";
@@ -671,6 +672,14 @@ const appRouter = t.router({
     setAutoCreate: publicProcedure
       .input(setOutlookAutoCreateInput)
       .output(microsoftConnectionStatusOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
+    }),
+  notifications: t.router({
+    status: publicProcedure
+      .output(notificationsStatusOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    testWhatsApp: publicProcedure
+      .output(notificationsTestOutput)
       .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
     }),
   projects: t.router({

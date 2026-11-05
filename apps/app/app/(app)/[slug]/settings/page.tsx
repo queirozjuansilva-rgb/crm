@@ -16,6 +16,7 @@ import { AgentModel } from "./agent-model";
 import { ArchiveRetention } from "./archive-retention";
 import { MonthlyGoal } from "./monthly-goal";
 import { ResearchKey } from "./research-key";
+import { WhatsAppAlerts } from "./whatsapp-alerts";
 import { WorkspaceForm } from "./workspace-form";
 
 export const metadata: Metadata = {
@@ -63,6 +64,7 @@ async function Settings() {
 			<div className="flex max-w-3xl flex-col gap-6">
 				<WorkspaceForm />
 				<MonthlyGoal />
+				<WhatsAppAlerts />
 				<ResearchKey />
 				<ArchiveRetention />
 				<AgentModel />

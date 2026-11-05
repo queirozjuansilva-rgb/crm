@@ -70,9 +70,9 @@ export function SlackDisconnectButton({
 							Disconnect {workspace ?? "Slack"}?
 						</AlertDialogTitle>
 						<AlertDialogDescription>
-							Agents stop sending to Slack immediately, and the cached channel
-							list is cleared so a new app re-reads it. Who is matched to which
-							Slack account is kept, so reconnecting the same workspace does not
+							Os agentes param de enviar ao Slack na hora, e a lista de canais é
+							limpa para o novo app ler de novo. Os vínculos com as contas do
+							Slack ficam guardados, então reconectar o mesmo espaço does not
 							ask you to match everyone again.
 						</AlertDialogDescription>
 					</AlertDialogHeader>

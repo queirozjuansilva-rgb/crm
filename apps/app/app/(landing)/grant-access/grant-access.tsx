@@ -43,7 +43,7 @@ export function GrantAccess({
 
 	function fail(message?: string) {
 		setPending(null);
-		toast.error(message ?? "Could not reach the provider.");
+		toast.error(message ?? "Não foi possível acessar o provedor.");
 	}
 
 	async function handleGrant(provider: MailboxProviderId) {
@@ -91,7 +91,9 @@ export function GrantAccess({
 			<Button
 				className="w-full"
 				onClick={() => {
-					signOutAndRedirect().catch(() => toast.error("Could not sign out."));
+					signOutAndRedirect().catch(() =>
+						toast.error("Não foi possível sair."),
+					);
 				}}
 				type="button"
 				variant="ghost"

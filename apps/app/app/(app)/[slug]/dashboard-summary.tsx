@@ -70,7 +70,7 @@ const ACTIVITY_COLUMNS: SimpleTableColumn[] = [
 	{ id: "activity", header: "Atividade" },
 	{
 		id: "company",
-		header: "Empresa",
+		header: "Cliente",
 		width: "w-44",
 		className: "hidden md:table-cell",
 	},
@@ -274,7 +274,7 @@ export function DashboardSummary() {
 					</CardDescription>
 					<CardAction>
 						<Button asChild variant="contrast" size="sm">
-							<Link href={workspaceUrl("/companies")}>Todas as empresas</Link>
+							<Link href={workspaceUrl("/companies")}>Todos os clientes</Link>
 						</Button>
 					</CardAction>
 				</CardHeader>

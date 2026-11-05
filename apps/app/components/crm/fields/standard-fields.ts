@@ -19,7 +19,7 @@ export const STANDARD_FIELDS = {
 		"Telefone",
 		"LinkedIn",
 		"GitHub",
-		"Empresa",
+		"Cliente",
 		"Responsável",
 	],
 	DEAL: [
@@ -27,7 +27,7 @@ export const STANDARD_FIELDS = {
 		"Valor",
 		"Moeda",
 		"Data de fechamento",
-		"Empresa",
+		"Cliente",
 		"Responsável",
 		"Etapa",
 	],

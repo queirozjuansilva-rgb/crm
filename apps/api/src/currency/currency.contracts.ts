@@ -5,8 +5,8 @@ import { z } from "zod";
 export const currencyCode = z
 	.string()
 	.trim()
-	.length(3, "A currency code is three letters, like USD.")
-	.refine(isCurrencyCode, "That is not a currency this CRM can convert.");
+	.length(3, "O código da moeda tem três letras, como BRL.")
+	.refine(isCurrencyCode, "Essa moeda não pode ser convertida neste CRM.");
 
 export const setReportingCurrencyInput = z.object({
 	currency: currencyCode,

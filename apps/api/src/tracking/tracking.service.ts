@@ -165,7 +165,7 @@ export class TrackingService {
 		const host = normalizeHost(input.host);
 		if (!host) {
 			throw new BadRequestException(
-				"That is not a domain. Try something like acme.com.",
+				"Isso não é um domínio. Tente algo como lugh.com.br.",
 			);
 		}
 
@@ -188,7 +188,7 @@ export class TrackingService {
 				error instanceof Prisma.PrismaClientKnownRequestError &&
 				error.code === "P2002"
 			) {
-				throw new BadRequestException(`${host} is already on the list.`);
+				throw new BadRequestException(`${host} já está na lista.`);
 			}
 
 			throw error;
@@ -231,14 +231,14 @@ export class TrackingService {
 
 		if (!trackingReady(row?.trackingLimitToDomains ?? true, domains)) {
 			throw new BadRequestException(
-				"Add the domain your website runs on first — there is no script to find yet.",
+				"Adicione primeiro o domínio do seu site. Ainda não há script para procurar.",
 			);
 		}
 
 		const target = absolute(url);
 		if (!target) {
 			throw new BadRequestException(
-				"That is not a URL. Try something like acme.com/pricing.",
+				"Isso não é uma URL. Tente algo como lugh.com.br/contato.",
 			);
 		}
 
@@ -475,7 +475,7 @@ export class TrackingService {
 	private async assertCanManage(userId: string): Promise<void> {
 		if (!canManageTracking(await this.roleOf(userId))) {
 			throw new ForbiddenException(
-				"Only an owner or an admin can change tracking.",
+				"Só um dono ou administrador pode mudar o rastreamento.",
 			);
 		}
 	}

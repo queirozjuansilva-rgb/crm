@@ -4,7 +4,7 @@ import type { FieldEntity } from "./fields-entity";
 export const SHEET_TITLE = "Campos";
 
 const SUBTITLE = {
-	company: "Isto vale para todas as empresas do CRM.",
+	company: "Isto vale para todos os clientes do CRM.",
 	contact: "Isto vale para todos os contatos do CRM.",
 	deal: "Isto vale para todos os negócios do CRM.",
 } satisfies Record<RecordKind, string>;
@@ -61,19 +61,19 @@ export const ARCHIVE = "Arquivar";
 export const FILL_REST = "Preencher o resto";
 
 const SHEET_PLACEMENT = {
-	COMPANY: "Mostrar na ficha da empresa",
+	COMPANY: "Mostrar na ficha do cliente",
 	CONTACT: "Mostrar na ficha do contato",
 	DEAL: "Mostrar na ficha do negócio",
 } satisfies Record<FieldEntity, string>;
 
 const TABLE_PLACEMENT = {
-	COMPANY: "Oferecer como coluna na tabela de Empresas",
+	COMPANY: "Oferecer como coluna na tabela de Clientes",
 	CONTACT: "Oferecer como coluna na tabela de Contatos",
 	DEAL: "Oferecer como coluna na tabela de Negócios",
 } satisfies Record<FieldEntity, string>;
 
 const FILTER_PLACEMENT = {
-	COMPANY: "Oferecer como filtro na tabela de Empresas",
+	COMPANY: "Oferecer como filtro na tabela de Clientes",
 	CONTACT: "Oferecer como filtro na tabela de Contatos",
 	DEAL: "Oferecer como filtro na tabela de Negócios",
 } satisfies Record<FieldEntity, string>;
@@ -91,7 +91,7 @@ export function filterPlacement(entity: FieldEntity): string {
 }
 
 export const ENTITY_TABS = [
-	{ kind: "company", label: "Empresas" },
+	{ kind: "company", label: "Clientes" },
 	{ kind: "contact", label: "Contatos" },
 	{ kind: "deal", label: "Negócios" },
 ] as const satisfies readonly { kind: RecordKind; label: string }[];

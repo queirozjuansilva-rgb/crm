@@ -125,7 +125,7 @@ export function EnrichmentQueue() {
 							Nada no momento
 						</span>
 						<span className="text-muted-foreground text-xs">
-							Empresas e contatos novos aparecem aqui enquanto os agentes
+							Clientes e contatos novos aparecem aqui enquanto os agentes
 							pesquisam.
 						</span>
 					</div>
@@ -290,7 +290,7 @@ function ScheduledSection({
 				<span className="text-muted-foreground">
 					{total === 1
 						? "1 record is booked for a later look"
-						: `${total} records are booked for a later look`}
+						: `${total} registros agendados para revisão`}
 				</span>
 				<span className="text-primary">{shown ? "Ocultar" : "Mostrar"}</span>
 			</CollapsibleTrigger>

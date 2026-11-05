@@ -49,11 +49,11 @@ import { useTRPC } from "@/lib/trpc/client";
 const SOURCES = {
 	calendar: {
 		label: "Reuniões",
-		autoCreate: "Add the company and contact when you meet someone new",
+		autoCreate: "Criar cliente e contato quando você conhecer alguém novo",
 	},
 	gmail: {
 		label: "E-mail",
-		autoCreate: "Add the company and contact when you reply to someone new",
+		autoCreate: "Criar cliente e contato quando você responder alguém novo",
 	},
 } as const;
 
@@ -115,8 +115,8 @@ function GoogleUnavailable() {
 					</div>
 				</CardTitle>
 				<CardDescription>
-					Set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in the root .env file
-					and restart.
+					Defina GOOGLE_CLIENT_ID e GOOGLE_CLIENT_SECRET no .env da raiz e
+					reinicie.
 				</CardDescription>
 			</CardHeader>
 		</Card>
@@ -141,7 +141,7 @@ function ConnectGoogle({
 
 	function fail(message?: string) {
 		setPending(false);
-		toast.error(message ?? "Could not reach Google.");
+		toast.error(message ?? "Não foi possível acessar o Google.");
 	}
 
 	async function handleConnect() {
@@ -169,8 +169,8 @@ function ConnectGoogle({
 					</div>
 				</CardTitle>
 				<CardDescription>
-					Read-only Gmail and Calendar. Only conversations with companies in the
-					CRM are stored.
+					Gmail e Agenda só para leitura. Só ficam salvas as conversas com
+					clientes do CRM.
 				</CardDescription>
 
 				<CardAction>
@@ -199,7 +199,7 @@ function ConnectGoogle({
 						<AlertTitle>O Google não terminou a conexão</AlertTitle>
 						<AlertDescription>
 							{CONNECT_ERRORS.get(connectError) ??
-								"Google returned an error before the connection was made. Try again."}
+								"O Google retornou um erro antes de conectar. Tente de novo."}
 						</AlertDescription>
 					</Alert>
 				</CardContent>
@@ -306,8 +306,8 @@ export function GoogleConnection({
 					</div>
 				</CardTitle>
 				<CardDescription>
-					Meetings and email threads land on the matching company as they
-					happen.
+					Reuniões e conversas por e-mail entram no cliente certo assim que
+					acontecem.
 				</CardDescription>
 
 				<CardAction>
@@ -419,9 +419,9 @@ export function GoogleConnection({
 										Excluir dados sincronizados?
 									</AlertDialogTitle>
 									<AlertDialogDescription>
-										Every email and meeting brought in from Google is removed
-										from the CRM. The next check starts from now, so nothing
-										deleted here comes back.
+										Todo e-mail e reunião trazidos do Google saem do CRM. A
+										próxima verificação começa de agora, então nada apagado aqui
+										volta.
 									</AlertDialogDescription>
 								</AlertDialogHeader>
 
@@ -449,8 +449,8 @@ export function GoogleConnection({
 									<AlertDialogTitle>Revogar acesso ao Google?</AlertDialogTitle>
 									<AlertDialogDescription>
 										{required
-											? "You will be signed out, and you cannot use the CRM again until you grant access."
-											: "New email and meetings stop arriving. Everything already synced stays, and you can connect Google again from this page."}
+											? "Você vai sair da conta e só volta a usar o CRM depois de liberar o acesso."
+											: "E-mails e reuniões novos param de chegar. O que já foi sincronizado continua, e você pode conectar o Google de novo nesta página."}
 									</AlertDialogDescription>
 								</AlertDialogHeader>
 

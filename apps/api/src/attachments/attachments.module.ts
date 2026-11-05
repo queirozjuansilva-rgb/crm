@@ -7,5 +7,6 @@ import { AttachmentsService } from "./attachments.service";
 @Module({
 	imports: [TrpcModule],
 	providers: [AttachmentStorageService, AttachmentsService, AttachmentsRouter],
+	exports: [AttachmentStorageService],
 })
 export class AttachmentsModule {}

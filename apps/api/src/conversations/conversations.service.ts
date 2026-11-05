@@ -609,7 +609,7 @@ export class ConversationsService {
 
 		const answer = input.optionId ?? input.text;
 		if (!answer) {
-			throw new BadRequestException("Choose an answer before submitting.");
+			throw new BadRequestException("Escolha uma resposta antes de enviar.");
 		}
 
 		const displayText = selected?.label ?? answer;

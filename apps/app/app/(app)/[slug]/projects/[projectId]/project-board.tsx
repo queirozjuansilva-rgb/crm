@@ -34,6 +34,7 @@ import {
 	TASK_LANES,
 	type TaskStatusKey,
 } from "@/components/crm/projects/project-meta";
+import { TaskDialog } from "@/components/crm/projects/task-dialog";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
@@ -59,6 +60,7 @@ export function ProjectBoard({ projectId }: { projectId: string }) {
 	const [moved, setMoved] = useState<Record<string, TaskStatusKey>>({});
 	const [title, setTitle] = useState("");
 	const [due, setDue] = useState("");
+	const [editing, setEditing] = useState<string | null>(null);
 
 	const project = useQuery(trpc.projects.byId.queryOptions({ id: projectId }));
 
@@ -282,6 +284,7 @@ export function ProjectBoard({ projectId }: { projectId: string }) {
 				getItemId={(task) => task.id}
 				getColumnId={(task) => task.status}
 				empty="Arraste uma tarefa para cá"
+				onOpen={(task) => setEditing(task.id)}
 				onMove={(task, lane) => {
 					if (!isTaskStatus(lane)) return;
 					setMoved((current) => ({ ...current, [task.id]: lane }));
@@ -293,6 +296,12 @@ export function ProjectBoard({ projectId }: { projectId: string }) {
 						onRemove={() => removeTask.mutate({ id: task.id })}
 					/>
 				)}
+			/>
+
+			<TaskDialog
+				task={data.tasks.find((task) => task.id === editing) ?? null}
+				projectId={data.id}
+				onClose={() => setEditing(null)}
 			/>
 		</div>
 	);

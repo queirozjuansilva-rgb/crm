@@ -30,8 +30,8 @@ export default function ApiKeysSettingsPage({
 				<PageShellHeading>
 					<PageShellTitle>Chaves de API</PageShellTitle>
 					<PageShellDescription>
-						Personal keys for calling the CRM API. Each one acts as you —
-						anything it can read or change is exactly what you can.
+						Chaves pessoais para chamar a API do CRM. Cada uma age como você: lê
+						e altera exatamente o que você pode.
 					</PageShellDescription>
 				</PageShellHeading>
 

@@ -181,7 +181,7 @@ export class GoogleConnectionService {
 	): Promise<SuppressDomainOutput> {
 		const normalised = normalizeDomain(domain);
 		if (!normalised) {
-			throw new NotFoundException(`"${domain}" is not a domain.`);
+			throw new NotFoundException(`"${domain}" não é um domínio.`);
 		}
 
 		const ours = await this.match.internalIdentity();

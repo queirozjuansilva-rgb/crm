@@ -37,7 +37,7 @@ const COPY: RecordCopyByKind = {
 	company: {
 		header: "x-crm-company",
 		field: "companyId",
-		title: "Pergunte sobre esta empresa",
+		title: "Pergunte sobre este cliente",
 		blurb:
 			"Lê o site deles e o nosso histórico com eles, e mostra o raciocínio.",
 		placeholder: "O que eles vendem?",
