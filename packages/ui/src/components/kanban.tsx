@@ -6,8 +6,9 @@ import {
 	DragOverlay,
 	type DragStartEvent,
 	KeyboardSensor,
-	PointerSensor,
+	MouseSensor,
 	pointerWithin,
+	TouchSensor,
 	useDraggable,
 	useDroppable,
 	useSensor,
@@ -48,7 +49,10 @@ function KanbanBoard<T>({
 	className,
 }: KanbanBoardProps<T>) {
 	const sensors = useSensors(
-		useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
+		useSensor(MouseSensor, { activationConstraint: { distance: 6 } }),
+		useSensor(TouchSensor, {
+			activationConstraint: { delay: 220, tolerance: 8 },
+		}),
 		useSensor(KeyboardSensor),
 	);
 	const [dragging, setDragging] = React.useState<T | null>(null);
@@ -87,7 +91,7 @@ function KanbanBoard<T>({
 				<div
 					data-slot="kanban-board"
 					className={cn(
-						"flex min-h-0 flex-1 gap-3 overflow-x-auto pb-2 [scrollbar-width:thin]",
+						"flex min-h-0 flex-1 snap-x snap-mandatory max-sm:min-h-[62svh] max-sm:flex-none gap-3 overflow-x-auto overscroll-x-contain pb-2 [scrollbar-width:thin] sm:snap-none",
 						className,
 					)}
 				>
@@ -141,7 +145,7 @@ function KanbanLane({
 			data-slot="kanban-lane"
 			data-over={isOver ? "" : undefined}
 			aria-label={typeof column.title === "string" ? column.title : undefined}
-			className="glass-surface reveal flex min-w-56 flex-1 basis-0 flex-col transition-[border-color,background-color] duration-200 data-over:border-ring/70 data-over:bg-primary/8"
+			className="glass-surface reveal flex min-w-[82vw] flex-1 basis-0 snap-start flex-col sm:min-w-56 transition-[border-color,background-color] duration-200 data-over:border-ring/70 data-over:bg-primary/8"
 		>
 			<header className="flex flex-col gap-1 px-4 pt-4 pb-3">
 				<div className="flex items-start gap-2">
@@ -204,7 +208,7 @@ function KanbanCard({
 			animate={{ opacity: isDragging ? 0.35 : 1, y: 0 }}
 			transition={{ type: "spring", stiffness: 420, damping: 34 }}
 			data-slot="kanban-card"
-			className="kanban-card spotlight lift cursor-grab touch-none text-left active:cursor-grabbing"
+			className="kanban-card spotlight lift cursor-grab touch-manipulation select-none text-left active:cursor-grabbing [-webkit-touch-callout:none]"
 			onClick={onOpen}
 			{...attributes}
 			{...listeners}

@@ -26,9 +26,11 @@ import { dashboardSummaryInput, dashboardSummaryOutput } from "../dashboard/dash
 import { dealListInput, dealListOutput, dealIdInput, dealDetailOutput, dealCreateInput, dealCreateOutput, dealUpdateArgs, dealMutateOutput, setStageInput, dealSetStageOutput, dealContactsInput, dealContactOptionsOutput, dealAttachContactInput, dealContactLinkOutput, dealDetachContactInput, dealContactRoleInput, dealContactRoleOutput, dealBulkOwnerInput, dealBulkResultOutput, dealBulkStageInput, dealBulkInput } from "../deals/deals.contracts";
 import { enrichmentQueueInput } from "@crm/validation/enrichment-queue";
 import { fieldListInput, fieldListOutput, fieldByKeyInput, serializedFieldOutput, fieldEntityInput, fieldFiltersOutput, fieldIdInput, fieldCoverageOutput, fieldCreateInput, fieldUpdateArgs, fieldReorderInput, fieldReorderOutput, fieldDeleteOutput, fieldBackfillOutput } from "../fields/fields.contracts";
+import { financeListInput, financeListOutput, financeSummaryInput, financeSummaryOutput, financeCreateInput, financeCreateOutput, financeUpdateInput, financeEntryOutput, financeSetPaidInput, financeIdInput, financeRemoveOutput } from "../finance/finance.contracts";
 import { googleConnectionStatusOutput, setAutoCreateInput, suppressDomainInput, suppressDomainOutput, threadInput, emailThreadOutput, calendarEventInput, calendarEventOutput } from "../google/google.contracts";
 import { purgeSyncedDataOutput, revokeAccessOutput, microsoftConnectionStatusOutput, setOutlookAutoCreateInput } from "../microsoft/microsoft.contracts";
 import { mcpListOutput, mcpGetInput, mcpGetOutput, mcpToolsInput, mcpToolsOutput, mcpStartInput, mcpStartOutput, mcpReconnectInput, mcpReconnectOutput, mcpDisconnectInput, mcpDisconnectOutput, mcpReviewToolsInput, mcpReviewToolsOutput } from "../mcp/mcp.contracts";
+import { projectListInput, projectListOutput, projectIdInput, projectDetailOutput, projectCreateInput, projectUpdateInput, removedOutput, taskCreateInput, projectTaskOutput, taskUpdateInput } from "../projects/projects.contracts";
 import { reportsOverviewInput, reportsOverviewOutput } from "../reports/reports.contracts";
 import { savedViewListInput, savedViewListOutput, savedViewCreateInput, savedViewOutput, savedViewUpdateArgs, savedViewIdInput, savedViewDeleteOutput } from "../saved-views/saved-views.contracts";
 import { agentModelOutput, modelCatalogOutput, setAgentModelInput, researchKeyOutput, setResearchKeyInput, archiveRetentionOutput, setArchiveRetentionDaysInput, monthlyGoalOutput, setMonthlyGoalInput } from "../settings/settings.contracts";
@@ -568,6 +570,32 @@ const appRouter = t.router({
       .output(fieldBackfillOutput)
       .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
     }),
+  finance: t.router({
+    list: publicProcedure
+      .input(financeListInput)
+      .output(financeListOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    summary: publicProcedure
+      .input(financeSummaryInput)
+      .output(financeSummaryOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    create: publicProcedure
+      .input(financeCreateInput)
+      .output(financeCreateOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    update: publicProcedure
+      .input(financeUpdateInput)
+      .output(financeEntryOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    setPaid: publicProcedure
+      .input(financeSetPaidInput)
+      .output(financeEntryOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    remove: publicProcedure
+      .input(financeIdInput)
+      .output(financeRemoveOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
+    }),
   google: t.router({
     status: publicProcedure
       .output(googleConnectionStatusOutput)
@@ -643,6 +671,40 @@ const appRouter = t.router({
     setAutoCreate: publicProcedure
       .input(setOutlookAutoCreateInput)
       .output(microsoftConnectionStatusOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
+    }),
+  projects: t.router({
+    list: publicProcedure
+      .input(projectListInput)
+      .output(projectListOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    byId: publicProcedure
+      .input(projectIdInput)
+      .output(projectDetailOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    create: publicProcedure
+      .input(projectCreateInput)
+      .output(projectDetailOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    update: publicProcedure
+      .input(projectUpdateInput)
+      .output(projectDetailOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    remove: publicProcedure
+      .input(projectIdInput)
+      .output(removedOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    addTask: publicProcedure
+      .input(taskCreateInput)
+      .output(projectTaskOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    updateTask: publicProcedure
+      .input(taskUpdateInput)
+      .output(projectTaskOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    removeTask: publicProcedure
+      .input(projectIdInput)
+      .output(removedOutput)
       .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
     }),
   reports: t.router({

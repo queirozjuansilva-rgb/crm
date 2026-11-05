@@ -209,7 +209,7 @@ function WeekGrid({
 	byDay: Map<string, AgendaItem[]>;
 }) {
 	return (
-		<div className="flex min-h-0 flex-1 gap-3 overflow-x-auto pb-2">
+		<div className="flex min-h-0 flex-1 gap-3 pb-2 max-sm:flex-col sm:overflow-x-auto">
 			{days.map((day) => {
 				const items = byDay.get(dayKey(day)) ?? [];
 				const isToday = sameDay(day, today);
@@ -217,7 +217,7 @@ function WeekGrid({
 					<section
 						key={dayKey(day)}
 						data-today={isToday ? "" : undefined}
-						className="glass-surface reveal flex min-w-36 flex-1 basis-0 flex-col data-today:border-ring/60"
+						className="glass-surface reveal flex flex-col data-today:border-ring/60 sm:min-w-36 sm:flex-1 sm:basis-0"
 					>
 						<header className="flex items-baseline gap-2 px-4 pt-4 pb-3">
 							<span className="font-mono text-[11px] text-muted-foreground uppercase tracking-[0.1em]">
@@ -232,7 +232,7 @@ function WeekGrid({
 								{day.getDate()}
 							</span>
 						</header>
-						<div className="flex min-h-32 flex-1 flex-col gap-2 overflow-y-auto px-3 pb-3">
+						<div className="flex flex-1 flex-col gap-2 overflow-y-auto px-3 pb-3 sm:min-h-32">
 							{items.length === 0 ? (
 								<p className="px-1 pt-1 text-muted-foreground text-xs">Livre</p>
 							) : (
@@ -364,7 +364,7 @@ function MonthGrid({
 							type="button"
 							onClick={() => onOpenDay(day)}
 							data-outside={outside ? "" : undefined}
-							className="flex min-h-24 flex-col gap-1 border-r border-b p-2 text-left transition-colors last:border-r-0 hover:bg-foreground/[0.03] data-outside:opacity-40 [&:nth-child(7n)]:border-r-0"
+							className="flex min-h-16 flex-col gap-1 border-r border-b p-1 text-left sm:min-h-24 sm:p-2 transition-colors last:border-r-0 hover:bg-foreground/[0.03] data-outside:opacity-40 [&:nth-child(7n)]:border-r-0"
 						>
 							<span
 								className={cn(
@@ -378,7 +378,7 @@ function MonthGrid({
 								<span
 									key={item.id}
 									data-kind={item.kind}
-									className="truncate rounded-md bg-ring/12 px-1.5 py-0.5 text-[11px] data-[kind=task]:bg-chart-3/15"
+									className="truncate rounded-md bg-ring/12 px-1.5 py-0.5 text-[11px] data-[kind=task]:bg-chart-3/15 max-sm:h-1.5 max-sm:p-0 max-sm:text-[0px]"
 								>
 									{item.isAllDay
 										? ""

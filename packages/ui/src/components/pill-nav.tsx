@@ -98,7 +98,7 @@ function PillNavLink({
 			data-slot="pill-nav-link"
 			data-active={active ? "" : undefined}
 			className={cn(
-				"inline-flex h-8 items-center justify-center rounded-full px-4 font-medium text-[13px] text-muted-foreground outline-none transition-colors duration-200 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/60 data-active:text-foreground",
+				"inline-flex h-8 items-center justify-center whitespace-nowrap rounded-full px-3 font-medium 2xl:px-4 text-[13px] text-muted-foreground outline-none transition-colors duration-200 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/60 data-active:text-foreground",
 				className,
 			)}
 			{...props}

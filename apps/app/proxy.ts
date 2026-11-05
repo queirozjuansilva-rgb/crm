@@ -25,6 +25,8 @@ const SECTIONS = [
 	"/settings",
 	"/agenda",
 	"/reports",
+	"/projects",
+	"/finance",
 ];
 
 export async function proxy(request: NextRequest) {

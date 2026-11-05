@@ -132,3 +132,19 @@ export function formatBytes(bytes: number): string {
 	const digits = unit === 0 || value >= 10 ? 0 : 1;
 	return `${value.toLocaleString("pt-BR", { maximumFractionDigits: digits })} ${BYTE_UNITS[unit]}`;
 }
+
+export function parseMoneyToCents(input: string): number | null {
+	const cleaned = input.replace(/[^\d.,-]/g, "");
+	if (!/\d/.test(cleaned)) return null;
+	const lastComma = cleaned.lastIndexOf(",");
+	const lastDot = cleaned.lastIndexOf(".");
+	const decimalAt = Math.max(lastComma, lastDot);
+	const decimals = decimalAt === -1 ? 0 : cleaned.length - decimalAt - 1;
+	const hasDecimal = decimalAt !== -1 && decimals > 0 && decimals <= 2;
+	const whole = hasDecimal ? cleaned.slice(0, decimalAt) : cleaned;
+	const fraction = hasDecimal ? cleaned.slice(decimalAt + 1) : "";
+	const units = Number.parseInt(whole.replace(/[.,]/g, "") || "0", 10);
+	const cents = Number.parseInt(fraction.padEnd(2, "0") || "0", 10);
+	const value = units * 100 + cents;
+	return Number.isFinite(value) ? value : null;
+}

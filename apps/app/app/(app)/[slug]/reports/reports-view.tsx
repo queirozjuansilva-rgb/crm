@@ -33,7 +33,7 @@ import { dealStageColor, dealStageLabel } from "@/lib/deal-stage";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
-import { OVERVIEW_SCOPES, overviewParsers } from "../overview-search-params";
+import { OVERVIEW_SCOPES } from "../overview-search-params";
 
 type ReportData = RouterOutputs["reports"]["overview"];
 

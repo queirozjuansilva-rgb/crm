@@ -40,6 +40,13 @@ export const SEARCH_PARAM = {
 	reports: {
 		months: "months",
 	},
+	finance: {
+		month: "month",
+		kind: "kind",
+	},
+	projects: {
+		filter: "filter",
+	},
 } as const;
 
 export const RESERVED_SEARCH_PARAM_KEYS: ReadonlySet<string> = new Set(
