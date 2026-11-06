@@ -76,7 +76,31 @@ export class CalendarClient {
 			...window,
 		});
 	}
+
+	async insertEvent(
+		accessToken: string,
+		event: NewGoogleEvent,
+	): Promise<MailboxResult<GoogleEvent>> {
+		return this.api.post<GoogleEvent>(EVENTS_URL, accessToken, event, {
+			conferenceDataVersion: event.conferenceData ? 1 : undefined,
+			sendUpdates: event.attendees?.length ? "all" : "none",
+		});
+	}
 }
+
+export type NewGoogleEvent = {
+	summary: string;
+	description?: string;
+	start: { dateTime: string; timeZone: string };
+	end: { dateTime: string; timeZone: string };
+	attendees?: { email: string }[];
+	conferenceData?: {
+		createRequest: {
+			requestId: string;
+			conferenceSolutionKey: { type: "hangoutsMeet" };
+		};
+	};
+};
 
 export function conferenceUrl(event: GoogleEvent): string | null {
 	if (event.hangoutLink) return event.hangoutLink;

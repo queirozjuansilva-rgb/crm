@@ -19,6 +19,7 @@ import {
 } from "@nestjs/swagger";
 import { AllowAnonymous } from "@thallesp/nestjs-better-auth";
 import type { EnvironmentVariables } from "../config/env.validation";
+import { MeetingsService } from "../meetings/meetings.service";
 import { MailboxSyncService } from "./mailbox-sync.service";
 
 @ApiTags("Internal — Cron")
@@ -36,6 +37,7 @@ export class SyncController {
 
 	constructor(
 		private readonly sync: MailboxSyncService,
+		private readonly meetings: MeetingsService,
 		config: ConfigService<EnvironmentVariables, true>,
 	) {
 		this.secret = config.get("CRON_SECRET", { infer: true });
@@ -85,7 +87,11 @@ export class SyncController {
 			throw new ForbiddenException();
 		}
 
-		return this.sync.runDue();
+		const summary = await this.sync.runDue();
+		const screeningsDone = await this.meetings.completeEndedScreenings(
+			new Date(),
+		);
+		return { ...summary, screeningsDone };
 	}
 }
 

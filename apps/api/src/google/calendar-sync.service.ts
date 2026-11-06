@@ -208,12 +208,16 @@ export class CalendarSyncService {
 			},
 		};
 
+		const sameEvent = [
+			{ iCalUid, originalStartTime: originalStart.at },
+			...(event.id && !event.recurringEventId
+				? [{ googleEventId: event.id }]
+				: []),
+		];
+
 		if (event.status === "cancelled") {
 			const deleted = await this.db.calendarEvent.deleteMany({
-				where: {
-					iCalUid,
-					originalStartTime: originalStart.at,
-				},
+				where: { OR: sameEvent },
 			});
 			return deleted.count > 0 ? "removed" : "ignored";
 		}
@@ -222,6 +226,11 @@ export class CalendarSyncService {
 		if (!start || !end) return "ignored";
 
 		const participants = this.participantsOf(event);
+
+		const existing = await this.db.calendarEvent.findFirst({
+			where: { OR: sameEvent },
+			select: { id: true, dealId: true, companyId: true, contactId: true },
+		});
 
 		const declinedByUs = event.attendees?.some(
 			(attendee) => attendee.self && attendee.responseStatus === "declined",
@@ -237,14 +246,17 @@ export class CalendarSyncService {
 			context,
 		);
 
-		if (!match.companyId && !match.contactId) {
+		if (!match.companyId && !match.contactId && !existing?.dealId) {
 			return "ignored";
 		}
+
+		const companyId = match.companyId ?? existing?.companyId ?? null;
+		const contactId = match.contactId ?? existing?.contactId ?? null;
 
 		const organizer = event.organizer?.email?.toLowerCase() ?? null;
 
 		const record = await this.db.calendarEvent.upsert({
-			where: key,
+			where: existing ? { id: existing.id } : key,
 			create: {
 				iCalUid,
 				originalStartTime: originalStart.at,
@@ -258,12 +270,13 @@ export class CalendarSyncService {
 				isAllDay: start.isAllDay,
 				status: event.status ?? "confirmed",
 				organizerEmail: organizer,
-				companyId: match.companyId,
-				contactId: match.contactId,
+				companyId,
+				contactId,
 				syncedByUserId: row.userId,
 				googleEventId: event.id ?? null,
 			},
 			update: {
+				originalStartTime: originalStart.at,
 				title: event.summary ?? null,
 				description: event.description ?? null,
 				location: event.location ?? null,
@@ -273,8 +286,8 @@ export class CalendarSyncService {
 				isAllDay: start.isAllDay,
 				status: event.status ?? "confirmed",
 				organizerEmail: organizer,
-				companyId: match.companyId,
-				contactId: match.contactId,
+				companyId,
+				contactId,
 			},
 			select: { id: true },
 		});
@@ -284,8 +297,8 @@ export class CalendarSyncService {
 		await this.project(record.id, row.userId, {
 			title: event.summary ?? "Meeting",
 			startsAt: start.at,
-			companyId: match.companyId,
-			contactId: match.contactId,
+			companyId,
+			contactId,
 			location: event.location ?? null,
 		});
 

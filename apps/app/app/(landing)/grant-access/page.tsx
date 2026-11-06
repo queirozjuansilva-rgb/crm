@@ -13,13 +13,13 @@ export const instant = false;
 
 const DESCRIPTION = {
 	google:
-		"This CRM reads your Gmail and Calendar so meetings and email threads show up on the right company. It is read-only — nothing is ever sent on your behalf.",
+		"Este CRM lê seu Gmail e sua Agenda para mostrar reuniões e conversas no cliente certo. Nenhum e-mail é enviado em seu nome. Na Agenda, o CRM só cria os eventos que você agendar por ele.",
 	microsoft:
 		"Este CRM lê seu Outlook para mostrar as conversas no cliente certo. É só leitura: nada é enviado em seu nome.",
 } satisfies Record<MailboxProviderId, string>;
 
 const BOTH =
-	"This CRM reads your mail and calendar so meetings and email threads show up on the right company. It is read-only — nothing is ever sent on your behalf.";
+	"Este CRM lê seu e-mail e sua agenda para mostrar reuniões e conversas no cliente certo. Nenhum e-mail é enviado em seu nome. Na Agenda, o CRM só cria os eventos que você agendar por ele.";
 
 export default async function GrantAccessPage() {
 	const { user } = await requireSession();
