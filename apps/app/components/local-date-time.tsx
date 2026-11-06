@@ -131,7 +131,7 @@ function formatRelativeTime(date: string): string {
 	if (!Number.isFinite(then)) return "—";
 	const difference = Date.now() - then;
 	const absolute = Math.abs(difference);
-	if (absolute < MINUTE_MS) return "just now";
+	if (absolute < MINUTE_MS) return "agora";
 	if (absolute >= 30 * DAY_MS) {
 		return getDateTimeFormatter({ month: "short", day: "numeric" }).format(
 			new Date(then),
@@ -144,7 +144,7 @@ function formatRelativeTime(date: string): string {
 			: absolute < DAY_MS
 				? `${Math.floor(absolute / HOUR_MS)}h`
 				: `${Math.floor(absolute / DAY_MS)}d`;
-	return difference < 0 ? `in ${distance}` : `${distance} ago`;
+	return difference < 0 ? `em ${distance}` : `há ${distance}`;
 }
 
 function calendarDay(date: Date): number {

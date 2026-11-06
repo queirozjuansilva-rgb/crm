@@ -103,6 +103,18 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
+	const deals = await db.deal.findMany({
+		where: { companyId: { in: companies } },
+		select: { id: true },
+	});
+	await db.agentTask.deleteMany({
+		where: {
+			OR: [
+				{ companyId: { in: companies } },
+				{ dealId: { in: deals.map((row) => row.id) } },
+			],
+		},
+	});
 	await db.activity.deleteMany({ where: { createdById: ownerId } });
 	await db.calendarEvent.deleteMany({ where: { syncedByUserId: ownerId } });
 	await db.contact.deleteMany({ where: { companyId: { in: companies } } });
