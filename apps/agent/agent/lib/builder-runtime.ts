@@ -16,7 +16,7 @@ import { actionDependency } from "./agent-actions";
 import { requestStaleSlackInventorySync } from "./slack-people";
 
 const GMAIL_SCOPE = "https://www.googleapis.com/auth/gmail.readonly";
-const CALENDAR_SCOPE = "https://www.googleapis.com/auth/calendar.readonly";
+const CALENDAR_SCOPE = "https://www.googleapis.com/auth/calendar.events";
 
 export type BuilderResource = {
 	kind: "integration" | "company" | "contact" | "deal";

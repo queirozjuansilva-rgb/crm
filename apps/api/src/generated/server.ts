@@ -30,6 +30,7 @@ import { financeListInput, financeListOutput, financeSummaryInput, financeSummar
 import { googleConnectionStatusOutput, setAutoCreateInput, suppressDomainInput, suppressDomainOutput, threadInput, emailThreadOutput, calendarEventInput, calendarEventOutput } from "../google/google.contracts";
 import { purgeSyncedDataOutput, revokeAccessOutput, microsoftConnectionStatusOutput, setOutlookAutoCreateInput } from "../microsoft/microsoft.contracts";
 import { mcpListOutput, mcpGetInput, mcpGetOutput, mcpToolsInput, mcpToolsOutput, mcpStartInput, mcpStartOutput, mcpReconnectInput, mcpReconnectOutput, mcpDisconnectInput, mcpDisconnectOutput, mcpReviewToolsInput, mcpReviewToolsOutput } from "../mcp/mcp.contracts";
+import { dealMeetingsInput, dealMeetingsOutput, scheduleMeetingInput, scheduleMeetingOutput } from "../meetings/meetings.contracts";
 import { notificationsTestOutput } from "../notifications/notifications.contracts";
 import { projectListInput, projectListOutput, projectIdInput, projectDetailOutput, projectCreateInput, projectUpdateInput, removedOutput, taskCreateInput, projectTaskOutput, taskUpdateInput } from "../projects/projects.contracts";
 import { reportsOverviewInput, reportsOverviewOutput } from "../reports/reports.contracts";
@@ -654,6 +655,16 @@ const appRouter = t.router({
     reviewTools: publicProcedure
       .input(mcpReviewToolsInput)
       .output(mcpReviewToolsOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
+    }),
+  meetings: t.router({
+    forDeal: publicProcedure
+      .input(dealMeetingsInput)
+      .output(dealMeetingsOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    schedule: publicProcedure
+      .input(scheduleMeetingInput)
+      .output(scheduleMeetingOutput)
       .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
     }),
   microsoft: t.router({

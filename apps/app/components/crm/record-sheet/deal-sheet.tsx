@@ -36,6 +36,7 @@ import {
 	InlineTextCell,
 	savingValue,
 } from "@/components/crm/inline-field";
+import { MeetingsSection } from "@/components/crm/meetings/meetings-section";
 import { OwnerCell } from "@/components/crm/owner-cell";
 import { DealStageMenu } from "@/components/crm/stage-change";
 import { StageStepper } from "@/components/crm/stage-stepper";
@@ -366,6 +367,12 @@ function DealOverview({ deal }: { deal: Deal }) {
 					onSave={(description) => save({ description })}
 				/>
 			</DetailSheetSection>
+
+			<MeetingsSection
+				dealId={deal.id}
+				companyName={deal.company.name}
+				stage={deal.stage}
+			/>
 
 			<AttachmentsSection record={{ kind: "deal", id: deal.id }} />
 

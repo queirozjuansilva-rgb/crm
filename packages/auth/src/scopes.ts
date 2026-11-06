@@ -12,8 +12,7 @@ export type MailboxProviderId = (typeof MAILBOX_PROVIDER_IDS)[number];
 export const IDENTITY_SCOPES = ["openid", "email", "profile"] as const;
 
 export const GMAIL_SCOPE = "https://www.googleapis.com/auth/gmail.readonly";
-export const CALENDAR_SCOPE =
-	"https://www.googleapis.com/auth/calendar.readonly";
+export const CALENDAR_SCOPE = "https://www.googleapis.com/auth/calendar.events";
 export const OUTLOOK_MAIL_SCOPE = "Mail.Read";
 
 export const SYNC_SCOPES = [GMAIL_SCOPE, CALENDAR_SCOPE] as const;

@@ -1094,6 +1094,7 @@ model Deal {
   attachments Attachment[]
   financeEntries FinanceEntry[]
   projects Project[]
+  calendarEvents CalendarEvent[]
   @@index([companyId])
   @@index([ownerId])
   @@index([stage])
@@ -1400,6 +1401,10 @@ model CalendarEvent {
   syncedByUserId String?
   googleEventId  String?
 
+  dealId    String?
+  deal      Deal?      @relation(fields: [dealId], references: [id], onDelete: SetNull)
+  dealStage DealStage?
+
   attendees CalendarAttendee[]
   activity  Activity?
 
@@ -1409,6 +1414,7 @@ model CalendarEvent {
   @@unique([iCalUid, originalStartTime])
   @@index([companyId, startsAt])
   @@index([contactId, startsAt])
+  @@index([dealId, startsAt])
   @@map("calendarEvent")
 }
 

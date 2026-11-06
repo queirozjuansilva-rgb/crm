@@ -184,6 +184,9 @@ imports nothing, Calendar reads from `now`, and Outlook records `now` as its cur
 kept as an alias of the first, so an existing deployment's cron does not break on
 deploy. **Crons live in `apps/api/vercel.json`** — mailboxes `*/5 * * * *`, rates
 daily. Minute-level schedules need a Pro plan; on Hobby it silently becomes daily.
+On Hobby, schedule them from Supabase instead: `pg_cron` with `pg_net` posts to both
+routes, and the bearer value lives in Supabase Vault as `crm_cron_secret`. The same
+tick moves a deal whose screening ended from Triagem Marcada to Triagem Feita.
 
 Deliberate absences: **no `GOOGLE_SYNC_ENABLED`** (a switch that can disable a mandatory
 feature is only ever wrong), **no `GOOGLE_WORKSPACE_DOMAIN`** (`ALLOWED_SIGN_IN` already

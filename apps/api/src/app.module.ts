@@ -29,6 +29,7 @@ import { LoggingModule } from "./logging/logging.module";
 import { logAuthRoute } from "./logging/request-logger.middleware";
 import { MailboxModule } from "./mailbox/mailbox.module";
 import { McpModule } from "./mcp/mcp.module";
+import { MeetingsModule } from "./meetings/meetings.module";
 import { MicrosoftModule } from "./microsoft/microsoft.module";
 import { NotificationsModule } from "./notifications/notifications.module";
 import { ProjectsModule } from "./projects/projects.module";
@@ -92,6 +93,7 @@ import { WorkspaceModule } from "./workspace/workspace.module";
 		ReportsModule,
 		FinanceModule,
 		ProjectsModule,
+		MeetingsModule,
 		NotificationsModule,
 	],
 })
