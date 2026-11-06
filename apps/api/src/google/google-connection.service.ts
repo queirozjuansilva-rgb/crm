@@ -1,6 +1,6 @@
 import { isGoogleConfigured } from "@crm/auth/env";
 import { GOOGLE_PROVIDER_ID, signsInWithGoogle } from "@crm/auth/scopes";
-import type { Db, Prisma } from "@crm/db";
+import { type Db, GoogleSyncStatus, type Prisma } from "@crm/db";
 import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { normalizeDomain } from "../companies/domain";
 import { ActivityStampService } from "../crm/activity-stamp.service";
@@ -73,18 +73,29 @@ export class GoogleConnectionService {
 	}
 
 	async onConnected(userId: string): Promise<void> {
-		const [granted, existing] = await Promise.all([
+		const [granted, existing, account] = await Promise.all([
 			this.tokens.grantedScopes(userId, GOOGLE_PROVIDER_ID),
 			this.state.listForUser(userId, GOOGLE_SYNC_SOURCES),
+			this.db.account.findFirst({
+				where: { userId, providerId: GOOGLE_PROVIDER_ID },
+				select: { updatedAt: true },
+			}),
 		]);
 
-		const known = new Set(existing.map((row) => row.source));
+		const known = new Map(existing.map((row) => [row.source, row]));
 
 		const added: string[] = [];
 
 		for (const source of GOOGLE_SYNC_SOURCES) {
 			if (!granted.has(SCOPE_FOR_SOURCE[source])) continue;
-			if (known.has(source)) continue;
+
+			const row = known.get(source);
+			const regranted =
+				row?.status === GoogleSyncStatus.NEEDS_RECONNECT &&
+				account !== null &&
+				account.updatedAt > row.updatedAt;
+
+			if (row && !regranted) continue;
 
 			await this.state.ensure(userId, source, {
 				autoCreate: source === "calendar",
