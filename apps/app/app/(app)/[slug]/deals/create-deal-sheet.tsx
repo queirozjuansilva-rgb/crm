@@ -32,7 +32,7 @@ import {
 import { Spinner } from "@crm/ui/components/spinner";
 import { Textarea } from "@crm/ui/components/textarea";
 import { ToggleGroup, ToggleGroupItem } from "@crm/ui/components/toggle-group";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { parseAsBoolean, useQueryState } from "nuqs";
 import { type ComponentProps, Suspense, useId, useState } from "react";
 import { toast } from "sonner";
@@ -45,7 +45,6 @@ import { useTRPC } from "@/lib/trpc/client";
 
 const UNSET = "";
 const NO_ORIGIN = "none";
-const INSTAGRAM_FIELD = "instagram_da_empresa";
 const ORIGIN_FIELD = "etiqueta_de_origem";
 
 type ClientMode = "new" | "existing";
@@ -57,20 +56,6 @@ function AddButton(props: ComponentProps<typeof Button>) {
 			Novo lead
 		</Button>
 	);
-}
-
-function instagramHandle(value: string): string {
-	const handle = value
-		.trim()
-		.replace(/^https?:\/\/(www\.)?instagram\.com\//i, "")
-		.replace(/[/?#].*$/, "")
-		.replace(/^@/, "");
-	return handle ? `@${handle}` : "";
-}
-
-function splitName(value: string): { firstName: string; lastName?: string } {
-	const [firstName = "", ...rest] = value.trim().split(/\s+/);
-	return { firstName, lastName: rest.join(" ") || undefined };
 }
 
 export function CreateDealSheet({ companyId }: { companyId?: string }) {
@@ -85,7 +70,6 @@ function CreateLeadForm({ companyId }: { companyId?: string }) {
 	const openRecord = useOpenRecord();
 	const trpc = useTRPC();
 	const cache = useCrmCache();
-	const queryClient = useQueryClient();
 
 	const [open, setOpen] = useQueryState(
 		SEARCH_PARAM.dialog.create,
@@ -105,7 +89,6 @@ function CreateLeadForm({ companyId }: { companyId?: string }) {
 	const [currency, setCurrency] = useState("");
 	const [closeDate, setCloseDate] = useState("");
 	const [notes, setNotes] = useState("");
-	const [saving, setSaving] = useState(false);
 
 	const clientId = useId();
 	const personId = useId();
@@ -127,18 +110,11 @@ function CreateLeadForm({ companyId }: { companyId?: string }) {
 	);
 
 	const hasInstagramField = (companyFields.data ?? []).some(
-		(field) => field.key === INSTAGRAM_FIELD,
+		(field) => field.key === "instagram_da_empresa",
 	);
 	const originField = (dealFields.data ?? []).find(
 		(field) => field.key === ORIGIN_FIELD,
 	);
-
-	const createCompany = useMutation(trpc.companies.create.mutationOptions());
-	const updateCompany = useMutation(trpc.companies.update.mutationOptions());
-	const createContact = useMutation(trpc.contacts.create.mutationOptions());
-	const createDeal = useMutation(trpc.deals.create.mutationOptions());
-	const updateDeal = useMutation(trpc.deals.update.mutationOptions());
-	const attachContact = useMutation(trpc.deals.attachContact.mutationOptions());
 
 	const resolvedOwner = ownerId || me.data?.id || UNSET;
 	const workspaceCurrency = currencies.data?.reportingCurrency;
@@ -162,84 +138,47 @@ function CreateLeadForm({ companyId }: { companyId?: string }) {
 		setNotes("");
 	};
 
-	const submit = async () => {
-		setSaving(true);
-		try {
-			const handle = instagramHandle(instagram);
-			const client =
-				mode === "new"
-					? await createCompany.mutateAsync({
-							name: clientName.trim(),
-							ownerId: resolvedOwner,
-						})
-					: await queryClient.fetchQuery(
-							trpc.companies.byId.queryOptions({ id: company }),
-						);
+	const createLead = useMutation(
+		trpc.leads.create.mutationOptions({
+			onSuccess: async (lead) => {
+				await Promise.all([
+					cache.deal(lead.dealId),
+					cache.company(lead.companyId),
+					lead.contactId ? cache.contact(lead.contactId) : Promise.resolve(),
+				]);
+				toast.success(`Lead ${lead.dealName} cadastrado.`);
+				await setOpen(null);
+				reset();
+				openRecord({ kind: "deal", id: lead.dealId });
+			},
+			onError: (error) => toast.error(error.message),
+		}),
+	);
 
-			if (mode === "new" && handle && hasInstagramField) {
-				await updateCompany.mutateAsync({
-					id: client.id,
-					data: { fields: { [INSTAGRAM_FIELD]: handle } },
-				});
-			}
-
-			const contact =
-				person.trim() !== "" || phone.trim() !== "" || email.trim() !== ""
-					? await createContact.mutateAsync({
-							...splitName(person.trim() || clientName.trim() || "Contato"),
-							phone: phone.trim() || undefined,
-							email: email.trim() || undefined,
-							companyId: client.id,
-							ownerId: resolvedOwner,
-						})
-					: null;
-
-			const parsed = Number.parseFloat(amount.replace(",", "."));
-			const deal = await createDeal.mutateAsync({
-				name: client.name,
-				companyId: client.id,
-				ownerId: resolvedOwner,
-				stage: stage as never,
-				amountCents: Number.isFinite(parsed) ? Math.round(parsed * 100) : null,
-				currency: currency || workspaceCurrency,
-				expectedCloseDate: closeDate || null,
-			});
-
-			if (contact) {
-				await attachContact.mutateAsync({
-					dealId: deal.id,
-					contactId: contact.id,
-					role: null,
-				});
-			}
-
-			const originLabel = origin !== NO_ORIGIN && originField ? origin : null;
-			if (notes.trim() !== "" || originLabel) {
-				await updateDeal.mutateAsync({
-					id: deal.id,
-					data: {
-						...(notes.trim() !== "" ? { description: notes.trim() } : {}),
-						...(originLabel ? { fields: { [ORIGIN_FIELD]: originLabel } } : {}),
-					},
-				});
-			}
-
-			await Promise.all([
-				cache.deal(deal.id),
-				cache.company(client.id),
-				contact ? cache.contact(contact.id) : Promise.resolve(),
-			]);
-			toast.success(`Lead ${deal.name} cadastrado.`);
-			await setOpen(null);
-			reset();
-			openRecord({ kind: "deal", id: deal.id });
-		} catch (error) {
-			toast.error(
-				error instanceof Error ? error.message : "O lead não foi cadastrado.",
-			);
-		} finally {
-			setSaving(false);
+	const submit = () => {
+		const trimmedAmount = amount.trim();
+		const parsed = Number.parseFloat(trimmedAmount.replace(",", "."));
+		if (trimmedAmount !== "" && !Number.isFinite(parsed)) {
+			toast.error("O valor precisa ser um número, como 2500 ou 2500,50.");
+			return;
 		}
+
+		createLead.mutate({
+			client:
+				mode === "new"
+					? { mode: "new", name: clientName.trim(), instagram }
+					: { mode: "existing", companyId: company },
+			person,
+			phone,
+			email: email.trim(),
+			ownerId: resolvedOwner,
+			stage: stage as never,
+			origin: origin !== NO_ORIGIN && originField ? origin : undefined,
+			amountCents: trimmedAmount === "" ? null : Math.round(parsed * 100),
+			currency: currency || workspaceCurrency,
+			expectedCloseDate: closeDate || null,
+			notes,
+		});
 	};
 
 	return (
@@ -261,7 +200,7 @@ function CreateLeadForm({ companyId }: { companyId?: string }) {
 					className="flex-1 overflow-y-auto px-4"
 					onSubmit={(event) => {
 						event.preventDefault();
-						if (ready && !saving) void submit();
+						if (ready && !createLead.isPending) submit();
 					}}
 				>
 					<FieldGroup>
@@ -457,8 +396,12 @@ function CreateLeadForm({ companyId }: { companyId?: string }) {
 				</form>
 
 				<SheetFooter>
-					<Button type="submit" form="create-deal" disabled={saving || !ready}>
-						{saving ? <Spinner /> : null}
+					<Button
+						type="submit"
+						form="create-deal"
+						disabled={createLead.isPending || !ready}
+					>
+						{createLead.isPending ? <Spinner /> : null}
 						Cadastrar lead
 					</Button>
 					<SheetClose asChild>

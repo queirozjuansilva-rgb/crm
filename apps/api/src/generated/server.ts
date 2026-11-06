@@ -29,6 +29,7 @@ import { fieldListInput, fieldListOutput, fieldByKeyInput, serializedFieldOutput
 import { financeListInput, financeListOutput, financeSummaryInput, financeSummaryOutput, financeCreateInput, financeCreateOutput, financeUpdateInput, financeEntryOutput, financeSetPaidInput, financeIdInput, financeRemoveOutput } from "../finance/finance.contracts";
 import { googleConnectionStatusOutput, setAutoCreateInput, suppressDomainInput, suppressDomainOutput, threadInput, emailThreadOutput, calendarEventInput, calendarEventOutput } from "../google/google.contracts";
 import { purgeSyncedDataOutput, revokeAccessOutput, microsoftConnectionStatusOutput, setOutlookAutoCreateInput } from "../microsoft/microsoft.contracts";
+import { leadCreateInput, leadCreateOutput } from "../leads/leads.contracts";
 import { mcpListOutput, mcpGetInput, mcpGetOutput, mcpToolsInput, mcpToolsOutput, mcpStartInput, mcpStartOutput, mcpReconnectInput, mcpReconnectOutput, mcpDisconnectInput, mcpDisconnectOutput, mcpReviewToolsInput, mcpReviewToolsOutput } from "../mcp/mcp.contracts";
 import { dealMeetingsInput, dealMeetingsOutput, scheduleMeetingInput, scheduleMeetingOutput } from "../meetings/meetings.contracts";
 import { notificationsTestOutput } from "../notifications/notifications.contracts";
@@ -627,6 +628,12 @@ const appRouter = t.router({
       .input(calendarEventInput)
       .output(calendarEventOutput)
       .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
+    }),
+  leads: t.router({
+    create: publicProcedure
+      .input(leadCreateInput)
+      .output(leadCreateOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
     }),
   mcp: t.router({
     list: publicProcedure

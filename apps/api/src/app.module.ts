@@ -25,6 +25,7 @@ import { FieldsModule } from "./fields/fields.module";
 import { FinanceModule } from "./finance/finance.module";
 import { GoogleModule } from "./google/google.module";
 import { HealthModule } from "./health/health.module";
+import { LeadsModule } from "./leads/leads.module";
 import { LoggingModule } from "./logging/logging.module";
 import { logAuthRoute } from "./logging/request-logger.middleware";
 import { MailboxModule } from "./mailbox/mailbox.module";
@@ -93,6 +94,7 @@ import { WorkspaceModule } from "./workspace/workspace.module";
 		ReportsModule,
 		FinanceModule,
 		ProjectsModule,
+		LeadsModule,
 		MeetingsModule,
 		NotificationsModule,
 	],
