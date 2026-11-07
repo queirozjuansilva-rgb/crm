@@ -1,5 +1,9 @@
 import { type Db, Prisma } from "@crm/db";
-import { Injectable, NotFoundException } from "@nestjs/common";
+import {
+	BadRequestException,
+	Injectable,
+	NotFoundException,
+} from "@nestjs/common";
 import { toCents } from "../crm/values";
 import { InjectDatabase } from "../database/database.constants";
 import type {
@@ -9,6 +13,7 @@ import type {
 	FinanceUpdateInput,
 } from "./finance.contracts";
 import { FINANCE } from "./finance-config";
+import { RecurringEntriesService } from "./recurring-entries.service";
 
 const MONTH_LABEL = new Intl.DateTimeFormat("pt-BR", {
 	month: "short",
@@ -36,6 +41,9 @@ const ENTRY_SELECT = {
 		},
 	},
 	deal: { select: { id: true, name: true } },
+	contractId: true,
+	payoutId: true,
+	fixedCostId: true,
 } as const;
 
 type EntryRow = Prisma.FinanceEntryGetPayload<{ select: typeof ENTRY_SELECT }>;
@@ -72,9 +80,13 @@ function fromCents(cents: number): Prisma.Decimal {
 
 @Injectable()
 export class FinanceService {
-	constructor(@InjectDatabase() private readonly db: Db) {}
+	constructor(
+		@InjectDatabase() private readonly db: Db,
+		private readonly recurring: RecurringEntriesService,
+	) {}
 
 	async list(input: FinanceListInput) {
+		await this.recurring.ensureRange(new Date(input.from), new Date(input.to));
 		const rows = await this.db.financeEntry.findMany({
 			where: {
 				dueDate: { gte: new Date(input.from), lt: new Date(input.to) },
@@ -83,7 +95,7 @@ export class FinanceService {
 					: { kind: input.kind as "INCOME" | "EXPENSE" }),
 				...(input.companyId ? { companyId: input.companyId } : {}),
 			},
-			orderBy: [{ dueDate: "asc" }, { createdAt: "asc" }],
+			orderBy: [{ dueDate: "asc" }, { kind: "asc" }, { createdAt: "asc" }],
 			take: FINANCE.listLimit,
 			select: ENTRY_SELECT,
 		});
@@ -107,6 +119,7 @@ export class FinanceService {
 		const now = new Date();
 		const since = monthStartUtc(now, -(months - 1));
 		const until = monthStartUtc(now, 1);
+		await this.recurring.ensureRange(since, until, now);
 		const [rows, overdue, categories] = await Promise.all([
 			this.db.financeEntry.findMany({
 				where: { dueDate: { gte: since, lt: until } },
@@ -235,6 +248,20 @@ export class FinanceService {
 	}
 
 	async remove(id: string) {
+		const entry = await this.db.financeEntry.findUnique({
+			where: { id },
+			select: { contractId: true, payoutId: true, fixedCostId: true },
+		});
+		if (entry?.contractId || entry?.payoutId) {
+			throw new BadRequestException(
+				"Esse lançamento vem de um contrato. Edite ou encerre o contrato em Clientes.",
+			);
+		}
+		if (entry?.fixedCostId) {
+			throw new BadRequestException(
+				"Esse lançamento vem de uma conta fixa. Edite ou desative a conta fixa.",
+			);
+		}
 		await this.db.financeEntry.delete({ where: { id } }).catch(() => {
 			throw new NotFoundException("Este lançamento não existe mais.");
 		});
@@ -256,6 +283,13 @@ export class FinanceService {
 			notes: row.notes,
 			company: row.company,
 			deal: row.deal,
+			source: row.contractId
+				? "contract"
+				: row.payoutId
+					? "payout"
+					: row.fixedCostId
+						? "fixed"
+						: null,
 		};
 	}
 }

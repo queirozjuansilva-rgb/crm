@@ -155,7 +155,12 @@ export function useCrmCache(): CrmCache {
 
 		finance: (options) =>
 			run(
-				[trpc.finance.list.queryKey(), trpc.finance.summary.queryKey()],
+				[
+					trpc.finance.list.queryKey(),
+					trpc.finance.summary.queryKey(),
+					trpc.contracts.list.queryKey(),
+					trpc.fixedCosts.list.queryKey(),
+				],
 				[],
 				options,
 			),
