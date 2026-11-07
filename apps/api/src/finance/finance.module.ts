@@ -1,6 +1,8 @@
 import { Module } from "@nestjs/common";
 import { AgentModule } from "../agent/agent.module";
 import { TrpcModule } from "../trpc/trpc.module";
+import { BoardNotesRouter } from "./board-notes.router";
+import { BoardNotesService } from "./board-notes.service";
 import { ContractsRouter } from "./contracts.router";
 import { ContractsService } from "./contracts.service";
 import { FinanceRouter } from "./finance.router";
@@ -13,6 +15,8 @@ import { RecurringEntriesService } from "./recurring-entries.service";
 	imports: [TrpcModule, AgentModule],
 	providers: [
 		RecurringEntriesService,
+		BoardNotesService,
+		BoardNotesRouter,
 		FinanceService,
 		FinanceRouter,
 		ContractsService,

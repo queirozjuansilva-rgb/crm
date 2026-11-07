@@ -26,6 +26,7 @@ import { dashboardSummaryInput, dashboardSummaryOutput } from "../dashboard/dash
 import { dealListInput, dealListOutput, dealIdInput, dealDetailOutput, dealCreateInput, dealCreateOutput, dealUpdateArgs, dealMutateOutput, setStageInput, dealSetStageOutput, dealContactsInput, dealContactOptionsOutput, dealAttachContactInput, dealContactLinkOutput, dealDetachContactInput, dealContactRoleInput, dealContactRoleOutput, dealBulkOwnerInput, dealBulkResultOutput, dealBulkStageInput, dealBulkInput } from "../deals/deals.contracts";
 import { enrichmentQueueInput } from "@crm/validation/enrichment-queue";
 import { fieldListInput, fieldListOutput, fieldByKeyInput, serializedFieldOutput, fieldEntityInput, fieldFiltersOutput, fieldIdInput, fieldCoverageOutput, fieldCreateInput, fieldUpdateArgs, fieldReorderInput, fieldReorderOutput, fieldDeleteOutput, fieldBackfillOutput } from "../fields/fields.contracts";
+import { boardNoteListInput, boardNoteListOutput, boardNoteCreateInput, boardNoteOutput, boardNoteIdInput } from "../finance/board-notes.contracts";
 import { contractListOutput, contractCreateInput, contractSavedOutput, contractUpdateInput, contractEndInput } from "../finance/contracts.contracts";
 import { financeListInput, financeListOutput, financeSummaryInput, financeSummaryOutput, financeCreateInput, financeCreateOutput, financeUpdateInput, financeEntryOutput, financeSetPaidInput, financeIdInput, financeRemoveOutput } from "../finance/finance.contracts";
 import { fixedCostListOutput, fixedCostCreateInput, fixedCostOutput, fixedCostUpdateInput } from "../finance/fixed-costs.contracts";
@@ -573,6 +574,20 @@ const appRouter = t.router({
     backfill: publicProcedure
       .input(fieldIdInput)
       .output(fieldBackfillOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
+    }),
+  boardNotes: t.router({
+    list: publicProcedure
+      .input(boardNoteListInput)
+      .output(boardNoteListOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    create: publicProcedure
+      .input(boardNoteCreateInput)
+      .output(boardNoteOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    remove: publicProcedure
+      .input(boardNoteIdInput)
+      .output(z.object({ id: z.string() }))
       .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
     }),
   contracts: t.router({
