@@ -80,6 +80,10 @@ export function FixedCostsCard() {
 					<div className="flex justify-center py-8">
 						<Spinner className="text-muted-foreground" />
 					</div>
+				) : costs.isError ? (
+					<p className="py-8 text-center text-muted-foreground text-sm">
+						Não foi possível carregar as contas fixas: {costs.error.message}
+					</p>
 				) : rows.length === 0 ? (
 					<p className="py-8 text-center text-muted-foreground text-sm">
 						Nenhuma conta fixa ainda.

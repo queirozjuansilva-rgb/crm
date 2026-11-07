@@ -70,6 +70,25 @@ export function ClientsView() {
 		);
 	}
 
+	if (contracts.isError) {
+		return (
+			<div className="glass-surface flex flex-col items-center gap-3 py-16 text-center">
+				<p className="font-medium">Não foi possível carregar os clientes</p>
+				<p className="max-w-sm text-muted-foreground text-sm">
+					{contracts.error.message}
+				</p>
+				<Button
+					variant="outline"
+					disabled={contracts.isFetching}
+					onClick={() => void contracts.refetch()}
+				>
+					{contracts.isFetching ? <Spinner /> : null}
+					Tentar de novo
+				</Button>
+			</div>
+		);
+	}
+
 	const data = contracts.data;
 	const rows = data?.rows ?? [];
 	const live = rows.filter((row) => row.status !== "ENDED");
