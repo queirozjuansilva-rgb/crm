@@ -1,6 +1,9 @@
 import { afterAll, beforeAll, describe, expect, it } from "bun:test";
 import { db } from "@crm/db";
-import { boardNoteListInput } from "../src/finance/board-notes.contracts";
+import {
+	boardNoteCreateInput,
+	boardNoteListInput,
+} from "../src/finance/board-notes.contracts";
 import { BoardNotesService } from "../src/finance/board-notes.service";
 
 const authorId = `note-author-${crypto.randomUUID().slice(0, 8)}`;
@@ -59,6 +62,21 @@ describe("BoardNotesService", () => {
 			(note) => note.author?.id === authorId,
 		);
 		expect(after).toHaveLength(1);
+	});
+
+	it("requires a real month for a finance note", () => {
+		const note = { board: "FINANCE", body: "Cartão" };
+		expect(boardNoteCreateInput.safeParse(note).success).toBe(false);
+		expect(
+			boardNoteCreateInput.safeParse({ ...note, period: "2026-99" }).success,
+		).toBe(false);
+		expect(
+			boardNoteCreateInput.safeParse({ ...note, period: "2026-11" }).success,
+		).toBe(true);
+		expect(
+			boardNoteCreateInput.safeParse({ board: "CLIENTS", body: "Atraso" })
+				.success,
+		).toBe(true);
 	});
 
 	it("rejects an unknown board", () => {

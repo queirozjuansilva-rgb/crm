@@ -12,17 +12,22 @@ const board = z
 
 const period = z
 	.string()
-	.regex(/^\d{4}-\d{2}$/, "Mês inválido.")
+	.regex(/^\d{4}-(0[1-9]|1[0-2])$/, "Mês inválido.")
 	.optional();
 
 export const boardNoteListInput = z.object({ board, period });
 
-export const boardNoteCreateInput = z.object({
-	board,
-	period,
-	body: z.string().trim().min(1, "Escreva a observação.").max(4000),
-	companyId: z.string().min(1).optional(),
-});
+export const boardNoteCreateInput = z
+	.object({
+		board,
+		period,
+		body: z.string().trim().min(1, "Escreva a observação.").max(4000),
+		companyId: z.string().min(1).optional(),
+	})
+	.refine((input) => input.board !== "FINANCE" || input.period !== undefined, {
+		message: "Uma observação do Financeiro precisa do mês.",
+		path: ["period"],
+	});
 
 export const boardNoteIdInput = z.object({ id: z.string().min(1) });
 

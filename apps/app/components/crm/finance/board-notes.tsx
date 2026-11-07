@@ -74,10 +74,10 @@ export function BoardNotes({
 
 	const create = useMutation(
 		trpc.boardNotes.create.mutationOptions({
-			onSuccess: async () => {
-				await refresh();
-				setBody("");
+			onSuccess: async (_note, sent) => {
+				setBody((current) => (current.trim() === sent.body ? "" : current));
 				setClientId(NO_CLIENT);
+				await refresh();
 			},
 			onError: (error) => toast.error(error.message),
 		}),
@@ -102,7 +102,7 @@ export function BoardNotes({
 					className="flex flex-col gap-3 p-4 md:px-6"
 					onSubmit={(event) => {
 						event.preventDefault();
-						if (body.trim() === "") return;
+						if (create.isPending || body.trim() === "") return;
 						create.mutate({
 							...input,
 							body: body.trim(),
@@ -114,6 +114,7 @@ export function BoardNotes({
 						id={bodyId}
 						aria-label="Nova observação"
 						value={body}
+						readOnly={create.isPending}
 						onChange={(event) => setBody(event.target.value)}
 						onKeyDown={(event) => {
 							if (event.key === "Enter" && (event.metaKey || event.ctrlKey)) {
