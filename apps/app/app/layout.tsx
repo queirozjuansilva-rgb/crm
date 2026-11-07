@@ -19,10 +19,12 @@ export const metadata: Metadata = {
 	description: "CRM da Lugh, empresa de crescimento estratégico",
 	icons: {
 		icon: [
-			{ url: "/favicon.svg", type: "image/svg+xml" },
-			{ url: "/favicon-96x96.png", type: "image/png", sizes: "96x96" },
+			{ url: "/lugh-icon.svg?v=3", type: "image/svg+xml" },
+			{ url: "/lugh-icon-96.png?v=3", type: "image/png", sizes: "96x96" },
+			{ url: "/favicon.ico?v=3", sizes: "any" },
 		],
-		apple: "/apple-touch-icon.png",
+		apple: "/lugh-apple-icon.png?v=3",
+		shortcut: "/favicon.ico?v=3",
 	},
 	manifest: "/site.webmanifest",
 	appleWebApp: {
