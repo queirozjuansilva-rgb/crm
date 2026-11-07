@@ -55,6 +55,7 @@ export const financeEntryOutput = z.object({
 	notes: z.string().nullable(),
 	company: financeCompany.nullable(),
 	deal: z.object({ id: z.string(), name: z.string() }).nullable(),
+	source: z.enum(["contract", "payout", "fixed"]).nullable(),
 });
 
 export type FinanceEntry = z.infer<typeof financeEntryOutput>;

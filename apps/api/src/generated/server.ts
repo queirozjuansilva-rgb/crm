@@ -26,7 +26,9 @@ import { dashboardSummaryInput, dashboardSummaryOutput } from "../dashboard/dash
 import { dealListInput, dealListOutput, dealIdInput, dealDetailOutput, dealCreateInput, dealCreateOutput, dealUpdateArgs, dealMutateOutput, setStageInput, dealSetStageOutput, dealContactsInput, dealContactOptionsOutput, dealAttachContactInput, dealContactLinkOutput, dealDetachContactInput, dealContactRoleInput, dealContactRoleOutput, dealBulkOwnerInput, dealBulkResultOutput, dealBulkStageInput, dealBulkInput } from "../deals/deals.contracts";
 import { enrichmentQueueInput } from "@crm/validation/enrichment-queue";
 import { fieldListInput, fieldListOutput, fieldByKeyInput, serializedFieldOutput, fieldEntityInput, fieldFiltersOutput, fieldIdInput, fieldCoverageOutput, fieldCreateInput, fieldUpdateArgs, fieldReorderInput, fieldReorderOutput, fieldDeleteOutput, fieldBackfillOutput } from "../fields/fields.contracts";
+import { contractListOutput, contractCreateInput, contractSavedOutput, contractUpdateInput, contractEndInput } from "../finance/contracts.contracts";
 import { financeListInput, financeListOutput, financeSummaryInput, financeSummaryOutput, financeCreateInput, financeCreateOutput, financeUpdateInput, financeEntryOutput, financeSetPaidInput, financeIdInput, financeRemoveOutput } from "../finance/finance.contracts";
+import { fixedCostListOutput, fixedCostCreateInput, fixedCostOutput, fixedCostUpdateInput } from "../finance/fixed-costs.contracts";
 import { googleConnectionStatusOutput, setAutoCreateInput, suppressDomainInput, suppressDomainOutput, threadInput, emailThreadOutput, calendarEventInput, calendarEventOutput } from "../google/google.contracts";
 import { purgeSyncedDataOutput, revokeAccessOutput, microsoftConnectionStatusOutput, setOutlookAutoCreateInput } from "../microsoft/microsoft.contracts";
 import { leadCreateInput, leadCreateOutput } from "../leads/leads.contracts";
@@ -573,6 +575,27 @@ const appRouter = t.router({
       .output(fieldBackfillOutput)
       .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
     }),
+  contracts: t.router({
+    list: publicProcedure
+      .output(contractListOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    create: publicProcedure
+      .input(contractCreateInput)
+      .output(contractSavedOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    update: publicProcedure
+      .input(contractUpdateInput)
+      .output(contractSavedOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    end: publicProcedure
+      .input(contractEndInput)
+      .output(contractSavedOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    reactivate: publicProcedure
+      .input(z.object({ id: z.string().min(1) }))
+      .output(contractSavedOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
+    }),
   finance: t.router({
     list: publicProcedure
       .input(financeListInput)
@@ -597,6 +620,26 @@ const appRouter = t.router({
     remove: publicProcedure
       .input(financeIdInput)
       .output(financeRemoveOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
+    }),
+  fixedCosts: t.router({
+    list: publicProcedure
+      .output(fixedCostListOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    create: publicProcedure
+      .input(fixedCostCreateInput)
+      .output(fixedCostOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    update: publicProcedure
+      .input(fixedCostUpdateInput)
+      .output(fixedCostOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    setActive: publicProcedure
+      .input(z.object({
+	id: z.string().min(1),
+	active: z.boolean(),
+}))
+      .output(fixedCostOutput)
       .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
     }),
   google: t.router({

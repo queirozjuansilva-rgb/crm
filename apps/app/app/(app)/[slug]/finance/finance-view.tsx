@@ -33,6 +33,7 @@ import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { FinanceEntrySheet } from "./finance-entry-sheet";
+import { FixedCostsCard } from "./fixed-costs-card";
 
 type Entry = RouterOutputs["finance"]["list"]["rows"][number];
 
@@ -292,6 +293,8 @@ export function FinanceView() {
 					)}
 				</div>
 			</Card>
+
+			<FixedCostsCard />
 		</div>
 	);
 }
@@ -386,16 +389,20 @@ function EntryRow({ entry }: { entry: Entry }) {
 				onCheckedChange={(paid) => setPaid.mutate({ id: entry.id, paid })}
 				aria-label={entry.kind === "INCOME" ? "Recebido" : "Pago"}
 			/>
-			<Button
-				variant="ghost"
-				size="icon-xs"
-				aria-label="Excluir lançamento"
-				disabled={remove.isPending}
-				onClick={() => remove.mutate({ id: entry.id })}
-				className="opacity-60 group-hover/entry:opacity-100"
-			>
-				<TrashCan />
-			</Button>
+			{entry.source ? (
+				<span className="size-6 shrink-0" />
+			) : (
+				<Button
+					variant="ghost"
+					size="icon-xs"
+					aria-label="Excluir lançamento"
+					disabled={remove.isPending}
+					onClick={() => remove.mutate({ id: entry.id })}
+					className="opacity-60 group-hover/entry:opacity-100"
+				>
+					<TrashCan />
+				</Button>
+			)}
 		</li>
 	);
 }

@@ -470,6 +470,7 @@ model Company {
   attachments Attachment[]
   financeEntries FinanceEntry[]
   projects Project[]
+  contracts Contract[]
   @@unique([domain], map: "company_domain_active_key", where: { archivedAt: null })
   @@index([ownerId])
   @@index([name])
@@ -1791,11 +1792,21 @@ model FinanceEntry {
   company     Company?    @relation(fields: [companyId], references: [id], onDelete: SetNull)
   dealId      String?
   deal        Deal?       @relation(fields: [dealId], references: [id], onDelete: SetNull)
+  contractId  String?
+  contract    Contract?       @relation(fields: [contractId], references: [id], onDelete: SetNull)
+  payoutId    String?
+  payout      ContractPayout? @relation(fields: [payoutId], references: [id], onDelete: SetNull)
+  fixedCostId String?
+  fixedCost   FixedCost?      @relation(fields: [fixedCostId], references: [id], onDelete: SetNull)
+  period      String?
   createdById String?
   createdBy   User?       @relation("FinanceEntryAuthor", fields: [createdById], references: [id], onDelete: SetNull)
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
 
+  @@unique([contractId, period])
+  @@unique([payoutId, period])
+  @@unique([fixedCostId, period])
   @@index([dueDate])
   @@index([kind, dueDate])
   @@index([companyId])
@@ -1853,4 +1864,65 @@ model ProjectTask {
   @@index([projectId, status, position])
   @@index([dueDate])
   @@map("projectTask")
+}
+
+enum ContractStatus {
+  ACTIVE
+  PAUSED
+  ENDED
+}
+
+model Contract {
+  id            String         @id @default(cuid())
+  companyId     String
+  company       Company        @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  service       String?
+  monthlyAmount Decimal        @db.Decimal(14, 2)
+  currency      String         @default("BRL")
+  dueDay        Int
+  startsOn      DateTime
+  endsOn        DateTime?
+  status        ContractStatus @default(ACTIVE)
+  notes         String?
+  payouts        ContractPayout[]
+  financeEntries FinanceEntry[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@index([companyId])
+  @@index([status])
+  @@map("contract")
+}
+
+model ContractPayout {
+  id             String         @id @default(cuid())
+  contractId     String
+  contract       Contract       @relation(fields: [contractId], references: [id], onDelete: Cascade)
+  payee          String
+  amount         Decimal        @db.Decimal(14, 2)
+  position       Int            @default(0)
+  financeEntries FinanceEntry[]
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  @@index([contractId])
+  @@map("contractPayout")
+}
+
+model FixedCost {
+  id             String         @id @default(cuid())
+  description    String
+  amount         Decimal        @db.Decimal(14, 2)
+  category       String?
+  dueDay         Int
+  startsOn       DateTime
+  endsOn         DateTime?
+  active         Boolean        @default(true)
+  notes          String?
+  financeEntries FinanceEntry[]
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  @@index([active])
+  @@map("fixedCost")
 }
