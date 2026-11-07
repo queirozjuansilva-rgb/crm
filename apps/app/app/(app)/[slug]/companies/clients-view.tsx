@@ -16,6 +16,7 @@ import { cn } from "@crm/ui/lib/utils";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
+import { BoardNotes } from "@/components/crm/finance/board-notes";
 import {
 	type Contract,
 	ContractSheet,
@@ -170,6 +171,14 @@ export function ClientsView() {
 					) : null}
 				</div>
 			) : null}
+
+			<BoardNotes
+				board="CLIENTS"
+				clients={live.map((contract) => ({
+					id: contract.company.id,
+					name: contract.company.name,
+				}))}
+			/>
 
 			<ContractSheet
 				open={editing !== null}

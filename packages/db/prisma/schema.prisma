@@ -54,6 +54,7 @@ model User {
 
   attachments Attachment[] @relation("AttachmentAuthor")
   financeEntries FinanceEntry[] @relation("FinanceEntryAuthor")
+  boardNotes BoardNote[] @relation("BoardNoteAuthor")
   ownedProjects Project[] @relation("ProjectOwner")
   projectTasks ProjectTask[] @relation("ProjectTaskAssignee")
   @@unique([email])
@@ -471,6 +472,7 @@ model Company {
   financeEntries FinanceEntry[]
   projects Project[]
   contracts Contract[]
+  boardNotes BoardNote[]
   @@unique([domain], map: "company_domain_active_key", where: { archivedAt: null })
   @@index([ownerId])
   @@index([name])
@@ -1925,4 +1927,25 @@ model FixedCost {
 
   @@index([active])
   @@map("fixedCost")
+}
+
+enum NoteBoard {
+  CLIENTS
+  FINANCE
+}
+
+model BoardNote {
+  id        String    @id @default(cuid())
+  board     NoteBoard
+  period    String?
+  body      String
+  companyId String?
+  company   Company?  @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  authorId  String?
+  author    User?     @relation("BoardNoteAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@index([board, period, createdAt])
+  @@map("boardNote")
 }

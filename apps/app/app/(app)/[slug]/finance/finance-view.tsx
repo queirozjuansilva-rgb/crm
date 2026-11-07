@@ -26,6 +26,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { parseAsString, parseAsStringLiteral, useQueryStates } from "nuqs";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
+import { BoardNotes } from "@/components/crm/finance/board-notes";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { BarTrend } from "@/components/dashboard-charts";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
@@ -295,6 +296,8 @@ export function FinanceView() {
 			</Card>
 
 			<FixedCostsCard />
+
+			<BoardNotes board="FINANCE" period={monthKey(month)} />
 		</div>
 	);
 }
