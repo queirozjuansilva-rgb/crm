@@ -18,15 +18,24 @@ describe("who has to grant a mailbox", () => {
 		).toBe(true);
 	});
 
-	it("walls someone whose granular consent dropped one of them", () => {
+	it("walls someone whose granular consent dropped the calendar", () => {
 		expect(
 			needsMailboxGrant([
-				{ providerId: "google", scope: `openid,${SYNC_SCOPES[0]}` },
+				{
+					providerId: "google",
+					scope: "openid,https://www.googleapis.com/auth/gmail.readonly",
+				},
 			]),
 		).toBe(true);
 	});
 
-	it("lets a Google account through once both scopes are there", () => {
+	it("asks Google for the calendar only", () => {
+		expect(SYNC_SCOPES).toEqual([
+			"https://www.googleapis.com/auth/calendar.events",
+		]);
+	});
+
+	it("lets a Google account through once the calendar is granted", () => {
 		expect(needsMailboxGrant([{ providerId: "google", scope: GRANTED }])).toBe(
 			false,
 		);
