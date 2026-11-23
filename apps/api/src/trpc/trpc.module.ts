@@ -1,5 +1,6 @@
 import { Module } from "@nestjs/common";
 import { TRPCModule } from "nestjs-trpc";
+import { SdrAccessService } from "../access/sdr-access.service";
 import { ContextLogger } from "../logging/context-logger";
 import { formatTrpcError } from "./error-formatter";
 import { AuthMiddleware } from "./middlewares/auth.middleware";
@@ -27,7 +28,8 @@ import { TrpcErrorHandler } from "./trpc-error.handler";
 		DomainErrorMiddleware,
 		AuthMiddleware,
 		SessionOnlyMiddleware,
+		SdrAccessService,
 	],
-	exports: [AuthMiddleware, SessionOnlyMiddleware],
+	exports: [AuthMiddleware, SessionOnlyMiddleware, SdrAccessService],
 })
 export class TrpcModule {}

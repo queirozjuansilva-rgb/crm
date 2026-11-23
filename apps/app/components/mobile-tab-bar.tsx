@@ -9,6 +9,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { isActive, type RailItem } from "@/components/app-icon-rail";
 import { useMobileNav } from "@/components/mobile-nav";
+import { sectionsFor, useIsSdr } from "@/lib/use-access";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 
 const TABS: RailItem[] = [
@@ -25,13 +26,14 @@ export function MobileTabBar() {
 	const pathname = usePathname();
 	const workspaceUrl = useWorkspaceUrl();
 	const { setOpen } = useMobileNav();
+	const sdr = useIsSdr();
 
 	return (
 		<nav
 			aria-label="Navegação rápida"
 			className="fixed inset-x-3 bottom-[max(0.75rem,env(safe-area-inset-bottom))] z-40 flex items-stretch gap-1 rounded-3xl border bg-popover/85 p-1.5 shadow-[0_18px_40px_-20px_rgb(0_0_0/0.6)] backdrop-blur-xl xl:hidden"
 		>
-			{TABS.map((tab) => {
+			{sectionsFor(TABS, sdr).map((tab) => {
 				const href = workspaceUrl(tab.href);
 				const active = isActive({ ...tab, href }, pathname);
 				const Glyph = tab.icon;

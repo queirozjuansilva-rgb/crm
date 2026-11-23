@@ -239,6 +239,7 @@ describe("the deals list", () => {
 			closing: [],
 			fields: {},
 			archived: false,
+			pipeline: "",
 		});
 
 		expect(list.reportingCurrency).toBe("USD");

@@ -22,7 +22,11 @@ function personName(person: Person): string {
 export class AgendaService {
 	constructor(@InjectDatabase() private readonly db: Db) {}
 
-	async range(input: AgendaRangeInput, userId: string) {
+	async range(
+		input: AgendaRangeInput,
+		userId: string,
+		viewer: AgendaViewer = { sdr: false, calendarUserId: userId },
+	) {
 		const from = new Date(input.from);
 		const to = new Date(input.to);
 
@@ -46,6 +50,7 @@ export class AgendaService {
 						isAllDay: true,
 						company: { select: COMPANY_SELECT },
 						contact: { select: { id: true, firstName: true, lastName: true } },
+						deal: { select: { id: true, name: true, ownerId: true } },
 						attendees: {
 							where: { isOrganizer: false },
 							orderBy: { email: "asc" },
@@ -55,6 +60,7 @@ export class AgendaService {
 				}),
 				this.db.activity.findMany({
 					where: {
+						...(viewer.sdr ? { deal: { ownerId: userId } } : {}),
 						OR: [
 							{ type: "TASK", dueAt: { gte: from, lt: to } },
 							{
@@ -86,52 +92,65 @@ export class AgendaService {
 					},
 				}),
 				this.db.mailboxSync.count({
-					where: { userId, source: "calendar" },
+					where: { userId: viewer.calendarUserId, source: "calendar" },
 				}),
-				this.db.projectTask.findMany({
-					where: { dueDate: { gte: from, lt: to } },
-					orderBy: { dueDate: "asc" },
-					take: AGENDA.maxItems + 1,
-					select: {
-						id: true,
-						title: true,
-						dueDate: true,
-						status: true,
-						project: {
+				viewer.sdr
+					? Promise.resolve([])
+					: this.db.projectTask.findMany({
+							where: { dueDate: { gte: from, lt: to } },
+							orderBy: { dueDate: "asc" },
+							take: AGENDA.maxItems + 1,
 							select: {
 								id: true,
-								name: true,
-								company: { select: COMPANY_SELECT },
+								title: true,
+								dueDate: true,
+								status: true,
+								project: {
+									select: {
+										id: true,
+										name: true,
+										company: { select: COMPANY_SELECT },
+									},
+								},
 							},
-						},
-					},
-				}),
+						}),
 			]);
 
-		const meetings: AgendaItem[] = events.map((event) => ({
-			id: event.id,
-			kind: "meeting",
-			source: "calendar",
-			title: event.title?.trim() || "Reunião sem título",
-			startsAt: event.startsAt.toISOString(),
-			endsAt: event.endsAt.toISOString(),
-			isAllDay: event.isAllDay,
-			location: event.location,
-			conferenceUrl: event.conferenceUrl,
-			done: false,
-			record: event.contact
-				? {
-						kind: "contact",
-						id: event.contact.id,
-						name: personName(event.contact),
-					}
-				: event.company
-					? { kind: "company", id: event.company.id, name: event.company.name }
-					: null,
-			company: event.company,
-			attendees: event.attendees.slice(0, AGENDA.attendeesShown),
-			attendeeCount: event.attendees.length,
-		}));
+		const meetings: AgendaItem[] = events.map((event) => {
+			if (viewer.sdr) {
+				return event.deal?.ownerId === userId
+					? sdrMeeting(event, event.deal)
+					: busyBlock(event);
+			}
+			return {
+				id: event.id,
+				kind: "meeting",
+				source: "calendar",
+				title: event.title?.trim() || "Reunião sem título",
+				startsAt: event.startsAt.toISOString(),
+				endsAt: event.endsAt.toISOString(),
+				isAllDay: event.isAllDay,
+				location: event.location,
+				conferenceUrl: event.conferenceUrl,
+				done: false,
+				record: event.contact
+					? {
+							kind: "contact",
+							id: event.contact.id,
+							name: personName(event.contact),
+						}
+					: event.company
+						? {
+								kind: "company",
+								id: event.company.id,
+								name: event.company.name,
+							}
+						: null,
+				company: event.company,
+				attendees: event.attendees.slice(0, AGENDA.attendeesShown),
+				attendeeCount: event.attendees.length,
+			};
+		});
 
 		const tasks: AgendaItem[] = activities.flatMap((activity) => {
 			const at =
@@ -222,4 +241,59 @@ export class AgendaService {
 				items.length > AGENDA.maxItems,
 		};
 	}
+}
+
+export type AgendaViewer = { sdr: boolean; calendarUserId: string };
+
+type AgendaEvent = {
+	id: string;
+	title: string | null;
+	location: string | null;
+	conferenceUrl: string | null;
+	startsAt: Date;
+	endsAt: Date;
+	isAllDay: boolean;
+	company: AgendaItem["company"];
+	attendees: AgendaItem["attendees"];
+};
+
+function sdrMeeting(
+	event: AgendaEvent,
+	deal: { id: string; name: string },
+): AgendaItem {
+	return {
+		id: event.id,
+		kind: "meeting",
+		source: "calendar",
+		title: event.title?.trim() || "Reunião sem título",
+		startsAt: event.startsAt.toISOString(),
+		endsAt: event.endsAt.toISOString(),
+		isAllDay: event.isAllDay,
+		location: event.location,
+		conferenceUrl: event.conferenceUrl,
+		done: false,
+		record: { kind: "deal", id: deal.id, name: deal.name },
+		company: event.company,
+		attendees: event.attendees.slice(0, AGENDA.attendeesShown),
+		attendeeCount: event.attendees.length,
+	};
+}
+
+function busyBlock(event: AgendaEvent): AgendaItem {
+	return {
+		id: event.id,
+		kind: "meeting",
+		source: "calendar",
+		title: "Ocupado",
+		startsAt: event.startsAt.toISOString(),
+		endsAt: event.endsAt.toISOString(),
+		isAllDay: event.isAllDay,
+		location: null,
+		conferenceUrl: null,
+		done: false,
+		record: null,
+		company: null,
+		attendees: [],
+		attendeeCount: 0,
+	};
 }

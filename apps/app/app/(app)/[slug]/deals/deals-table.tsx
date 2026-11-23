@@ -27,6 +27,7 @@ import { DEAL_STAGE_OPTIONS } from "@/lib/deal-stage";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { DealsBulkActions } from "./deals-bulk-actions";
+import { useDealsPipeline } from "./deals-pipeline";
 import { dealsSearchParams } from "./deals-search-params";
 
 type DealRow = RouterOutputs["deals"]["list"]["rows"][number];
@@ -149,9 +150,10 @@ export function DealsTable() {
 	const trpc = useTRPC();
 	const prefetchRecord = usePrefetchRecord();
 	const { query, input, setArchived } = useTableQuery(dealsSearchParams);
+	const pipeline = useDealsPipeline();
 
 	const deals = useQuery({
-		...trpc.deals.list.queryOptions(input),
+		...trpc.deals.list.queryOptions({ ...input, pipeline }),
 		placeholderData: (previous) => previous,
 	});
 	const users = useQuery(trpc.users.list.queryOptions());

@@ -5,6 +5,7 @@ import { useCallback } from "react";
 import { companiesSearchParams } from "@/app/(app)/[slug]/companies/companies-search-params";
 import { contactsSearchParams } from "@/app/(app)/[slug]/contacts/contacts-search-params";
 import { dealsSearchParams } from "@/app/(app)/[slug]/deals/deals-search-params";
+import { LUGH_PIPELINE } from "@/app/(app)/[slug]/deals/deals-view";
 import { useTRPC } from "@/lib/trpc/client";
 
 export function usePrefetchSection(): (section: string) => void {
@@ -35,7 +36,10 @@ export function usePrefetchSection(): (section: string) => void {
 					return;
 				case "/deals":
 					void queryClient.prefetchQuery(
-						trpc.deals.list.queryOptions(dealsSearchParams.defaultInput()),
+						trpc.deals.list.queryOptions({
+							...dealsSearchParams.defaultInput(),
+							pipeline: LUGH_PIPELINE,
+						}),
 					);
 					return;
 				default:

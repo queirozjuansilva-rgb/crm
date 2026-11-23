@@ -20,6 +20,7 @@ import { useEffect, useState } from "react";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useTRPC } from "@/lib/trpc/client";
+import { useIsSdr } from "@/lib/use-access";
 
 const GROUP_LABEL = {
 	company: "Clientes",
@@ -30,6 +31,10 @@ const GROUP_LABEL = {
 const KINDS = ["company", "contact", "deal"] as const;
 
 export function QuickSwitcher() {
+	return useIsSdr() ? null : <QuickSwitcherDialog />;
+}
+
+function QuickSwitcherDialog() {
 	const openRecord = useOpenRecord();
 	const trpc = useTRPC();
 

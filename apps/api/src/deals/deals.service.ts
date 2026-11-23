@@ -57,6 +57,7 @@ import type {
 	DealCreateInput,
 	DealDetachContactInput,
 	DealListInput,
+	DealPipelineScope,
 	DealUpdateInput,
 	SetStageInput,
 } from "./deals.contracts";
@@ -117,9 +118,11 @@ export class DealsService {
 		private readonly storage?: AttachmentStorageService,
 	) {}
 
-	async list(input: DealListInput) {
+	async list(input: DealListInput, scope: DealPipelineScope = {}) {
 		const filterableFields = await this.fields.filterableFieldsFor("DEAL");
-		const where = this.buildWhere(input, filterableFields);
+		const where: Prisma.DealWhereInput = {
+			AND: [this.buildWhere(input, filterableFields), pipelineFilter(scope)],
+		};
 		const { skip, take } = paginate(input);
 
 		const openWhere = { ...where, stage: { in: [...OPEN_DEAL_STAGES] } };
@@ -149,7 +152,7 @@ export class DealsService {
 					},
 				}),
 				this.db.deal.count({ where }),
-				this.facetCounts(input, filterableFields),
+				this.facetCounts(input, filterableFields, scope),
 				this.db.deal.aggregate({
 					where: { AND: [openWhere, this.conversion.countedWhere(base)] },
 					_sum: { baseAmount: true },
@@ -805,9 +808,14 @@ export class DealsService {
 	private async facetCounts(
 		input: DealListInput,
 		filterableFields: FieldDefinitionWithOptions[],
+		scope: DealPipelineScope,
 	) {
 		const where: Prisma.DealWhereInput = {
-			AND: [this.searchFilter(input.q), archivedFilter(input.archived)],
+			AND: [
+				this.searchFilter(input.q),
+				archivedFilter(input.archived),
+				pipelineFilter(scope),
+			],
 		};
 
 		const [owners, stages, fieldFacets, ...closingCounts] = await Promise.all([
@@ -909,4 +917,13 @@ function parseDate(value: string | null | undefined): Date | null {
 		throw new BadRequestException(`"${value}" não é uma data.`);
 	}
 	return date;
+}
+
+function pipelineFilter(scope: DealPipelineScope): Prisma.DealWhereInput {
+	const and: Prisma.DealWhereInput[] = [];
+	if (scope.ownerIds) and.push({ ownerId: { in: scope.ownerIds } });
+	if (scope.excludeOwnerIds && scope.excludeOwnerIds.length > 0) {
+		and.push({ ownerId: { notIn: scope.excludeOwnerIds } });
+	}
+	return { AND: and };
 }

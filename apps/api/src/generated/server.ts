@@ -956,6 +956,7 @@ const appRouter = t.router({
 		name: z.string(),
 		email: z.string(),
 		image: z.string().nullable(),
+		sdr: z.boolean(),
 	}),
 ))
       .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)

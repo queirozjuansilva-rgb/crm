@@ -215,6 +215,12 @@ export class WorkspaceService {
 			});
 		});
 
+		if (input.role === "sdr") {
+			await this.db.mailboxSync.deleteMany({
+				where: { userId: updated.userId },
+			});
+		}
+
 		this.logger.log({
 			message: "Workspace role changed",
 			userId,

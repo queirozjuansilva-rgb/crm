@@ -1,7 +1,9 @@
 import { type auth } from "@crm/auth/auth";
 import { SESSION_COOKIE_NAME } from "@crm/auth/cookies";
+import { isSdr, workspaceRoleOf } from "@crm/auth/organization";
 import {
 	Controller,
+	ForbiddenException,
 	Get,
 	Param,
 	Query,
@@ -43,6 +45,10 @@ export class ConversationAttachmentsController {
 		@Session() session: CrmSession,
 		@Res({ passthrough: true }) response: Response,
 	) {
+		if (isSdr(await workspaceRoleOf(session.user.id))) {
+			throw new ForbiddenException();
+		}
+
 		const attachment = await this.conversations.attachment(
 			id,
 			session.user.id,

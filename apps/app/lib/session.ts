@@ -1,4 +1,5 @@
 import { auth, type Session } from "@crm/auth/auth";
+import { isSdr, workspaceRoleOf } from "@crm/auth/organization";
 import { needsMailboxGrant } from "@crm/auth/scopes";
 import { db } from "@crm/db";
 import { headers } from "next/headers";
@@ -30,7 +31,10 @@ export const signInAccounts = cache(async (userId: string) =>
 export async function requireMailboxAccess(): Promise<Session> {
 	const session = await requireSession();
 
-	if (needsMailboxGrant(await signInAccounts(session.user.id))) {
+	if (
+		needsMailboxGrant(await signInAccounts(session.user.id)) &&
+		!isSdr(await workspaceRoleOf(session.user.id))
+	) {
 		redirect("/grant-access");
 	}
 

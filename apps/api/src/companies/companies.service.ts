@@ -327,9 +327,16 @@ export class CompaniesService {
 		};
 	}
 
-	async options(q: string) {
+	async options(q: string, dealOwnerId?: string) {
 		return this.db.company.findMany({
-			where: this.searchFilter(q),
+			where: dealOwnerId
+				? {
+						AND: [
+							this.searchFilter(q),
+							{ deals: { some: { ownerId: dealOwnerId } } },
+						],
+					}
+				: this.searchFilter(q),
 			select: { id: true, name: true, domain: true, iconUrl: true },
 			orderBy: { name: "asc" },
 			take: 100,
