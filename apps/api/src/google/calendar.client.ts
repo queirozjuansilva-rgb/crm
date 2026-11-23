@@ -11,6 +11,7 @@ export type GoogleEvent = {
 	id?: string;
 	iCalUID?: string;
 	status?: string;
+	transparency?: string;
 	summary?: string;
 	description?: string;
 	location?: string;

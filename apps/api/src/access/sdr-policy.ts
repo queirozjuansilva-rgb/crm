@@ -1,56 +1,83 @@
 import type { Db } from "@crm/db";
+import { z } from "zod";
+import {
+	activityCreateInput,
+	completeInput,
+	timelineCountsInput,
+	timelineInput,
+} from "../activities/activities.contracts";
+import {
+	attachmentCompleteInput,
+	attachmentIdInput,
+	attachmentLinkInput,
+	attachmentListInput,
+	attachmentPrepareInput,
+} from "../attachments/attachments.contracts";
+import {
+	dealAttachContactInput,
+	dealBulkInput,
+	dealBulkStageInput,
+	dealContactRoleInput,
+	dealContactsInput,
+	dealDetachContactInput,
+	dealIdInput,
+	dealUpdateArgs,
+	setStageInput,
+} from "../deals/deals.contracts";
+import { calendarEventInput } from "../google/google.contracts";
+import { leadCreateInput } from "../leads/leads.contracts";
+import {
+	dealMeetingsInput,
+	scheduleMeetingInput,
+} from "../meetings/meetings.contracts";
 
-export type SdrCheckArgs = {
-	db: Db;
-	userId: string;
-	input: Record<string, unknown>;
-};
+type Viewer = { db: Db; userId: string };
 
-export type SdrCheck = (args: SdrCheckArgs) => Promise<boolean>;
+export type SdrRule = (viewer: Viewer, input: unknown) => Promise<boolean>;
 
-const allow: SdrCheck = async () => true;
-
-function text(value: unknown): string | null {
-	return typeof value === "string" && value.length > 0 ? value : null;
+function rule<S extends z.ZodType>(
+	schema: S,
+	check: (viewer: Viewer, input: z.infer<S>) => Promise<boolean>,
+): SdrRule {
+	return async (viewer, input) => {
+		const parsed = schema.safeParse(input);
+		return parsed.success ? check(viewer, parsed.data) : false;
+	};
 }
 
-function record(value: unknown): Record<string, unknown> {
-	return value !== null && typeof value === "object"
-		? (value as Record<string, unknown>)
-		: {};
+const allow: SdrRule = async () => true;
+
+async function ownsDeals({ db, userId }: Viewer, ids: string[]) {
+	const unique = [...new Set(ids)];
+	const owned = await db.deal.count({
+		where: { id: { in: unique }, ownerId: userId },
+	});
+	return unique.length > 0 && owned === unique.length;
 }
 
-async function ownsDeal(db: Db, userId: string, dealId: unknown) {
-	const id = text(dealId);
-	if (!id) return false;
-	return (await db.deal.count({ where: { id, ownerId: userId } })) > 0;
+const ownsDeal = (viewer: Viewer, id: string) => ownsDeals(viewer, [id]);
+
+async function ownsCompany({ db, userId }: Viewer, companyId: string) {
+	return (await db.deal.count({ where: { companyId, ownerId: userId } })) > 0;
 }
 
-async function ownsCompany(db: Db, userId: string, companyId: unknown) {
-	const id = text(companyId);
-	if (!id) return false;
-	return (
-		(await db.deal.count({ where: { companyId: id, ownerId: userId } })) > 0
-	);
-}
+const dealRecord = (
+	viewer: Viewer,
+	record: z.infer<typeof attachmentListInput>,
+) =>
+	record.kind === "deal" ? ownsDeal(viewer, record.id) : Promise.resolve(false);
 
-function dealAt(key: string): SdrCheck {
-	return ({ db, userId, input }) => ownsDeal(db, userId, input[key]);
-}
-
-const dealOnly: SdrCheck = async ({ db, userId, input }) =>
+const throughDeal = (
+	viewer: Viewer,
+	input: { dealId?: string; companyId?: string; contactId?: string },
+) =>
 	input.companyId === undefined &&
 	input.contactId === undefined &&
-	ownsDeal(db, userId, input.dealId);
-
-function dealRecord(value: unknown, db: Db, userId: string) {
-	const target = record(value);
-	return target.kind === "deal"
-		? ownsDeal(db, userId, target.id)
+	input.dealId !== undefined
+		? ownsDeal(viewer, input.dealId)
 		: Promise.resolve(false);
-}
 
-export const SDR_POLICY: Record<string, SdrCheck> = {
+export const SDR_POLICY: Record<string, SdrRule> = {
 	"users.me": allow,
 	"users.list": allow,
 	"workspace.get": allow,
@@ -63,67 +90,100 @@ export const SDR_POLICY: Record<string, SdrCheck> = {
 	"companies.options": allow,
 	"agenda.range": allow,
 
-	"deals.byId": dealAt("id"),
-	"deals.setStage": dealAt("id"),
-	"deals.archive": dealAt("id"),
-	"deals.restore": dealAt("id"),
-	"deals.update": async ({ db, userId, input }) => {
-		const data = record(input.data);
-		if (data.ownerId !== undefined && data.ownerId !== userId) return false;
+	"deals.byId": rule(dealIdInput, (viewer, input) =>
+		ownsDeal(viewer, input.id),
+	),
+	"deals.setStage": rule(setStageInput, (viewer, input) =>
+		ownsDeal(viewer, input.id),
+	),
+	"deals.archive": rule(dealIdInput, (viewer, input) =>
+		ownsDeal(viewer, input.id),
+	),
+	"deals.restore": rule(dealIdInput, (viewer, input) =>
+		ownsDeal(viewer, input.id),
+	),
+	"deals.bulkSetStage": rule(dealBulkStageInput, (viewer, input) =>
+		ownsDeals(viewer, input.ids),
+	),
+	"deals.bulkArchive": rule(dealBulkInput, (viewer, input) =>
+		ownsDeals(viewer, input.ids),
+	),
+	"deals.bulkRestore": rule(dealBulkInput, (viewer, input) =>
+		ownsDeals(viewer, input.ids),
+	),
+	"deals.update": rule(dealUpdateArgs, async (viewer, { id, data }) => {
+		if (data.ownerId !== undefined && data.ownerId !== viewer.userId) {
+			return false;
+		}
 		if (
 			data.companyId !== undefined &&
-			!(await ownsCompany(db, userId, data.companyId))
+			!(await ownsCompany(viewer, data.companyId))
 		) {
 			return false;
 		}
-		return ownsDeal(db, userId, input.id);
-	},
-	"deals.contactOptions": dealAt("dealId"),
-	"deals.attachContact": dealAt("dealId"),
-	"deals.detachContact": dealAt("dealId"),
-	"deals.setContactRole": dealAt("dealId"),
+		return ownsDeal(viewer, id);
+	}),
+	"deals.contactOptions": rule(dealContactsInput, (viewer, input) =>
+		ownsDeal(viewer, input.dealId),
+	),
+	"deals.attachContact": rule(dealAttachContactInput, (viewer, input) =>
+		ownsDeal(viewer, input.dealId),
+	),
+	"deals.detachContact": rule(dealDetachContactInput, (viewer, input) =>
+		ownsDeal(viewer, input.dealId),
+	),
+	"deals.setContactRole": rule(dealContactRoleInput, (viewer, input) =>
+		ownsDeal(viewer, input.dealId),
+	),
 
-	"leads.create": async ({ userId, input }) => input.ownerId === userId,
+	"leads.create": rule(leadCreateInput, async (viewer, input) => {
+		if (input.ownerId !== viewer.userId) return false;
+		return input.client.mode === "existing"
+			? ownsCompany(viewer, input.client.companyId)
+			: true;
+	}),
 
-	"google.event": async ({ db, userId, input }) => {
-		const id = text(input.eventId);
-		if (!id) return false;
-		return (
-			(await db.calendarEvent.count({
-				where: { id, deal: { ownerId: userId } },
-			})) > 0
-		);
-	},
+	"meetings.forDeal": rule(dealMeetingsInput, (viewer, input) =>
+		ownsDeal(viewer, input.dealId),
+	),
+	"meetings.schedule": rule(scheduleMeetingInput, (viewer, input) =>
+		ownsDeal(viewer, input.dealId),
+	),
 
-	"meetings.forDeal": dealAt("dealId"),
-	"meetings.schedule": dealAt("dealId"),
+	"activities.timeline": rule(timelineInput, throughDeal),
+	"activities.timelineCounts": rule(timelineCountsInput, throughDeal),
+	"activities.create": rule(activityCreateInput, throughDeal),
+	"activities.complete": rule(
+		completeInput,
+		async ({ db, userId }, input) =>
+			(await db.activity.count({
+				where: { id: input.id, deal: { ownerId: userId } },
+			})) > 0,
+	),
 
-	"activities.timeline": dealOnly,
-	"activities.timelineCounts": dealOnly,
-	"activities.create": dealOnly,
-	"activities.complete": async ({ db, userId, input }) => {
-		const id = text(input.id);
-		if (!id) return false;
-		return (
-			(await db.activity.count({ where: { id, deal: { ownerId: userId } } })) >
-			0
-		);
-	},
-
-	"attachments.list": ({ db, userId, input }) => dealRecord(input, db, userId),
-	"attachments.prepareUpload": ({ db, userId, input }) =>
-		dealRecord(input.record, db, userId),
-	"attachments.completeUpload": ({ db, userId, input }) =>
-		dealRecord(input.record, db, userId),
-	"attachments.addLink": ({ db, userId, input }) =>
-		dealRecord(input.record, db, userId),
-	"attachments.remove": async ({ db, userId, input }) => {
-		const id = text(input.id);
-		if (!id) return false;
-		return (
+	"attachments.list": rule(attachmentListInput, dealRecord),
+	"attachments.prepareUpload": rule(attachmentPrepareInput, (viewer, input) =>
+		dealRecord(viewer, input.record),
+	),
+	"attachments.completeUpload": rule(attachmentCompleteInput, (viewer, input) =>
+		dealRecord(viewer, input.record),
+	),
+	"attachments.addLink": rule(attachmentLinkInput, (viewer, input) =>
+		dealRecord(viewer, input.record),
+	),
+	"attachments.remove": rule(
+		attachmentIdInput,
+		async ({ db, userId }, input) =>
 			(await db.attachment.count({
-				where: { id, deal: { ownerId: userId } },
-			})) > 0
-		);
-	},
+				where: { id: input.id, deal: { ownerId: userId } },
+			})) > 0,
+	),
+
+	"google.event": rule(
+		calendarEventInput,
+		async ({ db, userId }, input) =>
+			(await db.calendarEvent.count({
+				where: { id: input.eventId, deal: { ownerId: userId } },
+			})) > 0,
+	),
 };

@@ -1,8 +1,10 @@
 import type { Db } from "@crm/db";
 import { Injectable } from "@nestjs/common";
+import { ACCESS } from "../access/access-config";
 import { InjectDatabase } from "../database/database.constants";
 import type { AgendaItem, AgendaRangeInput } from "./agenda.contracts";
 import { AGENDA } from "./agenda-config";
+import type { BusyInterval } from "./host-busy.service";
 
 const COMPANY_SELECT = {
 	id: true,
@@ -50,6 +52,7 @@ export class AgendaService {
 						isAllDay: true,
 						company: { select: COMPANY_SELECT },
 						contact: { select: { id: true, firstName: true, lastName: true } },
+						googleEventId: true,
 						deal: { select: { id: true, name: true, ownerId: true } },
 						attendees: {
 							where: { isOrganizer: false },
@@ -116,40 +119,66 @@ export class AgendaService {
 						}),
 			]);
 
-		const meetings: AgendaItem[] = events.map((event) => {
+		const ownGoogleIds = new Set(
+			events
+				.filter((event) => event.deal?.ownerId === userId)
+				.map((event) => event.googleEventId)
+				.filter((id): id is string => id !== null),
+		);
+
+		const hostBusy: AgendaItem[] =
+			viewer.sdr && viewer.busy
+				? viewer.busy
+						.filter(
+							(interval) =>
+								!interval.googleEventId ||
+								!ownGoogleIds.has(interval.googleEventId),
+						)
+						.map((interval, index) =>
+							busyBlock({
+								id: interval.googleEventId ?? `busy-${index}`,
+								...interval,
+							}),
+						)
+				: [];
+
+		const meetings: AgendaItem[] = events.flatMap((event) => {
 			if (viewer.sdr) {
-				return event.deal?.ownerId === userId
-					? sdrMeeting(event, event.deal)
-					: busyBlock(event);
+				if (event.deal?.ownerId === userId) {
+					return [sdrMeeting(event, event.deal)];
+				}
+				return viewer.busy ? [] : [busyBlock(event)];
 			}
-			return {
-				id: event.id,
-				kind: "meeting",
-				source: "calendar",
-				title: event.title?.trim() || "Reunião sem título",
-				startsAt: event.startsAt.toISOString(),
-				endsAt: event.endsAt.toISOString(),
-				isAllDay: event.isAllDay,
-				location: event.location,
-				conferenceUrl: event.conferenceUrl,
-				done: false,
-				record: event.contact
-					? {
-							kind: "contact",
-							id: event.contact.id,
-							name: personName(event.contact),
-						}
-					: event.company
+			return [
+				{
+					id: event.id,
+					kind: "meeting",
+					source: "calendar",
+					title: event.title?.trim() || "Reunião sem título",
+					startsAt: event.startsAt.toISOString(),
+					endsAt: event.endsAt.toISOString(),
+					isAllDay: event.isAllDay,
+					location: event.location,
+					conferenceUrl: event.conferenceUrl,
+					done: false,
+					record: event.contact
 						? {
-								kind: "company",
-								id: event.company.id,
-								name: event.company.name,
+								kind: "contact",
+								id: event.contact.id,
+								name: personName(event.contact),
 							}
-						: null,
-				company: event.company,
-				attendees: event.attendees.slice(0, AGENDA.attendeesShown),
-				attendeeCount: event.attendees.length,
-			};
+						: event.company
+							? {
+									kind: "company",
+									id: event.company.id,
+									name: event.company.name,
+								}
+							: null,
+					company: event.company,
+					attendees: event.attendees.slice(0, AGENDA.attendeesShown),
+					attendeeCount: event.attendees.length,
+				},
+			];
 		});
 
 		const tasks: AgendaItem[] = activities.flatMap((activity) => {
@@ -227,8 +256,8 @@ export class AgendaService {
 				: [],
 		);
 
-		const items = [...meetings, ...tasks, ...projectItems].sort((a, b) =>
-			a.startsAt.localeCompare(b.startsAt),
+		const items = [...meetings, ...hostBusy, ...tasks, ...projectItems].sort(
+			(a, b) => a.startsAt.localeCompare(b.startsAt),
 		);
 
 		return {
@@ -243,7 +272,11 @@ export class AgendaService {
 	}
 }
 
-export type AgendaViewer = { sdr: boolean; calendarUserId: string };
+export type AgendaViewer = {
+	sdr: boolean;
+	calendarUserId: string;
+	busy?: BusyInterval[] | null;
+};
 
 type AgendaEvent = {
 	id: string;
@@ -279,12 +312,14 @@ function sdrMeeting(
 	};
 }
 
-function busyBlock(event: AgendaEvent): AgendaItem {
+type BusyBlock = Pick<AgendaEvent, "id" | "startsAt" | "endsAt" | "isAllDay">;
+
+function busyBlock(event: BusyBlock): AgendaItem {
 	return {
 		id: event.id,
 		kind: "meeting",
 		source: "calendar",
-		title: "Ocupado",
+		title: ACCESS.sdr.busyLabel,
 		startsAt: event.startsAt.toISOString(),
 		endsAt: event.endsAt.toISOString(),
 		isAllDay: event.isAllDay,
