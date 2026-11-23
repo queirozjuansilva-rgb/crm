@@ -12,7 +12,9 @@ const queryFailure = z
 export function makeQueryClient(): QueryClient {
 	return new QueryClient({
 		defaultOptions: {
-			queries: { staleTime: 30_000, retry: retryQuery },
+			// Mutations invalidate what they change, so a longer staleTime only skips
+			// refetches on tab focus, which are billed as Vercel CPU time.
+			queries: { staleTime: 2 * 60_000, retry: retryQuery },
 		},
 	});
 }

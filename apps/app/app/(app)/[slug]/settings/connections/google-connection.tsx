@@ -169,8 +169,8 @@ function ConnectGoogle({
 					</div>
 				</CardTitle>
 				<CardDescription>
-					Gmail só para leitura. Na Agenda, o CRM lê suas reuniões e cria só os
-					eventos que você agendar pelo CRM.
+					Só a Agenda: o CRM lê suas reuniões e cria só os eventos que você
+					agendar pelo CRM. O CRM não lê seus e-mails.
 				</CardDescription>
 
 				<CardAction>

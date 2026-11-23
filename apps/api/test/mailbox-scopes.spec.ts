@@ -40,13 +40,16 @@ describe("hasSyncScopes for Google", () => {
 		expect(hasSyncScopes("google", BOTH)).toBe(true);
 	});
 
-	it("is false when granular consent dropped one of them", () => {
+	it("is false when granular consent dropped the calendar", () => {
 		expect(hasSyncScopes("google", `openid,email,profile,${GMAIL_SCOPE}`)).toBe(
 			false,
 		);
+	});
+
+	it("needs only the calendar now that Gmail sync is off", () => {
 		expect(
 			hasSyncScopes("google", `openid,email,profile,${CALENDAR_SCOPE}`),
-		).toBe(false);
+		).toBe(true);
 	});
 
 	it("is false for an account that predates the requirement", () => {
@@ -59,7 +62,7 @@ describe("hasSyncScopes for Google", () => {
 
 	it("does not match on a prefix", () => {
 		expect(
-			hasSyncScopes("google", `${GMAIL_SCOPE}.metadata,${CALENDAR_SCOPE}`),
+			hasSyncScopes("google", `${CALENDAR_SCOPE}.readonly,${GMAIL_SCOPE}`),
 		).toBe(false);
 	});
 

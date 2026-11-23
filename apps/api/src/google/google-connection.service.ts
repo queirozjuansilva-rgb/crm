@@ -8,6 +8,7 @@ import { InjectDatabase } from "../database/database.constants";
 import {
 	GOOGLE_SYNC_SOURCES,
 	type GoogleSyncSource,
+	isEnabledSyncSource,
 	SCOPE_FOR_SOURCE,
 } from "../mailbox/mailbox.constants";
 import { MailboxMatchService } from "../mailbox/mailbox-match.service";
@@ -47,19 +48,21 @@ export class GoogleConnectionService {
 
 		const bySource = new Map(rows.map((row) => [row.source, row]));
 
-		const sources = GOOGLE_SYNC_SOURCES.map((source): GoogleSourceStatus => {
-			const row = bySource.get(source);
-			const connected = granted.has(SCOPE_FOR_SOURCE[source]);
+		const sources = GOOGLE_SYNC_SOURCES.filter(isEnabledSyncSource).map(
+			(source): GoogleSourceStatus => {
+				const row = bySource.get(source);
+				const connected = granted.has(SCOPE_FOR_SOURCE[source]);
 
-			return {
-				source,
-				connected,
-				status: row?.status ?? null,
-				lastSyncedAt: row?.lastSyncedAt?.toISOString() ?? null,
-				lastError: row?.lastError ?? null,
-				autoCreate: row?.autoCreate ?? false,
-			};
-		});
+				return {
+					source,
+					connected,
+					status: row?.status ?? null,
+					lastSyncedAt: row?.lastSyncedAt?.toISOString() ?? null,
+					lastError: row?.lastError ?? null,
+					autoCreate: row?.autoCreate ?? false,
+				};
+			},
+		);
 
 		return {
 			configured: isGoogleConfigured(),
@@ -87,6 +90,7 @@ export class GoogleConnectionService {
 		const added: string[] = [];
 
 		for (const source of GOOGLE_SYNC_SOURCES) {
+			if (!isEnabledSyncSource(source)) continue;
 			if (!granted.has(SCOPE_FOR_SOURCE[source])) continue;
 
 			const row = known.get(source);

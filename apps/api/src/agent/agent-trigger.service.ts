@@ -43,6 +43,26 @@ async function runWithConcurrency<T>(
 	);
 }
 
+// Web research the CRM starts on its own when a record appears. Off unless
+// AUTO_ENRICHMENT=true: each task is agent CPU and AI credits, and Lugh's
+// leads (local businesses on Instagram) rarely have much to find. A rep can
+// still ask for one, which passes required = true.
+const AUTO_ENRICHMENT_KINDS = new Set([
+	"brand",
+	"company-profile",
+	"identify",
+	"meeting-prep",
+	"workspace-profile",
+]);
+
+function isAutoEnrichment(kind: string): boolean {
+	return AUTO_ENRICHMENT_KINDS.has(kind);
+}
+
+export function autoEnrichmentOn(): boolean {
+	return process.env.AUTO_ENRICHMENT === "true";
+}
+
 @Injectable()
 export class AgentTriggerService {
 	private readonly logger = new Logger(AgentTriggerService.name);
@@ -479,6 +499,10 @@ export class AgentTriggerService {
 		required = false,
 		client?: Prisma.TransactionClient,
 	): Promise<boolean> {
+		if (!required && isAutoEnrichment(task.kind) && !autoEnrichmentOn()) {
+			return false;
+		}
+
 		try {
 			const write = async (tx: Prisma.TransactionClient) => {
 				await lockIdempotencyKey(

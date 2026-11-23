@@ -6,7 +6,11 @@ import {
 } from "@crm/db";
 import { Injectable, Logger } from "@nestjs/common";
 import { InjectDatabase } from "../database/database.constants";
-import type { SyncSource } from "./mailbox.constants";
+import {
+	ENABLED_SYNC_SOURCES,
+	MICROSOFT_SYNC_SOURCES,
+	type SyncSource,
+} from "./mailbox.constants";
 
 export const SYNC_LEASE_MS = 300_000;
 
@@ -175,6 +179,7 @@ export class SyncStateService {
 
 function dueWhere(now: Date) {
 	return {
+		source: { in: [...ENABLED_SYNC_SOURCES, ...MICROSOFT_SYNC_SOURCES] },
 		status: { notIn: [GoogleSyncStatus.NEEDS_RECONNECT] },
 		OR: [{ retryAfter: null }, { retryAfter: { lte: now } }],
 	};

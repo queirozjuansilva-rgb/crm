@@ -435,6 +435,7 @@ describe("disconnecting Google", () => {
 		expect(
 			status.sources.filter((source) => source.status === GoogleSyncStatus.IDLE)
 				.length,
-		).toBe(2);
+		).toBe(1);
+		expect(status.sources.map((source) => source.source)).toEqual(["calendar"]);
 	});
 });

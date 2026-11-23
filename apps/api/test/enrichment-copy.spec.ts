@@ -22,9 +22,7 @@ describe("what a rep reads while the agent works", () => {
 		expect(enrichmentStep("brand")).toBe("Buscando o logo");
 		expect(enrichmentStep("identify")).toBe("Lendo o perfil");
 		expect(enrichmentStep("portrait")).toBe("Buscando a foto");
-		expect(enrichmentStep("company-profile")).toBe(
-			"Lendo o site do cliente",
-		);
+		expect(enrichmentStep("company-profile")).toBe("Lendo o site do cliente");
 	});
 
 	it("uses no internal vocabulary", () => {

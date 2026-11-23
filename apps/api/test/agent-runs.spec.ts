@@ -244,7 +244,9 @@ describe("manual agent runs", () => {
 		} catch (error) {
 			runError = error;
 		}
-		expect((runError as Error).message).toBe("Este agente ainda não está no ar.");
+		expect((runError as Error).message).toBe(
+			"Este agente ainda não está no ar.",
+		);
 		expect(pokeCount).toBe(beforePokeCount);
 	});
 
