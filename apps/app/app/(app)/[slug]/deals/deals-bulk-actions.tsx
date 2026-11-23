@@ -36,6 +36,7 @@ import {
 import { DEAL_STAGE_OPTIONS, LOSING_STAGES } from "@/lib/deal-stage";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
+import { useIsSdr } from "@/lib/use-access";
 
 function deals(count: number): string {
 	return formatCount(count, "deal");
@@ -118,6 +119,8 @@ export function DealsBulkActions({
 		}),
 	);
 
+	const sdr = useIsSdr();
+
 	if (archived) {
 		const archivedPending = restore.isPending || purge.isPending;
 
@@ -130,15 +133,19 @@ export function DealsBulkActions({
 							Restaurar
 						</DropdownMenuItem>
 					</DropdownMenuGroup>
-					<DropdownMenuSeparator />
-					<DropdownMenuGroup>
-						<DropdownMenuItem
-							variant="destructive"
-							onSelect={() => setConfirming(true)}
-						>
-							Excluir para sempre
-						</DropdownMenuItem>
-					</DropdownMenuGroup>
+					{sdr ? null : (
+						<>
+							<DropdownMenuSeparator />
+							<DropdownMenuGroup>
+								<DropdownMenuItem
+									variant="destructive"
+									onSelect={() => setConfirming(true)}
+								>
+									Excluir para sempre
+								</DropdownMenuItem>
+							</DropdownMenuGroup>
+						</>
+					)}
 				</BulkActionsMenu>
 
 				<BulkDeleteDialog
@@ -158,12 +165,14 @@ export function DealsBulkActions({
 	return (
 		<>
 			<BulkActionsMenu pending={pending}>
-				<BulkOwnerMenu
-					users={users.data ?? []}
-					onSelect={(ownerId) =>
-						ownerId && assignOwner.mutate({ ids, ownerId })
-					}
-				/>
+				{sdr ? null : (
+					<BulkOwnerMenu
+						users={users.data ?? []}
+						onSelect={(ownerId) =>
+							ownerId && assignOwner.mutate({ ids, ownerId })
+						}
+					/>
+				)}
 				<DropdownMenuSub>
 					<DropdownMenuSubTrigger>Mudar etapa</DropdownMenuSubTrigger>
 					<DropdownMenuSubContent className="max-h-72 overflow-y-auto">

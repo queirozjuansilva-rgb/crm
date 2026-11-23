@@ -156,13 +156,53 @@ describe("what an SDR may call", () => {
 	});
 
 	it("creates leads only for themselves", async () => {
-		expect(await allows("leads.create", { ownerId: sdr })).toBe(true);
-		expect(await allows("leads.create", { ownerId: juan })).toBe(false);
+		const lead = (ownerId: string) => ({
+			client: { mode: "new", name: "Clínica Nova" },
+			ownerId,
+		});
+		expect(await allows("leads.create", lead(sdr))).toBe(true);
+		expect(await allows("leads.create", lead(juan))).toBe(false);
+	});
+
+	it("cannot open a lead on someone else's client", async () => {
+		const existing = (companyId: string) => ({
+			client: { mode: "existing", companyId },
+			ownerId: sdr,
+		});
+		expect(await allows("leads.create", existing(sdrCompany))).toBe(true);
+		expect(await allows("leads.create", existing(lughCompany))).toBe(false);
+	});
+
+	it("runs bulk actions only when every deal is theirs", async () => {
+		expect(await allows("deals.bulkArchive", { ids: [sdrDeal] })).toBe(true);
+		expect(
+			await allows("deals.bulkArchive", { ids: [sdrDeal, lughDeal] }),
+		).toBe(false);
+		expect(
+			await allows("deals.bulkSetStage", {
+				ids: [sdrDeal],
+				stage: "NEGOTIATION",
+			}),
+		).toBe(true);
+	});
+
+	it("refuses input that does not match the procedure", async () => {
+		expect(await allows("deals.byId", { id: 42 })).toBe(false);
+		expect(await allows("meetings.schedule", { dealId: sdrDeal })).toBe(false);
 	});
 
 	it("schedules only on their own deals", async () => {
-		expect(await allows("meetings.schedule", { dealId: sdrDeal })).toBe(true);
-		expect(await allows("meetings.schedule", { dealId: lughDeal })).toBe(false);
+		const meeting = (dealId: string) => ({
+			dealId,
+			kind: "SCREENING",
+			title: "Triagem",
+			startsAt: start.toISOString(),
+			durationMinutes: 30,
+			timeZone: "America/Fortaleza",
+			withMeet: true,
+		});
+		expect(await allows("meetings.schedule", meeting(sdrDeal))).toBe(true);
+		expect(await allows("meetings.schedule", meeting(lughDeal))).toBe(false);
 	});
 
 	it("reads a timeline only through their deal", async () => {
@@ -298,6 +338,28 @@ describe("the SDR agenda", () => {
 			(item) => item.title === "Triagem do lead do SDR",
 		);
 		expect(own?.record).toEqual({ kind: "deal", id: sdrDeal, name: "SDR" });
+	});
+
+	it("reads busy time from the host calendar, not only from the CRM", async () => {
+		const dentist = new Date(start.getTime() + 30 * 60 * 1000);
+		const view = await agenda.range(range as never, sdr, {
+			sdr: true,
+			calendarUserId: juan,
+			busy: [
+				{
+					googleEventId: "personal-google-id",
+					startsAt: dentist,
+					endsAt: new Date(dentist.getTime() + HOUR_MS),
+					isAllDay: false,
+				},
+			],
+		});
+
+		const busy = view.items.filter((item) => item.title === "Ocupado");
+		expect(busy.map((item) => item.startsAt)).toEqual([dentist.toISOString()]);
+		expect(view.items.map((item) => item.title)).toContain(
+			"Triagem do lead do SDR",
+		);
 	});
 
 	it("shows the owner every meeting in full", async () => {

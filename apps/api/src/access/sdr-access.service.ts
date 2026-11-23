@@ -2,9 +2,8 @@ import { isSdr, toWorkspaceRole, WORKSPACE_ID } from "@crm/auth/organization";
 import type { Db } from "@crm/db";
 import { Injectable } from "@nestjs/common";
 import { InjectDatabase } from "../database/database.constants";
-import { SDR_POLICY, type SdrCheck } from "./sdr-policy";
-
-const ROLE_TTL_MS = 30_000;
+import { ACCESS } from "./access-config";
+import { SDR_POLICY } from "./sdr-policy";
 
 type CachedRole = { sdr: boolean; at: number };
 
@@ -16,7 +15,8 @@ export class SdrAccessService {
 
 	async isSdr(userId: string): Promise<boolean> {
 		const cached = this.roles.get(userId);
-		if (cached && Date.now() - cached.at < ROLE_TTL_MS) return cached.sdr;
+		if (cached && Date.now() - cached.at < ACCESS.roleCacheMs)
+			return cached.sdr;
 
 		const member = await this.db.member.findUnique({
 			where: {
@@ -53,14 +53,7 @@ export class SdrAccessService {
 	}
 
 	async allows(path: string, input: unknown, userId: string): Promise<boolean> {
-		const check: SdrCheck | undefined = SDR_POLICY[path];
-		if (!check) return false;
-		return check({ db: this.db, userId, input: asRecord(input) });
+		const check = SDR_POLICY[path];
+		return check ? check({ db: this.db, userId }, input) : false;
 	}
-}
-
-function asRecord(input: unknown): Record<string, unknown> {
-	return input !== null && typeof input === "object"
-		? (input as Record<string, unknown>)
-		: {};
 }
