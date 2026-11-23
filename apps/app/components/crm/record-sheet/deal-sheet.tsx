@@ -60,6 +60,7 @@ import { savingField } from "@/lib/pending-field";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
+import { useIsSdr } from "@/lib/use-access";
 import { AttachDealContact } from "./quick-add";
 import { RecordActions } from "./record-actions";
 import { AddRow, RecordSheetFrame } from "./record-parts";
@@ -124,7 +125,7 @@ const DATE_OPTIONS: Intl.DateTimeFormatOptions = {
 
 export function DealSheet({ dealId }: { dealId: string }) {
 	const trpc = useTRPC();
-	const openRecord = useOpenRecord();
+	const openRecord = useDealSheetLink();
 	const {
 		tab,
 		setTab,
@@ -134,6 +135,7 @@ export function DealSheet({ dealId }: { dealId: string }) {
 
 	const query = useQuery(trpc.deals.byId.queryOptions({ id: dealId }));
 	const deal = query.data;
+	const sdr = useIsSdr();
 
 	const tabs: DetailSheetTab[] = deal
 		? [
@@ -160,12 +162,16 @@ export function DealSheet({ dealId }: { dealId: string }) {
 					label: "Atividade",
 					content: <Timeline anchor={{ dealId: deal.id }} />,
 				},
-				{
-					value: "agent",
-					label: "Agente",
-					content: <AgentPanel record={{ kind: "deal", id: deal.id }} />,
-					keepMounted: true,
-				},
+				...(sdr
+					? []
+					: [
+							{
+								value: "agent",
+								label: "Agente",
+								content: <AgentPanel record={{ kind: "deal", id: deal.id }} />,
+								keepMounted: true,
+							},
+						]),
 			]
 		: [];
 
@@ -253,6 +259,7 @@ function DealOverview({ deal }: { deal: Deal }) {
 	const cache = useCrmCache();
 
 	const users = useQuery(trpc.users.list.queryOptions());
+	const sdr = useIsSdr();
 
 	const update = useMutation(
 		trpc.deals.update.mutationOptions({
@@ -294,7 +301,10 @@ function DealOverview({ deal }: { deal: Deal }) {
 				) : null}
 			</DetailSheetSection>
 
-			<DetailSheetSection title="Detalhes" action={<FieldsCog kind="deal" />}>
+			<DetailSheetSection
+				title="Detalhes"
+				action={sdr ? null : <FieldsCog kind="deal" />}
+			>
 				<DetailSheetProperties>
 					<InlineField
 						label="Nome"
@@ -341,15 +351,17 @@ function DealOverview({ deal }: { deal: Deal }) {
 						saving={isSaving("companyId")}
 						onSave={(companyId) => save({ companyId })}
 					/>
-					<InlineSelectField
-						label="Responsável"
-						value={deal.owner.id}
-						options={(users.data ?? []).map((user) => ({
-							value: user.id,
-							label: user.name,
-						}))}
-						onSave={(ownerId) => save({ ownerId })}
-					/>
+					{sdr ? null : (
+						<InlineSelectField
+							label="Responsável"
+							value={deal.owner.id}
+							options={(users.data ?? []).map((user) => ({
+								value: user.id,
+								label: user.name,
+							}))}
+							onSave={(ownerId) => save({ ownerId })}
+						/>
+					)}
 					<RecordFields
 						fields={deal.fields}
 						saving={isSavingField}
@@ -382,7 +394,7 @@ function DealOverview({ deal }: { deal: Deal }) {
 }
 
 function WhereItStands({ deal }: { deal: Deal }) {
-	const openRecord = useOpenRecord();
+	const openRecord = useDealSheetLink();
 
 	return (
 		<DetailSheetSection title="Situação">
@@ -453,7 +465,7 @@ function DealContacts({
 }) {
 	const trpc = useTRPC();
 	const cache = useCrmCache();
-	const openRecord = useOpenRecord();
+	const openRecord = useDealSheetLink();
 
 	const detach = useMutation(
 		trpc.deals.detachContact.mutationOptions({
@@ -578,4 +590,12 @@ function DealContacts({
 			</SimpleTable>
 		</>
 	);
+}
+
+function useDealSheetLink() {
+	const openRecord = useOpenRecord();
+	const sdr = useIsSdr();
+	return (target: Parameters<typeof openRecord>[0]) => {
+		if (!sdr) openRecord(target);
+	};
 }

@@ -62,8 +62,8 @@ export class CompaniesRouter {
 		output: companyOptionOutput,
 		meta: restMeta("GET", "/companies/options", ["Companies"]),
 	})
-	async options(@Input("q") q: string) {
-		return this.companies.options(q);
+	async options(@Ctx() ctx: AuthedTrpcContext, @Input("q") q: string) {
+		return this.companies.options(q, ctx.sdr ? ctx.user.id : undefined);
 	}
 
 	@Mutation({

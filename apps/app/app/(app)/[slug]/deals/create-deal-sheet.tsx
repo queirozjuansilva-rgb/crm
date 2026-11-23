@@ -42,6 +42,8 @@ import { dealStageLabel, OPEN_STAGES } from "@/lib/deal-stage";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
+import { useIsSdr } from "@/lib/use-access";
+import { useDealsPipeline } from "./deals-pipeline";
 
 const UNSET = "";
 const NO_ORIGIN = "none";
@@ -116,7 +118,14 @@ function CreateLeadForm({ companyId }: { companyId?: string }) {
 		(field) => field.key === ORIGIN_FIELD,
 	);
 
-	const resolvedOwner = ownerId || me.data?.id || UNSET;
+	const sdr = useIsSdr();
+	const pipeline = useDealsPipeline();
+	const pipelineOwner = (users.data ?? []).find(
+		(user) => user.sdr && user.id === pipeline,
+	)?.id;
+	const resolvedOwner = sdr
+		? (me.data?.id ?? UNSET)
+		: ownerId || pipelineOwner || me.data?.id || UNSET;
 	const workspaceCurrency = currencies.data?.reportingCurrency;
 	const resolvedCurrency = currency || workspaceCurrency || "BRL";
 
@@ -325,7 +334,7 @@ function CreateLeadForm({ companyId }: { companyId?: string }) {
 							) : null}
 						</div>
 
-						<Field>
+						<Field hidden={sdr}>
 							<FieldLabel htmlFor="create-deal-owner">Responsável</FieldLabel>
 							<Select value={resolvedOwner} onValueChange={setOwnerId}>
 								<SelectTrigger id="create-deal-owner">

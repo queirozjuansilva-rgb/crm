@@ -8,6 +8,7 @@ import {
 	UseMiddlewares,
 } from "nestjs-trpc";
 import type { z } from "zod";
+import { SdrAccessService } from "../access/sdr-access.service";
 import type { AuthedTrpcContext } from "../trpc/context.types";
 import { AuthMiddleware } from "../trpc/middlewares/auth.middleware";
 import { restMeta } from "../trpc/openapi";
@@ -24,7 +25,13 @@ import { MeetingsService } from "./meetings.service";
 export class MeetingsRouter {
 	constructor(
 		@Inject(MeetingsService) private readonly meetings: MeetingsService,
+		@Inject(SdrAccessService) private readonly access: SdrAccessService,
 	) {}
+
+	private async calendarUser(ctx: AuthedTrpcContext): Promise<string> {
+		if (!ctx.sdr) return ctx.user.id;
+		return (await this.access.calendarHostId()) ?? ctx.user.id;
+	}
 
 	@Query({
 		input: dealMeetingsInput,
@@ -35,7 +42,7 @@ export class MeetingsRouter {
 		@Ctx() ctx: AuthedTrpcContext,
 		@Input("dealId") dealId: string,
 	) {
-		return this.meetings.forDeal(dealId, ctx.user.id);
+		return this.meetings.forDeal(dealId, await this.calendarUser(ctx));
 	}
 
 	@Mutation({
@@ -47,6 +54,10 @@ export class MeetingsRouter {
 		@Ctx() ctx: AuthedTrpcContext,
 		@Input() input: z.infer<typeof scheduleMeetingInput>,
 	) {
-		return this.meetings.schedule(input, ctx.user.id);
+		return this.meetings.schedule(
+			input,
+			ctx.user.id,
+			await this.calendarUser(ctx),
+		);
 	}
 }

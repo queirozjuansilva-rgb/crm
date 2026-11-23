@@ -21,6 +21,7 @@ import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
+import { useDealsPipeline } from "./deals-pipeline";
 import { dealsSearchParams } from "./deals-search-params";
 
 type DealRow = RouterOutputs["deals"]["list"]["rows"][number];
@@ -72,6 +73,7 @@ export function DealsBoard() {
 	const prefetchRecord = usePrefetchRecord();
 	const [, setCloseParams] = useQueryStates(closeReasonParams);
 	const { input } = useTableQuery(dealsSearchParams);
+	const pipeline = useDealsPipeline();
 	const [moved, setMoved] = useState<Record<string, DealStage>>({});
 
 	const boardInput = {
@@ -80,6 +82,7 @@ export function DealsBoard() {
 		pageSize: BOARD.pageSize,
 		status: "all",
 		archived: false,
+		pipeline,
 	};
 
 	const deals = useQuery({

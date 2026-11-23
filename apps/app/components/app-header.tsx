@@ -38,6 +38,7 @@ export function AppHeader({ user }: { user: User }) {
 	const workspaceUrl = useWorkspaceUrl();
 	const workspace = useQuery(trpc.workspace.get.queryOptions());
 	const label = workspaceLabel(workspace.data?.name);
+	const sdr = workspace.data?.viewerRole === "sdr";
 
 	return (
 		<header className="relative flex h-16 shrink-0 items-center gap-3 px-4 md:px-6 [view-transition-name:app-header]">
@@ -52,7 +53,7 @@ export function AppHeader({ user }: { user: User }) {
 					<Menu />
 				</Button>
 				<Link
-					href={workspaceUrl()}
+					href={workspaceUrl(sdr ? "/deals" : "/")}
 					aria-label="Início"
 					className="flex items-center gap-2.5 text-foreground"
 				>
@@ -75,11 +76,13 @@ export function AppHeader({ user }: { user: User }) {
 			</div>
 
 			<div className="ml-auto flex shrink-0 items-center gap-1.5">
-				<Button variant="ghost" size="icon" asChild>
-					<Link href={workspaceUrl("/settings")} aria-label="Configurações">
-						<Settings />
-					</Link>
-				</Button>
+				{sdr ? null : (
+					<Button variant="ghost" size="icon" asChild>
+						<Link href={workspaceUrl("/settings")} aria-label="Configurações">
+							<Settings />
+						</Link>
+					</Button>
+				)}
 				<UserMenu
 					user={user}
 					onSignOut={() => {

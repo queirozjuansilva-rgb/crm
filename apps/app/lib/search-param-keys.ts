@@ -29,6 +29,7 @@ export const SEARCH_PARAM = {
 	},
 	deals: {
 		view: "view",
+		pipeline: "pipeline",
 	},
 	agenda: {
 		period: "period",

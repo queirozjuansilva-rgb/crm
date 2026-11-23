@@ -5,7 +5,7 @@ export { WORKSPACE_ID };
 
 export const DEFAULT_WORKSPACE_NAME = "CRM";
 
-export const WORKSPACE_ROLES = ["owner", "admin", "member"] as const;
+export const WORKSPACE_ROLES = ["owner", "admin", "member", "sdr"] as const;
 
 export type WorkspaceRole = (typeof WORKSPACE_ROLES)[number];
 
@@ -15,6 +15,10 @@ export function isWorkspaceRole(value: string): value is WorkspaceRole {
 
 export function isWorkspaceAdmin(role: WorkspaceRole | null): boolean {
 	return role === "owner" || role === "admin";
+}
+
+export function isSdr(role: WorkspaceRole | null): boolean {
+	return role === "sdr";
 }
 
 export function canRenameWorkspace(role: WorkspaceRole | null): boolean {

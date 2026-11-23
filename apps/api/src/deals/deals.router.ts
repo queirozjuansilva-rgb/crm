@@ -8,6 +8,7 @@ import {
 	UseMiddlewares,
 } from "nestjs-trpc";
 import type { z } from "zod";
+import { SdrAccessService } from "../access/sdr-access.service";
 import { AgentTriggerService } from "../agent/agent-trigger.service";
 import type { AuthedTrpcContext } from "../trpc/context.types";
 import { AuthMiddleware } from "../trpc/middlewares/auth.middleware";
@@ -43,6 +44,7 @@ export class DealsRouter {
 	constructor(
 		@Inject(DealsService) private readonly deals: DealsService,
 		@Inject(AgentTriggerService) private readonly agent: AgentTriggerService,
+		@Inject(SdrAccessService) private readonly access: SdrAccessService,
 	) {}
 
 	@Query({
@@ -50,7 +52,19 @@ export class DealsRouter {
 		output: dealListOutput,
 		meta: restMeta("POST", "/deals/search", ["Deals"]),
 	})
-	async list(@Input() input: z.infer<typeof dealListInput>) {
+	async list(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof dealListInput>,
+	) {
+		if (ctx.sdr) return this.deals.list(input, { ownerIds: [ctx.user.id] });
+		if (input.pipeline === "lugh") {
+			return this.deals.list(input, {
+				excludeOwnerIds: await this.access.sdrUserIds(),
+			});
+		}
+		if (input.pipeline) {
+			return this.deals.list(input, { ownerIds: [input.pipeline] });
+		}
 		return this.deals.list(input);
 	}
 

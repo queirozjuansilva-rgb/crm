@@ -95,7 +95,11 @@ export class MeetingsService {
 		};
 	}
 
-	async schedule(input: ScheduleMeetingInput, userId: string) {
+	async schedule(
+		input: ScheduleMeetingInput,
+		userId: string,
+		calendarUserId: string = userId,
+	) {
 		const deal = await this.db.deal.findUnique({
 			where: { id: input.dealId },
 			select: {
@@ -113,13 +117,13 @@ export class MeetingsService {
 			throw new NotFoundException("Este negócio não existe mais.");
 		}
 
-		if (!(await this.canSchedule(userId))) {
+		if (!(await this.canSchedule(calendarUserId))) {
 			throw new BadRequestException(
 				"Conecte o Google em Configurações → Conexões para agendar pelo CRM.",
 			);
 		}
 
-		const token = await this.tokens.accessTokenFor(userId, "calendar");
+		const token = await this.tokens.accessTokenFor(calendarUserId, "calendar");
 		if (token.outcome !== "ok") {
 			throw new BadRequestException(
 				"O acesso ao Google expirou. Reconecte o Google em Configurações → Conexões.",
@@ -209,7 +213,7 @@ export class MeetingsService {
 				...fields,
 				iCalUid: google.iCalUID,
 				originalStartTime: startsAt,
-				syncedByUserId: userId,
+				syncedByUserId: calendarUserId,
 				googleEventId: google.id ?? null,
 			},
 			update: fields,

@@ -1,3 +1,4 @@
+import { isSdr, workspaceRoleOf } from "@crm/auth/organization";
 import { db } from "@crm/db";
 import { connection } from "next/server";
 import { z } from "zod";
@@ -43,6 +44,9 @@ async function handler(request: Request): Promise<Response> {
 
 	const session = await getSession();
 	if (!session) return failure("Not signed in.", 401);
+	if (isSdr(await workspaceRoleOf(session.user.id))) {
+		return failure("Agents are not part of this access.", 403);
+	}
 
 	let record: RecordContext;
 	let builderConversation = false;

@@ -33,9 +33,15 @@ export const dealListInput = listInput.extend({
 	closing: z.array(z.string()).default([]),
 	fields: z.record(z.string(), z.array(z.string())).default({}),
 	archived: z.boolean().default(false),
+	pipeline: z.string().default(""),
 });
 
 export type DealListInput = z.infer<typeof dealListInput>;
+
+export type DealPipelineScope = {
+	ownerIds?: string[];
+	excludeOwnerIds?: string[];
+};
 
 const stageEnum = z.enum(
 	Object.values(DealStage) as [DealStage, ...DealStage[]],

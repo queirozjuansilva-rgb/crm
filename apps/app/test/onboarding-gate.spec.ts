@@ -46,6 +46,7 @@ const workspace = (data: {
 	onboarded: boolean;
 	canRename: boolean;
 	slug?: string;
+	viewerRole?: string;
 }) => ({ result: { data: { slug: SLUG, ...data } } });
 
 const researchKey = (configured: boolean) => ({
@@ -58,18 +59,20 @@ function setup({
 	canRename = true,
 	configured = true,
 	slug = SLUG,
+	viewerRole = "owner",
 }: {
 	onboarded?: boolean;
 	canRename?: boolean;
 	configured?: boolean;
 	slug?: string;
+	viewerRole?: string;
 } = {}) {
 	const calls = { workspace: 0, research: 0 };
 
 	stub(async (url) => {
 		if (url.includes("workspace.get")) {
 			calls.workspace += 1;
-			return json(workspace({ onboarded, canRename, slug }));
+			return json(workspace({ onboarded, canRename, slug, viewerRole }));
 		}
 
 		calls.research += 1;
@@ -114,6 +117,19 @@ describe("readWorkspaceGate", () => {
 		expect(await readWorkspaceGate(request("/", [SESSION_COOKIE]))).toEqual({
 			gate: "settled",
 			slug: SLUG,
+			sdr: false,
+		});
+	});
+
+	it("marks an SDR so the proxy keeps them on the pipeline and the agenda", async () => {
+		answerWith(
+			workspace({ onboarded: true, canRename: false, viewerRole: "sdr" }),
+		);
+
+		expect(await readWorkspaceGate(request("/", [SESSION_COOKIE]))).toEqual({
+			gate: "settled",
+			slug: SLUG,
+			sdr: true,
 		});
 	});
 
@@ -352,6 +368,35 @@ describe("the slug the app is served under", () => {
 		expect(
 			redirectedTo(await proxy(request("/companies", [SESSION_COOKIE]))),
 		).toBeNull();
+	});
+});
+
+describe("the SDR gate", () => {
+	it("keeps an SDR on the pipeline and the agenda", async () => {
+		setup({ canRename: false, viewerRole: "sdr" });
+
+		for (const path of [`/${SLUG}/deals`, `/${SLUG}/agenda`]) {
+			expect(
+				redirectedTo(await proxy(request(path, [SESSION_COOKIE]))),
+			).toBeNull();
+		}
+	});
+
+	it("sends an SDR anywhere else to the pipeline", async () => {
+		setup({ canRename: false, viewerRole: "sdr" });
+
+		for (const path of [
+			"/",
+			`/${SLUG}`,
+			`/${SLUG}/companies`,
+			`/${SLUG}/finance`,
+			`/${SLUG}/settings`,
+			"/chat",
+		]) {
+			expect(redirectedTo(await proxy(request(path, [SESSION_COOKIE])))).toBe(
+				`/${SLUG}/deals`,
+			);
+		}
 	});
 });
 

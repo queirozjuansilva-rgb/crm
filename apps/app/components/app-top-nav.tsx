@@ -6,22 +6,27 @@ import { usePathname } from "next/navigation";
 import { useMemo } from "react";
 import { ITEMS, isActive, SETTINGS_HREF } from "@/components/app-icon-rail";
 import { usePrefetchSection } from "@/components/crm/section-prefetch";
+import { sectionsFor, useIsSdr } from "@/lib/use-access";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 
 export function AppTopNav() {
 	const pathname = usePathname();
 	const workspaceUrl = useWorkspaceUrl();
 	const prefetchSection = usePrefetchSection();
+	const sdr = useIsSdr();
 
 	const items = useMemo(
 		() =>
-			ITEMS.filter((item) => item.href !== SETTINGS_HREF).map((item) => ({
+			sectionsFor(
+				ITEMS.filter((item) => item.href !== SETTINGS_HREF),
+				sdr,
+			).map((item) => ({
 				...item,
 				section: item.href,
 				href: workspaceUrl(item.href),
 				related: item.related?.map((path) => workspaceUrl(path)),
 			})),
-		[workspaceUrl],
+		[workspaceUrl, sdr],
 	);
 
 	return (

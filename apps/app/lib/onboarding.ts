@@ -19,8 +19,9 @@ const workspaceAnswer = z
 		onboarded: z.boolean().nullable().catch(null),
 		canRename: z.boolean().nullable().catch(null),
 		slug: z.string().min(1).nullable().catch(null),
+		viewerRole: z.string().nullable().catch(null),
 	})
-	.catch({ onboarded: null, canRename: null, slug: null });
+	.catch({ onboarded: null, canRename: null, slug: null, viewerRole: null });
 
 const researchKeyAnswer = z
 	.object({ configured: z.boolean().nullable().catch(null) })
@@ -46,7 +47,11 @@ async function read(request: NextRequest, procedure: string) {
 	}
 }
 
-export type WorkspaceGate = { gate: Gate; slug: string | null };
+export type WorkspaceGate = {
+	gate: Gate;
+	slug: string | null;
+	sdr: boolean;
+};
 
 export async function readWorkspaceGate(
 	request: NextRequest,
@@ -55,11 +60,14 @@ export async function readWorkspaceGate(
 
 	const slug = workspace.slug;
 
+	const sdr = workspace.viewerRole === "sdr";
+
 	if (workspace.onboarded === null) {
-		return { gate: "unknown", slug };
+		return { gate: "unknown", slug, sdr };
 	}
 
 	return {
+		sdr,
 		gate:
 			workspace.onboarded || workspace.canRename !== true
 				? "settled"

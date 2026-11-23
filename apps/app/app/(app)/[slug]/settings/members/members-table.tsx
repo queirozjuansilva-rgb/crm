@@ -29,6 +29,7 @@ const ROLE_LABEL = {
 	owner: "Responsável",
 	admin: "Administrador",
 	member: "Membro",
+	sdr: "SDR",
 } as const;
 
 type Role = keyof typeof ROLE_LABEL;

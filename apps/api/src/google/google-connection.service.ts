@@ -1,4 +1,5 @@
 import { isGoogleConfigured } from "@crm/auth/env";
+import { isSdr, workspaceRoleOf } from "@crm/auth/organization";
 import { GOOGLE_PROVIDER_ID, signsInWithGoogle } from "@crm/auth/scopes";
 import { type Db, GoogleSyncStatus, type Prisma } from "@crm/db";
 import { Injectable, Logger, NotFoundException } from "@nestjs/common";
@@ -76,6 +77,8 @@ export class GoogleConnectionService {
 	}
 
 	async onConnected(userId: string): Promise<void> {
+		if (isSdr(await workspaceRoleOf(userId))) return;
+
 		const [granted, existing, account] = await Promise.all([
 			this.tokens.grantedScopes(userId, GOOGLE_PROVIDER_ID),
 			this.state.listForUser(userId, GOOGLE_SYNC_SOURCES),

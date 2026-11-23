@@ -29,6 +29,10 @@ const SECTIONS = [
 	"/finance",
 ];
 
+const SDR_SECTIONS = ["/deals", "/agenda"];
+
+const SDR_HOME = "/deals";
+
 export async function proxy(request: NextRequest) {
 	const { pathname } = request.nextUrl;
 
@@ -52,6 +56,14 @@ export async function proxy(request: NextRequest) {
 		readWorkspaceGate(request),
 		readResearchGate(request),
 	]);
+
+	if (workspace.sdr && workspace.slug) {
+		return SDR_SECTIONS.some((section) =>
+			isUnder(pathname, `/${workspace.slug}${section}`),
+		)
+			? NextResponse.next()
+			: sendTo(workspaceUrl(workspace.slug, SDR_HOME), request);
+	}
 
 	if (workspace.gate === "required") return sendTo(ONBOARDING_PATH, request);
 	if (research === "required") return sendTo(RESEARCH_PATH, request);

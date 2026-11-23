@@ -7,6 +7,7 @@ export interface UserOption {
 	name: string;
 	email: string;
 	image: string | null;
+	sdr: boolean;
 }
 
 @Injectable()
@@ -14,9 +15,20 @@ export class UsersService {
 	constructor(@InjectDatabase() private readonly db: Db) {}
 
 	async list(): Promise<UserOption[]> {
-		return this.db.user.findMany({
-			select: { id: true, name: true, email: true, image: true },
+		const users = await this.db.user.findMany({
+			select: {
+				id: true,
+				name: true,
+				email: true,
+				image: true,
+				members: { select: { role: true } },
+			},
 			orderBy: [{ name: "asc" }, { email: "asc" }],
 		});
+
+		return users.map(({ members, ...user }) => ({
+			...user,
+			sdr: members.some((member) => member.role === "sdr"),
+		}));
 	}
 }

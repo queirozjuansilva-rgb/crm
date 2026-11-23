@@ -1,6 +1,7 @@
 import { Inject } from "@nestjs/common";
 import { Ctx, Input, Query, Router, UseMiddlewares } from "nestjs-trpc";
 import type { z } from "zod";
+import { SdrAccessService } from "../access/sdr-access.service";
 import type { AuthedTrpcContext } from "../trpc/context.types";
 import { AuthMiddleware } from "../trpc/middlewares/auth.middleware";
 import { restMeta } from "../trpc/openapi";
@@ -10,7 +11,10 @@ import { AgendaService } from "./agenda.service";
 @Router({ alias: "agenda" })
 @UseMiddlewares(AuthMiddleware)
 export class AgendaRouter {
-	constructor(@Inject(AgendaService) private readonly agenda: AgendaService) {}
+	constructor(
+		@Inject(AgendaService) private readonly agenda: AgendaService,
+		@Inject(SdrAccessService) private readonly access: SdrAccessService,
+	) {}
 
 	@Query({
 		input: agendaRangeInput,
@@ -21,6 +25,11 @@ export class AgendaRouter {
 		@Ctx() ctx: AuthedTrpcContext,
 		@Input() input: z.infer<typeof agendaRangeInput>,
 	) {
-		return this.agenda.range(input, ctx.user.id);
+		if (!ctx.sdr) return this.agenda.range(input, ctx.user.id);
+		const host = await this.access.calendarHostId();
+		return this.agenda.range(input, ctx.user.id, {
+			sdr: true,
+			calendarUserId: host ?? ctx.user.id,
+		});
 	}
 }

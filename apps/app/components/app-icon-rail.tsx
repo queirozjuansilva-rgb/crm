@@ -27,6 +27,7 @@ import { useMemo } from "react";
 import { AgentBuilderSidebar } from "@/components/agent-builder/agent-builder-sidebar";
 import { usePrefetchSection } from "@/components/crm/section-prefetch";
 import { useMobileNav } from "@/components/mobile-nav";
+import { sectionsFor, useIsSdr } from "@/lib/use-access";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 
 export type RailItem = {
@@ -164,16 +165,17 @@ export function AppIconRail() {
 	const workspaceUrl = useWorkspaceUrl();
 	const { open, setOpen } = useMobileNav();
 	const prefetchSection = usePrefetchSection();
+	const sdr = useIsSdr();
 
 	const items = useMemo(
 		() =>
-			ITEMS.map((item) => ({
+			sectionsFor(ITEMS, sdr).map((item) => ({
 				...item,
 				section: item.href,
 				href: workspaceUrl(item.href),
 				related: item.related?.map((path) => workspaceUrl(path)),
 			})),
-		[workspaceUrl],
+		[workspaceUrl, sdr],
 	);
 	const inChat = items.some(
 		(item) => item.section === CHAT_HREF && isActive(item, pathname),

@@ -13,6 +13,7 @@ const usersListOutput = z.array(
 		name: z.string(),
 		email: z.string(),
 		image: z.string().nullable(),
+		sdr: z.boolean(),
 	}),
 );
 
