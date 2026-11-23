@@ -17,9 +17,9 @@ import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 import { CreateDealSheet } from "./create-deal-sheet";
 import { DealsBoard } from "./deals-board";
 import { DealsPipelineSwitch } from "./deals-pipeline";
+import { LUGH_PIPELINE } from "./deals-pipeline-key";
 import { dealsSearchParams } from "./deals-search-params";
 import { DealsTable } from "./deals-table";
-import { LUGH_PIPELINE } from "./deals-view";
 import {
 	DealsViewSwitch,
 	DealsViewToggle,

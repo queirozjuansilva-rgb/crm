@@ -4,8 +4,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useCallback } from "react";
 import { companiesSearchParams } from "@/app/(app)/[slug]/companies/companies-search-params";
 import { contactsSearchParams } from "@/app/(app)/[slug]/contacts/contacts-search-params";
+import { LUGH_PIPELINE } from "@/app/(app)/[slug]/deals/deals-pipeline-key";
 import { dealsSearchParams } from "@/app/(app)/[slug]/deals/deals-search-params";
-import { LUGH_PIPELINE } from "@/app/(app)/[slug]/deals/deals-view";
 import { useTRPC } from "@/lib/trpc/client";
 
 export function usePrefetchSection(): (section: string) => void {
