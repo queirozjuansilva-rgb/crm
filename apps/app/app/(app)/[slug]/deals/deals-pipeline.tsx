@@ -6,7 +6,8 @@ import { useQueryStates } from "nuqs";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useTRPC } from "@/lib/trpc/client";
 import { useIsSdr } from "@/lib/use-access";
-import { dealsPipelineParser, LUGH_PIPELINE } from "./deals-view";
+import { LUGH_PIPELINE } from "./deals-pipeline-key";
+import { dealsPipelineParser } from "./deals-view";
 
 export function useDealsPipeline(): string {
 	const [state] = useQueryStates(dealsPipelineParser);
