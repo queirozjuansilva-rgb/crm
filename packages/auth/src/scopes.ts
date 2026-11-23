@@ -15,8 +15,6 @@ export const GMAIL_SCOPE = "https://www.googleapis.com/auth/gmail.readonly";
 export const CALENDAR_SCOPE = "https://www.googleapis.com/auth/calendar.events";
 export const OUTLOOK_MAIL_SCOPE = "Mail.Read";
 
-// Lugh talks to clients on WhatsApp and Instagram, so the CRM only asks Google
-// for the calendar. GMAIL_SCOPE stays exported for accounts that granted it.
 export const SYNC_SCOPES = [CALENDAR_SCOPE] as const;
 export const MICROSOFT_SYNC_SCOPES = [OUTLOOK_MAIL_SCOPE] as const;
 
