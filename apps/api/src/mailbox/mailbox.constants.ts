@@ -12,8 +12,6 @@ export type SyncSource = (typeof SYNC_SOURCES)[number];
 
 export const GOOGLE_SYNC_SOURCES = ["calendar", "gmail"] as const;
 
-// Gmail sync is off: older accounts may still hold the scope, but only these
-// sources get a sync row or run.
 export const ENABLED_SYNC_SOURCES = [
 	"calendar",
 ] as const satisfies readonly SyncSource[];
