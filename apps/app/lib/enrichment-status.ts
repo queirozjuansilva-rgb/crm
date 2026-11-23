@@ -16,9 +16,10 @@ const PRESENTATION: EnrichmentPresentation = {
 
 const QUEUED = { label: "Na fila", tone: "neutral" as StatusTone, busy: false };
 
-export const ENRICHMENT_POLL_MS = 3_000;
+// Each poll is a serverless call billed as Vercel CPU time, so keep them sparse.
+export const ENRICHMENT_POLL_MS = 5_000;
 
-export const ENRICHMENT_IDLE_POLL_MS = 30_000;
+export const ENRICHMENT_IDLE_POLL_MS = 5 * 60_000;
 
 export const ENRICHMENT_FACET_OPTIONS = (
 	Object.keys(PRESENTATION) as EnrichmentStatus[]
